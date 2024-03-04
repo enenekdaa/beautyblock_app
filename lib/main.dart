@@ -1,4 +1,30 @@
+import 'package:beautyblock_app/auth/join/screen/join_app_description_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_certify_email_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_check_info_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_receive_customer_info_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_receive_email_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_receive_password_screen.dart';
+import 'package:beautyblock_app/auth/join/screen/join_select_category_screen.dart';
+import 'package:beautyblock_app/auth/login/login_screen.dart';
+import 'package:beautyblock_app/home/screen/home_add_detail_info_screen.dart';
+import 'package:beautyblock_app/home/screen/home_almost_done_screen.dart';
+import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
+import 'package:beautyblock_app/home/screen/home_channel_world_and_category_select_screen.dart';
+import 'package:beautyblock_app/home/screen/home_main_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_mychannel_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_myvideo_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_screen.dart';
+import 'package:beautyblock_app/home/screen/home_post_share_screen.dart';
+import 'package:beautyblock_app/home/screen/home_post_upload_screen.dart';
+import 'package:beautyblock_app/home/screen/home_search_screen.dart';
+import 'package:beautyblock_app/home/screen/home_select_country_screen.dart';
+import 'package:beautyblock_app/home/screen/home_videoplayer_screen.dart';
+import 'package:beautyblock_app/main_init_binding.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'auth/join/screen/join_main_screen.dart';
+import 'auth/join/screen/join_terms_of_use_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,109 +33,45 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'GlobalBeauty',
+      initialRoute: "/loginMainScreen",
+      // initialRoute:'/homeMain' ,
+      initialBinding: InitBinding(),
+      getPages: [
+        GetPage(name: '/loginMainScreen', page: ()=> LoginScreen(), binding: InitBinding() ),
+        GetPage(name: '/joinMainScreen', page: ()=> JoinScreen(), binding: InitBinding() ),
+        GetPage(name: '/termsScreen', page:()=> JoinTermsOfUseScreen(), binding: InitBinding()),
+        GetPage(name: '/receiveEmailScreen', page: ()=> JoinReceiveEmailScreen(), binding: InitBinding()),
+        GetPage(name: '/certifyScreen', page:()=> JoinCertifyEmailScreen(),binding: InitBinding()),
+        GetPage(name: '/receivePasswordScreen', page:()=> JoinReceivePasswordScreen(),binding: InitBinding()),
+        GetPage(name: '/receiveCustomerInfo', page:()=> JoinReceiveCustomerInfoScreen(),binding: InitBinding()),
+        GetPage(name: '/selectCategory', page:()=> JoinSelectCategoryScreen(),binding: InitBinding()),
+        GetPage(name: '/infoCheck', page:()=>  JoinCheckInfoScreen(),binding: InitBinding()),
+        GetPage(name: '/appDescription', page:()=> JoinAppDescriptionScreen()),
+        GetPage(name: '/homeMain', page:()=> HomeMainScreen(),binding: InitBinding()),
+        GetPage(name: '/homeSearch', page:()=> HomeSearchScreen(),binding: InitBinding()),
+        // GetPage(name: '/homeAlarm', page: ()=>HomeAlarmPage(),binding: InitBinding()),
+        GetPage(name: '/homeVideo', page: ()=>HomeVideoplayerScreen(),binding: InitBinding()),
+        GetPage(name: '/homeChannelDetail', page:()=> HomeChannelDetailScreen(),binding: InitBinding()),
+        GetPage(name: '/selectCountry', page:()=> HomeSelectCountryScreen(), binding: InitBinding()),
+        GetPage(name: '/postUpload', page: ()=> HomePostUploadScreen(),binding: InitBinding()),
+        GetPage(name: '/postShare', page:()=> HomePostShareScreen(),binding: InitBinding()),
+        GetPage(name: '/addDetailInfo', page: ()=> HomeAddDetailInfoScreen(),binding: InitBinding()),
+        GetPage(name: '/almostDone', page: ()=> HomeAlmostDoneScreen(),binding: InitBinding()),
+        GetPage(name: '/worldAndCategorySelect', page:()=> HomeChannelWorldAndCategorySelectScreen(),binding: InitBinding()),
+        GetPage(name: '/myPage', page:()=> HomeMyPageScreen(),binding: InitBinding()),
+        GetPage(name: '/myPageFavoritesChannel', page: ()=> HomeMyPageFavoritesChannelScreen(),binding: InitBinding()),
+        GetPage(name: '/myPageMyChannel', page: ()=> HomeMyPageMyChannelScreen(),binding: InitBinding()),
+        GetPage(name: '/myPageMyVideo', page: ()=> HomeMyPageMyVideoScreen(),binding: InitBinding()),
+      ],
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}

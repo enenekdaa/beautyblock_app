@@ -1,0 +1,151 @@
+import 'package:beautyblock_app/home/controller/home_controller.dart';
+import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_screen_scaffold.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_mychannel_screen.dart';
+import 'package:beautyblock_app/home/screen/home_mypage_myvideo_screen.dart';
+import 'package:beautyblock_app/utils.dart';
+import 'package:beautyblock_app/widget/widget_appbar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../config.dart';
+import '../../widget/widget_radius_button.dart';
+
+class HomeMyPageScreen extends StatelessWidget {
+  HomeMyPageScreen({super.key});
+
+  final HomeController _homeController = Get.put(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    return HomeMypageScreenScaffold(
+        homeAppbarSection: _buildAppbar(),
+        profileImgSection: profileImg(),
+        listTitleSection: _buildList(),
+        bottomButtonSection: _buildbottomButton());
+  }
+
+  Widget _buildAppbar() {
+    return AppbarWidget(
+      appbarText: '마이페이지',
+      centerTitle: true,
+    );
+  }
+
+  Widget profileImg() {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Container(
+            height: Get.height * 0.15,
+            width: Get.width * 0.3,
+            child: CircleAvatar(
+              radius: Get.height * 0.15,
+              backgroundImage: AssetImage(
+                'assets/images/img_test.png',
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: Get.width * 0.27,
+            child: IconButton(
+              icon: SvgPicture.asset('assets/images/ic_photo.svg'),
+              onPressed: () {},
+            ))
+      ],
+    );
+  }
+
+  Widget _buildList() {
+    return Column(
+      children: [
+        myPageListTile('즐겨찾기',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageFavoritesChannelScreen());}),
+        myPageListTile('내 채널',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageMyChannelScreen());}),
+        myPageListTile('나의 영상',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageMyVideoScreen());}),
+        Divider(
+          thickness: 1,
+          color: Color.fromRGBO(171, 169, 163, 0.24),
+        ),
+        myPageListTile('구매결제 내역',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        myPageListTile('문의하기',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        myPageListTile(
+            '아이디',
+            Text(
+              'adffhakjhfwkhfkd',
+              style: AppTheme.boldMyPageTextStyle,
+            ),
+            () {}),
+        myPageListTile(
+            '닉네임',
+            Text(
+              '홍길동',
+              style: AppTheme.boldMyPageTextStyle,
+            ),
+            () {}),
+        myPageListTile('비밀번호 재설정',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        Divider(
+          color: Color.fromRGBO(171, 169, 163, 0.24),
+        ),
+        myPageListTile('서비스 이용약관',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        myPageListTile('개인정보취급방침',
+            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        myPageListTile(
+            '알림허용',
+            Obx(() => Switch(
+                  value: _homeController.getSwitchValue('isAlarm'),
+                  activeColor: GlobalBeautyColor.buttonHotPink,
+                  // 활성화 상태의 thumb 색상
+                  activeTrackColor: Color.fromRGBO(171, 169, 163, 0.12),
+                  // 활성화 상태의 track 색상
+                  inactiveThumbColor: Color.fromRGBO(213, 212, 208, 1),
+                  // 비활성화 상태의 thumb 색상
+                  inactiveTrackColor: Color.fromRGBO(171, 169, 163, 0.24),
+                  trackOutlineColor: MaterialStateProperty.resolveWith(
+                    (final Set<MaterialState> states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return null;
+                      }
+                      return Colors.transparent;
+                    },
+                  ),
+                  onChanged: (value) {
+                    _homeController.updateSwitchValue('isAlarm', value);
+                  },
+                )),
+            () {}),
+      ],
+    );
+  }
+
+  Widget _buildbottomButton() {
+    return RadiusButtonWidget(
+      backgroundColor: GlobalBeautyColor.buttonHotPink,
+      text: '로그아웃',
+      onPress: () {},
+    );
+  }
+
+  ListTile myPageListTile(text, trailing, onPress) {
+    return ListTile(
+      dense: true,
+      title: Text(
+        text,
+        style: AppTheme.boldMyPageTextStyle,
+      ),
+      trailing: trailing,
+      onTap: onPress,
+    );
+  }
+}

@@ -7,15 +7,18 @@ import 'package:get/get.dart';
 class BottomNavBar extends StatelessWidget {
    BottomNavBar({super.key});
 
-  final BottomNavBarController _bottomNavBarController = Get.put(BottomNavBarController());
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed, // 3개 이상의 아이템에는 fixed 타입을 사용
-      items: _bottomNavBarController.bottomItems,
-      currentIndex: _bottomNavBarController.bottomNavCurrentIndex.value,
-      selectedItemColor: GlobalBeautyColor.buttonHotPink,
-      onTap:(value){ _bottomNavBarController.onItemTapped(value);},
+    return Obx(()=> BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: BottomNavBarController.to.bottomItems,
+        selectedFontSize: 12,
+        currentIndex: BottomNavBarController.to.bottomNavCurrentIndex.value,
+        selectedItemColor: GlobalBeautyColor.buttonHotPink,
+        onTap:(value){
+          print(value);
+          BottomNavBarController.to.onItemTapped(value);},
+      ),
     );
   }
 }

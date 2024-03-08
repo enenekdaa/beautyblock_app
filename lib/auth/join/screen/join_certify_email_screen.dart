@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/auth/join/controller/join_controller.dart';
 import 'package:beautyblock_app/auth/join/local_widget/join_certify_email_scaffold.dart';
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/utils.dart';
@@ -7,7 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class JoinCertifyEmailScreen extends StatelessWidget {
-  const JoinCertifyEmailScreen({super.key});
+   JoinCertifyEmailScreen({super.key});
+
+  final JoinController _joinController = Get.put(JoinController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,7 @@ class JoinCertifyEmailScreen extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text('이메일==== ==== ==== ====  === === ==== 으로 발송된 인증메일을 확인해주세요.',softWrap: true,style: AppTheme.smallTitleTextStyle,textAlign: TextAlign.center,),
+          child: Text('이메일 ${_joinController.emailController.text} 으로 발송된 인증메일을 확인해주세요.',softWrap: true,style: AppTheme.smallTitleTextStyle,textAlign: TextAlign.center,),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +65,7 @@ class JoinCertifyEmailScreen extends StatelessWidget {
   }
 
   Widget _buildReceiveCertifyInput() {
-    return TextInputWidget(titleText: '', hintText: '인증번호 입력', isVisible: false);
+    return TextInputWidget(titleText: '', hintText: '인증번호 입력', isGuideTextVisible: false,controller:_joinController.emailCertifyController ,);
   }
 
   Widget _buildNextButton() {

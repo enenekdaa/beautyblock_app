@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       initialBinding: InitBinding(),
       getPages: [
         GetPage(name: '/loginMainScreen', page: ()=> LoginScreen(), binding: InitBinding() ),
-        GetPage(name: '/joinMainScreen', page: ()=> JoinScreen(), binding: InitBinding() ),
+        GetPage(name: '/joinMainScreen', page: ()=> JoinMainScreen(), binding: InitBinding() ),
         GetPage(name: '/termsScreen', page:()=> JoinTermsOfUseScreen(), binding: InitBinding()),
         GetPage(name: '/receiveEmailScreen', page: ()=> JoinReceiveEmailScreen(), binding: InitBinding()),
         GetPage(name: '/certifyScreen', page:()=> JoinCertifyEmailScreen(),binding: InitBinding()),

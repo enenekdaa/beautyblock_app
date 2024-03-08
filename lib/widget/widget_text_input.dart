@@ -3,23 +3,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextInputWidget extends StatelessWidget {
-  const TextInputWidget(
-      {Key? key,
-      required this.titleText,
-      required this.hintText,
-      required this.isVisible,
-      this.guideText = "",
-      this.guideTextColor = Colors.white,
-      this.guideTextAlign = Alignment.topLeft,
-      this.initTextValue = ""});
+  const TextInputWidget({
+    Key? key,
+    required this.titleText,
+    required this.hintText,
+    required this.controller,
+    required this.isGuideTextVisible,
+    this.guideText = "",
+    this.guideTextColor = Colors.white,
+    this.guideTextAlign = Alignment.topLeft,
+    this.focusNode,
+    // this.initTextValue = ""
+  });
 
   final titleText;
   final hintText;
-  final isVisible;
+  final isGuideTextVisible;
   final guideText;
   final guideTextColor;
   final guideTextAlign;
-  final initTextValue;
+
+  // final initTextValue;
+  final controller;
+  final focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +40,14 @@ class TextInputWidget extends StatelessWidget {
         TextFormField(
           // 1. [유효성 체크]
           // 공백일 경우 메시지 출력..
-          // style: AppTheme.smallTitleTextStyle
-          //     .copyWith(fontWeight: FontWeight.normal),
           validator: (value) => value!.isEmpty ? "필수항목입니다" : null,
-
-          // 2. [마킹처리]
-          // text가 Password일 경우 마킹 처리 true
+          controller: controller,
           obscureText: titleText == "비밀번호" ||
                   titleText == "비밀번호 입력" ||
                   titleText == "비밀번호 확인"
               ? true
               : false,
-          initialValue: initTextValue,
-          // 3. [데코레이션]
-          // 힌트 문자나 여러가지 데코레이션 기능 추가
+          // initialValue: initTextValue,
           decoration: InputDecoration(
               isDense: true,
               hintText: hintText,
@@ -78,6 +78,7 @@ class TextInputWidget extends StatelessWidget {
                   // 에러 발생 후 포커스 되었을 경우 모양
                   //   borderRadius: BorderRadius.circular(10)
                   )),
+          focusNode: focusNode,
         ),
         Visibility(
           child: Padding(
@@ -93,7 +94,7 @@ class TextInputWidget extends StatelessWidget {
                       fontSize: 10)),
             ),
           ),
-          visible: isVisible,
+          visible: isGuideTextVisible,
         ),
       ],
     );

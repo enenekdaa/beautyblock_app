@@ -21,7 +21,6 @@ class TabHomeScreen extends StatefulWidget {
 class _TabHomeScreenState extends State<TabHomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final HomeController _homeController = Get.put(HomeController());
 
   @override
   void initState() {
@@ -42,7 +41,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
     return TabHomeScaffold(
       homeAppbarSection: _buildHomeAppbar(),
       tabBarSection: _buildTabBar(_tabController),
-      influencerListSection: _builInfluencerListviewSection(),
+      subcriptionChannelListSection: Obx(()=>_buildSubscriptionChannelListviewSection()),
       channelProfileSection: _buildChannelProfileSection(),
       bottomListviewSection: _buildBottomListViewSection(),
     );
@@ -61,6 +60,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
         shadowColor: Colors.black.withOpacity(0.04),
         actions: [
           GestureDetector(
+            onTap: (){HomeController.to.isShowSubscriptionChannel.value = true;},
             child: SvgPicture.asset('assets/images/ic_bookmark.svg'),
           ),
           Padding(
@@ -105,9 +105,9 @@ class _TabHomeScreenState extends State<TabHomeScreen>
             .toList());
   }
 
-  Widget _builInfluencerListviewSection() {
+  Widget _buildSubscriptionChannelListviewSection() {
     List<Widget> inflWidgetList = [];
-    _homeController.influencerList.forEach((element) {
+   HomeController.to.influencerList.forEach((element) {
       inflWidgetList.add(Padding(
         padding: EdgeInsets.only(right: Get.width * 0.04),
         child: GestureDetector(
@@ -117,27 +117,29 @@ class _TabHomeScreenState extends State<TabHomeScreen>
             bottomTextIsVisible: true,
           ),
           onTap: () {
-            _homeController.selectIfluencerIndex.value =
-                _homeController.influencerList.indexOf(element);
+            HomeController.to.selectIfluencerIndex.value =
+                HomeController.to.influencerList.indexOf(element);
           },
         ),
       ));
     });
-    return Container(
+  return  HomeController.to.isShowSubscriptionChannel.value ?
+    Container(
         height: Get.height * 0.13,
         margin: EdgeInsets.only(top: Get.height * 0.015),
         child: ListView(
           padding: EdgeInsets.zero,
           scrollDirection: Axis.horizontal,
           children: inflWidgetList,
-        ));
+        ))
+    : SizedBox();
   }
 
   Widget _buildChannelProfileSection() {
     return SubscriptionProfileWidget(
       imageUrl: AssetImage('assets/images/img_test.png'),
-      userName: _homeController
-          .influencerList[_homeController.selectIfluencerIndex.value],
+      userName: HomeController.to
+          .influencerList[HomeController.to.selectIfluencerIndex.value],
       subscriptionBtnOnPress: () {},
       isSubscription: true,
       useLikeButton: false,

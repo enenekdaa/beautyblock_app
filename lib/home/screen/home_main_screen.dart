@@ -6,16 +6,17 @@ import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:video_compress/video_compress.dart';
 import '../../config.dart';
+import '../../widget/widget_drawer.dart';
 import '../local_widget/scaffold/home_main_screen_scaffold.dart';
 
 class HomeMainScreen extends StatelessWidget {
   HomeMainScreen({super.key});
 
-  final BottomNavBarController _bottomNavBarController =
-      Get.put(BottomNavBarController());
   final HomeController _homeController = Get.put(HomeController());
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +24,13 @@ class HomeMainScreen extends StatelessWidget {
       bodySection: _buildBodySection(),
       bottomNavigationSection: BottomNavBar(),
       modalBottomSheet: _buildBottomModalSheet(context),
+      drawer: DrawerWidget(),
     );
   }
 
   Widget _buildBodySection() {
-    return Obx(() => _bottomNavBarController
-        .pages.value[_bottomNavBarController.bottomNavCurrentIndex.value]);
+    return Obx(() => BottomNavBarController.to
+        .pages.value[BottomNavBarController.to.bottomNavCurrentIndex.value]);
   }
 
   Widget _buildBottomModalSheet(context) {
@@ -74,7 +76,7 @@ class HomeMainScreen extends StatelessWidget {
                         child: GestureDetector(
                           child: Text('카메라/동영상'),
                           onTap: () {
-                            Get.to(HomeAddDetailInfoScreen());
+
                           },
                         ),
                       ),
@@ -87,7 +89,7 @@ class HomeMainScreen extends StatelessWidget {
                         child: GestureDetector(
                           child: Text('업로드'),
                           onTap: () {
-                            Get.to(HomePostUploadScreen());
+                            _pickMediaFromGallery();
                           },
                         ),
                       ),
@@ -125,4 +127,18 @@ class HomeMainScreen extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _pickMediaFromGallery() async {
+    final XFile? pickedMedia = await _picker.pickMedia(imageQuality:80);
+    final videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'wmv'];
+    if(pickedMedia != null){
+      if(videoExtensions.any((extension) =>pickedMedia.path.endsWith(extension) )){
+        HomeController.to.fetchImage.value = await VideoCompress.getFileThumbnail(pickedMedia.path).then((value) => Get.to(HomeAddDetailInfoScreen()));
+      }else{
+        HomeController.to.fetchImage.value = pickedMedia;
+        Get.to(HomePostUploadScreen());
+      }
+    }
+  }
+  
 }

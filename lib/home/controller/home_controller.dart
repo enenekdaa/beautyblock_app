@@ -1,24 +1,61 @@
+import 'package:beautyblock_app/model/channel_model.dart';
+import 'package:beautyblock_app/model/roles_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeController extends GetxController {
+  static HomeController get to => Get.find();
+
+  //textEditingController
+  var uploadTitleController = TextEditingController();
+  var uploadContentController = TextEditingController();
+  var uploadTagController = TextEditingController();
+  var searchController = TextEditingController();
+
   //mainPage
+  var isShowSubscriptionChannel = false.obs;
   var influencerList = [].obs;
   var selectIfluencerIndex = 0.obs;
+
+  //search
+  var brandList =[].obs;
+  var filteredData = [].obs;
+  var searchQuery ="".obs;
+
+
   //selectCountry
   var continents = [].obs;
   var countries = [].obs;
+
   //postUpload
   var categories = [].obs;
+  late final fetchImage ;
+
+  //fetchList
+  var channels = <ChannelModel>[].obs;
+  var roles = <RolesModel>[].obs;
+
   //dropdown
   var dropdownSelected = <String, String>{
     "category": "Brand",
-    "countries": '대한민국',
-    'continents': '아시아'
+    "country": '대한민국',
+    'continent': '아시아'
   }.obs;
+
+  //drawer
+  var selectedSearchCategory = 'Brand'.obs;
+
   //alarmPage
   var isAlarmClicked = false.obs;
+
   //switchClicked
-  var isSwitchChecked = <String, bool>{'isPostOpen':false,'isUseReview':false,'isAlarm':false}.obs;
+  var isSwitchChecked = <String, bool>{
+    'isPostOpen': false,
+    'isUseReview': false,
+    'isAlarm': false
+  }.obs;
+
   //worldAndCategorySelect
   var isWorldSelected = false.obs;
 
@@ -32,6 +69,7 @@ class HomeController extends GetxController {
     dropdownSelected[dropdownKey] = newValue;
     dropdownSelected.refresh();
   }
+
   //dropdownGetValue
   String? getDropdownSelectedValue(String dropdownKey) {
     return dropdownSelected[dropdownKey];
@@ -42,10 +80,31 @@ class HomeController extends GetxController {
     isSwitchChecked[switchKey] = newValue;
     isSwitchChecked.refresh();
   }
+
   //switchGetValue
   bool getSwitchValue(String switchKey) {
     return isSwitchChecked[switchKey]!;
   }
+
+  // sortFromList(type,List list){
+  //   if(type == 'Latest'){
+  //     list.sort((a,b) => a.createAt.compareTo(b.createAt));
+  //   }else{
+  //     list.sort((a,b)=> a.po.compareTo(b.po));
+  //   }
+  // }
+  void updateSearchQuery(String newQuery) {
+      searchQuery.value = newQuery;
+      if (searchQuery.value.isNotEmpty) {
+        filteredData.value = brandList
+            .where((item) =>
+            item.toLowerCase().contains(searchQuery.value.toLowerCase()))
+            .toList();
+      } else {
+        filteredData.value = brandList;
+      }
+  }
+
 
   @override
   void onInit() {
@@ -70,5 +129,29 @@ class HomeController extends GetxController {
       'OEM/ODM',
       'Logistic',
     ];
+    brandList.value = [
+      '샤넬',
+      '루이비통',
+      '쿠션',
+      '맥',
+      '프라다',
+      '디올',
+      '뷰티블록',
+    ];
+    filteredData.value = brandList;
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    uploadTitleController.dispose();
+    uploadContentController.dispose();
+    uploadTagController.dispose();
+    searchController.dispose();
+    influencerList.value = [];
+    countries.value = [];
+    continents.value=[];
+    categories.value = [];
+  }
+
 }

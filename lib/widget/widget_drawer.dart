@@ -35,6 +35,7 @@ class DrawerWidget extends StatelessWidget {
                         ),
                         onTap: () {
                           print('${_homeController.categories[index]} is clicked');
+                          HomeController.to.selectedSearchCategory.value = _homeController.categories[index];
                           Get.to(HomeSelectCountryScreen());
                         },
                         trailing:

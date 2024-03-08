@@ -44,7 +44,7 @@ class HomeAddDetailInfoScreen extends StatelessWidget {
           height: Get.height * 0.11,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/img_test_video_thumbnail.png'),
+            child: Image.file(HomeController.to.fetchImage),
           ),
         ),
         SizedBox(height: Get.height * 0.02,),

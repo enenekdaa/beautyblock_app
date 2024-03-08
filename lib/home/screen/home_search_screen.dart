@@ -1,12 +1,31 @@
+import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/home_brand_search_listview_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../local_widget/scaffold/home_search_screen_scaffold.dart';
 
-class HomeSearchScreen extends StatelessWidget {
+class HomeSearchScreen extends StatefulWidget {
   const HomeSearchScreen({super.key});
+
+  @override
+  State<HomeSearchScreen> createState() => _HomeSearchScreen();
+}
+
+
+
+class _HomeSearchScreen extends State<HomeSearchScreen> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    HomeController.to.searchQuery.value = '';
+    HomeController.to.searchController.text = '';
+    HomeController.to.filteredData.value = HomeController.to.brandList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +40,19 @@ class HomeSearchScreen extends StatelessWidget {
         titleSpacing: 0,
         leading: IconButton(
             icon: Image.asset('assets/images/ic_back_arrow.png'),
-            onPressed: () => Get.back()
+            onPressed: () {
+
+              Get.back();
+
+            }
         ),
         title: Row(
           children: [
             Flexible(
             fit: FlexFit.tight,
-            child: TextFormField(decoration: InputDecoration(
+            child: TextFormField(
+              controller: HomeController.to.searchController,
+              decoration: InputDecoration(
               isDense: true,
               hintText: 'Beauty Block Search',
               filled: true,
@@ -47,7 +72,10 @@ class HomeSearchScreen extends StatelessWidget {
           ),]
         )
         ,actions: [
-          Container(width:Get.width * 0.15 ,child: SvgPicture.asset('assets/images/ic_search.svg'))
+          GestureDetector(child: Container(width:Get.width * 0.15 ,child: SvgPicture.asset('assets/images/ic_search.svg')),onTap: (){
+            HomeController.to.updateSearchQuery(HomeController.to.searchController.text);
+            print('search Query ========== ${HomeController.to.searchController.text}');
+          },)
     ],
       bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
@@ -64,20 +92,14 @@ class HomeSearchScreen extends StatelessWidget {
   }
 
   Widget _buildListview(){
-    return ListView(
-      scrollDirection: Axis.vertical,
-      children: [
-          HomeBrandSearchListViewItem(text:'샤넬'),
-          HomeBrandSearchListViewItem(text:'루이비통'),
-          HomeBrandSearchListViewItem(text:'맥'),
-          HomeBrandSearchListViewItem(text:'디올'),
-          HomeBrandSearchListViewItem(text:'프라다'),
-        HomeBrandSearchListViewItem(text:'샤넬'),
-        HomeBrandSearchListViewItem(text:'루이비통'),
-        HomeBrandSearchListViewItem(text:'맥'),
-        HomeBrandSearchListViewItem(text:'디올'),
-        HomeBrandSearchListViewItem(text:'프라다'),
-      ],
+    print('filtered length ==== ${HomeController.to.filteredData.length}');
+    return Obx(()=> ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: HomeController.to.filteredData.length,
+        itemBuilder: (context,index){
+        return HomeBrandSearchListViewItem(text:HomeController.to.filteredData[index]);
+        },
+      ),
     );
   }
 }

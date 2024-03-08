@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/auth/join/controller/join_controller.dart';
 import 'package:beautyblock_app/auth/join/local_widget/join_select_category_scaffold.dart';
 import 'package:beautyblock_app/auth/join/screen/join_check_info_screen.dart';
 import 'package:beautyblock_app/config.dart';
@@ -56,26 +57,15 @@ class JoinSelectCategoryScreen extends StatelessWidget {
   }
 
   Widget _buildInterestTypeContainer() {
-    List<String> interestTypeList = [
-      "BUYER",
-      "CELEB",
-      "MKT",
-      "PR",
-      "OEM",
-      "ODM",
-      "LOGISTIC",
-      "INFLUENCER",
-      "OTHERS"
-    ];
-    List<Widget> textWidgetList = [];
-    interestTypeList.forEach((textValue) {
-      textWidgetList.add(CategoryButtonWidget(
-        text: textValue,
-        onPress: () {},
-        index: 0,
-        isSelected: false,
-      ));
-    });
+    List<Widget> widgets = JoinController.to.interestTypeList.map((value){
+     return Obx(()=> CategoryButtonWidget(
+        text: value,
+        onPress: () {JoinController.to.toggleInterestTypeButton(JoinController.to.interestTypeList.indexOf(value));},
+        isSelected: JoinController.to.interestTypeIsChecked[JoinController.to.interestTypeList.indexOf(value)],
+           )
+     );
+    }).toList();
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.height *0.01),
       child: Container(
@@ -104,7 +94,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             Wrap(
               spacing: 12,
               runSpacing: 3, //수직
-              children: textWidgetList,
+              children: widgets,
             ),
           ],
         ),
@@ -113,18 +103,15 @@ class JoinSelectCategoryScreen extends StatelessWidget {
   }
 
   Widget _buildInterestCategoryContainer() {
-    print('========build category in');
-    List<String> interestCategoryList = ['뷰티','색조','스킨케어','마스크/팩','선케어','클렌징/필링','베이스'];
-    List<Widget> categoryWidgetList = [];
+   List<Widget> widgets = JoinController.to.interestCategoryList.map((value){
+    return Obx(()=> CategoryButtonWidget(
+      text: value,
+      onPress: () {JoinController.to.toggleInterestCategoryButton(JoinController.to.interestCategoryList.indexOf(value));},
+      isSelected: JoinController.to.interestCategoryIsChecked[JoinController.to.interestCategoryList.indexOf(value)],
+    )
+    );
+   }).toList();
 
-    interestCategoryList.forEach((textValue) {
-      categoryWidgetList.add(CategoryButtonWidget(
-        text: textValue,
-        onPress: () {},
-        index: 0,             //카테고리 버튼 index
-        isSelected: false,    //카테고리 버튼 toggle event
-      ));
-    });
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
       child: Container(
@@ -153,7 +140,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             Wrap(
               spacing: 12,  //수평
               runSpacing: 3, //수직
-              children: categoryWidgetList,
+              children: widgets,
             ),
           ],
         ),
@@ -162,17 +149,15 @@ class JoinSelectCategoryScreen extends StatelessWidget {
   }
 
   Widget _buildInterestCountryContainer() {
-    List<String> interestCountryList = ['대한민국'];
-    List<Widget> countryWidgetList = [];
+    List<Widget> widgets = JoinController.to.interestCountryList.map((value){
+      return Obx(()=> CategoryButtonWidget(
+        text: value,
+        onPress: () {JoinController.to.toggleInterestCountryButton(JoinController.to.interestCountryList.indexOf(value));},
+        isSelected: JoinController.to.interestCountryIsChecked[JoinController.to.interestCountryList.indexOf(value)],
+      )
+      );
+    }).toList();
 
-    interestCountryList.forEach((textValue) {
-      countryWidgetList.add(CategoryButtonWidget(
-        text: textValue,
-        onPress: () {},
-        index: 0,             //카테고리 버튼 index
-        isSelected: false,    //카테고리 버튼 toggle event
-      ));
-    });
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
       child: Container(
@@ -193,7 +178,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             Wrap(
               spacing: 12,  //수평
               runSpacing: 3, //수직
-              children: countryWidgetList,
+              children: widgets,
             ),
           ],
         ),

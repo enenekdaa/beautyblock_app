@@ -1,10 +1,9 @@
+import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
-import 'package:beautyblock_app/home/screen/home_main_screen.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_custom_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../config.dart';
 import '../../../widget/widget_radius_button.dart';
@@ -13,8 +12,6 @@ import '../local_widget/scaffold/home_select_country_screen_scaffold.dart';
 
 class HomeSelectCountryScreen extends StatelessWidget {
   HomeSelectCountryScreen({super.key});
-
-  final HomeController _homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,9 @@ class HomeSelectCountryScreen extends StatelessWidget {
               SizedBox(
                 height: Get.height * 0.005,
               ),
-              CustomDropDownWidget(itemList: _homeController.continents, dropdownKey: 'continents')
+              CustomDropDownWidget(
+                  itemList: HomeController.to.continents,
+                  dropdownKey: 'continent')
             ],
           ),
         ), //Continents
@@ -63,7 +62,8 @@ class HomeSelectCountryScreen extends StatelessWidget {
               SizedBox(
                 height: Get.height * 0.005,
               ),
-              CustomDropDownWidget(itemList: _homeController.countries, dropdownKey: 'countries')
+              CustomDropDownWidget(
+                  itemList: HomeController.to.countries, dropdownKey: 'country')
             ],
           ),
         ), //Counties
@@ -90,7 +90,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
                 ),
                 child: Obx(
                   () => Text(
-                      '${_homeController.getDropdownSelectedValue('continents')}>${_homeController.getDropdownSelectedValue('countries')}',
+                      '${HomeController.to.getDropdownSelectedValue('continent')}>${HomeController.to.getDropdownSelectedValue('country')}',
                       style: AppTheme.smallTitleTextStyle
                           .copyWith(fontWeight: FontWeight.w400)),
                 ),
@@ -105,8 +105,22 @@ class HomeSelectCountryScreen extends StatelessWidget {
   Widget _buildBottomButton() {
     return RadiusButtonWidget(
       text: "확인",
-      onPress: () =>{Get.offAll(HomeMainScreen())},
+      onPress: () => showSelectedSearchInfo(),
       backgroundColor: GlobalBeautyColor.buttonHotPink,
     );
+  }
+
+  showSelectedSearchInfo() {
+    customDialog(
+        '선택 확인',
+        Text(
+            '검색 : ${HomeController.to.selectedSearchCategory.value}'
+                '\n지역 : ${HomeController.to.getDropdownSelectedValue('country')}'
+                '\n국가 : ${HomeController.to.getDropdownSelectedValue('continent')}'
+                '\n선택하신 항목으로 검색하시겠습니까?',textAlign: TextAlign.center,),
+        (){
+          BottomNavBarController.to.onItemTapped(1);
+          Get.back();},
+        "확인");
   }
 }

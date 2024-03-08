@@ -42,7 +42,7 @@ class HomePostUploadScreen extends StatelessWidget {
   }
 
   Widget _buildimageSection() {
-    return OverlappingImagesWidget(image: AssetImage('assets/images/img_test.png'));
+    return OverlappingImagesWidget(image:Image.file(HomeController.to.fetchImage));
   }
 
   Widget _buildWritePost() {
@@ -59,9 +59,9 @@ class HomePostUploadScreen extends StatelessWidget {
           CustomDropDownWidget(
               itemList: _homeController.categories, dropdownKey: 'category'),
           SizedBox(height: Get.height * 0.03),
-          TextInputWidget(titleText: '제목', hintText: '제목을 입력해 주세요.', isVisible: false),
+          TextInputWidget(titleText: '제목', hintText: '제목을 입력해 주세요.', isGuideTextVisible: false,controller:_homeController.uploadTitleController ,),
           SizedBox(height: Get.height * 0.03),
-          Text('내용',style: AppTheme.smallTitleTextStyle),
+          Text('내용',style: AppTheme.smallTitleTextStyle,),
           SizedBox(height: Get.height * 0.01),
           Stack(
             children:[ TextField(
@@ -69,6 +69,7 @@ class HomePostUploadScreen extends StatelessWidget {
               minLines: 3,
               maxLines: null,
               keyboardType: TextInputType.multiline,
+              controller: _homeController.uploadContentController,
               decoration: InputDecoration(
                 hintText: '내용을 입력해 주세요.',
                 hintStyle: AppTheme.tagTextStyle.copyWith(fontWeight: FontWeight.w400,fontSize: 14),
@@ -86,7 +87,7 @@ class HomePostUploadScreen extends StatelessWidget {
             ]
           ),
           SizedBox(height: Get.height * 0.03),
-          TextInputWidget(titleText: '태그', hintText: "태그", isVisible: false),
+          TextInputWidget(titleText: '태그', hintText: "태그", isGuideTextVisible: false,controller: _homeController.uploadTagController,),
           SizedBox(height: Get.height * 0.03),
           RadiusButtonWidget(
               onPress: () {Get.to(HomePostShareScreen());},

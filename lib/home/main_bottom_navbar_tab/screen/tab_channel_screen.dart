@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/tab_channel_listview_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class TabChannelScreen extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: Get.width * 0.02),
-            child: Text('Brand'),
+            child: Obx(()=> Text(HomeController.to.selectedSearchCategory.value)),
           ),
         ],
       ),

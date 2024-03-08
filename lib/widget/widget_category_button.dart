@@ -7,13 +7,13 @@ class CategoryButtonWidget extends StatelessWidget {
   const CategoryButtonWidget({
     Key? key,
     required this.text,
-    required this.index,
+    // required this.index,
     required this.onPress,
     required this.isSelected,
   }) : super(key: key);
 
   final text;
-  final index;
+  // final index;
   final onPress;
   final isSelected;
 

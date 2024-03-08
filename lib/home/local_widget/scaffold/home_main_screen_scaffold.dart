@@ -9,20 +9,22 @@ class HomeMainScreenScaffold extends StatelessWidget {
     // required this.homeAppbarSection,
     required this.bodySection,
     required this.bottomNavigationSection,
-    required this.modalBottomSheet
+    required this.modalBottomSheet,
+    required this.drawer
   }) : super(key: key);
 
   // final homeAppbarSection;
   final bodySection;
   final bottomNavigationSection;
   final modalBottomSheet;
+  final drawer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: homeAppbarSection,
       body: bodySection,
       bottomNavigationBar: bottomNavigationSection,
-      drawer: DrawerWidget(),
+      drawer: drawer,
       bottomSheet: modalBottomSheet,
     );
   }

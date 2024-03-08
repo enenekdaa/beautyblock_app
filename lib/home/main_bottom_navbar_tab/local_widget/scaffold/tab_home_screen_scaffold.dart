@@ -6,14 +6,14 @@ class TabHomeScaffold extends StatelessWidget {
     Key? key,
     required this.homeAppbarSection,
     required this.tabBarSection,
-    required this.influencerListSection,
+    required this.subcriptionChannelListSection,
     required this.channelProfileSection,
     required this.bottomListviewSection,
   }) : super(key: key);
 
   final homeAppbarSection;
   final tabBarSection;
-  final influencerListSection;
+  final subcriptionChannelListSection;
   final channelProfileSection;
   final bottomListviewSection;
 
@@ -26,7 +26,7 @@ class TabHomeScaffold extends StatelessWidget {
         child: Column(
           children:[
             tabBarSection,
-            influencerListSection,
+            subcriptionChannelListSection,
             channelProfileSection,
             bottomListviewSection,
           ]

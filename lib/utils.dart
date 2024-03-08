@@ -68,7 +68,8 @@ class AppTheme {
   height: 1.45);
 }
 
-customDialog(String titleText, Widget textWidgets, onPress, buttonText) {
+
+customDialog(String titleText, Widget textWidgets, onPress, buttonText) async {
   Get.dialog(
     Dialog(
       backgroundColor: Colors.white,
@@ -82,6 +83,8 @@ customDialog(String titleText, Widget textWidgets, onPress, buttonText) {
               style: AppTheme.smallTitleTextStyle
                   .copyWith(fontSize: 16, fontWeight: FontWeight.w900),
             ),
+            SizedBox(height: 20),
+            textWidgets,
             SizedBox(height: 20),
             RadiusButtonWidget(
                 onPress: onPress,

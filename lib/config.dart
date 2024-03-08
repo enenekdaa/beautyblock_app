@@ -10,6 +10,10 @@ class GlobalBeautyColor {
   static final tagGray170 = Color.fromRGBO(174, 173, 170, 1);
 }
 
+class Server {
+  static const baseUrl = 'http://52.79.64.155:8080';
+}
+
 void prefStrSave(key, value) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString(key, value);

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../config.dart';
 import '../../../constants/firestore_constants.dart';
 import '../../../home/screen/home_main_screen.dart';
@@ -81,5 +85,40 @@ class LoginController extends GetxController {
 
   String getNick() {
     return _user?.nickName ?? '뷰티블록';
+  }
+
+  void setProfile() async {
+    ImagePicker imagePicker = ImagePicker();
+    File? imagePath;
+    final pickedFile = await imagePicker.pickImage(
+        source: ImageSource.gallery, maxWidth: 1024, imageQuality: 100);
+    if (pickedFile != null) {
+      imagePath = File(pickedFile.path);
+      uploadPhoto(imagePath);
+    }
+  }
+
+  Future uploadPhoto(File imagePath) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String path = "profile";
+    UploadTask uploadTask = uploadFirebase(path, imagePath, fileName);
+    try {
+      TaskSnapshot snapshot = await uploadTask;
+      String profileUrl = await snapshot.ref.getDownloadURL();
+      firebaseFirestore
+          .collection(FirestoreConstants.pathUserCollection)
+          .doc(_user?.id)
+          .update({
+        'profile': profileUrl,
+      });
+      _user?.profile = profileUrl;
+      update();
+    } on FirebaseException catch (e) {}
+  }
+
+  UploadTask uploadFirebase(String path, File image, String fileName) {
+    Reference reference = firebaseStorage.ref(path).child(fileName);
+    UploadTask uploadTask = reference.putFile(image);
+    return uploadTask;
   }
 }

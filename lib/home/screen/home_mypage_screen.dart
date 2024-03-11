@@ -4,6 +4,7 @@ import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_screen_sc
 import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_mychannel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_myvideo_screen.dart';
+import 'package:beautyblock_app/model/login_model.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_appbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,11 +23,13 @@ class HomeMyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeMypageScreenScaffold(
-        homeAppbarSection: _buildAppbar(),
-        profileImgSection: profileImg(),
-        listTitleSection: _buildList(),
-        bottomButtonSection: _buildbottomButton());
+    return GetBuilder<LoginController>(builder: (controller) {
+      return HomeMypageScreenScaffold(
+          homeAppbarSection: _buildAppbar(),
+          profileImgSection: profileImg(),
+          listTitleSection: _buildList(),
+          bottomButtonSection: _buildbottomButton());
+    });
   }
 
   Widget _buildAppbar() {
@@ -62,7 +65,9 @@ class HomeMyPageScreen extends StatelessWidget {
             right: Get.width * 0.27,
             child: IconButton(
               icon: SvgPicture.asset('assets/images/ic_photo.svg'),
-              onPressed: () {},
+              onPressed: () {
+                LoginController.to.setProfile();
+              },
             ))
       ],
     );

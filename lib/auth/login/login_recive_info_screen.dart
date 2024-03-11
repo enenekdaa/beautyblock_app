@@ -8,30 +8,67 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../config.dart';
 import '../../widget/widget_radius_button.dart';
+import '../../widget/widget_sns_join_button.dart';
 import '../../widget/widget_text_input.dart';
+import '../join/controller/join_controller.dart';
 
 class LoginReciveInfoScreen extends StatelessWidget {
-   LoginReciveInfoScreen({super.key});
+  LoginReciveInfoScreen({super.key});
 
-   final LoginController _loginController = Get.find();
+  final LoginController _loginController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return LoginRecieveScreenScaffold(
         mainLogoWidget: _buildMainLogo(),
-        middleContent: _buildLoginReceiver(),
+        middleContent: Container(),
+        // middleContent: _buildLoginReceiver(),
+        // loginButton: _buildLoginButton(),
         loginButton: _buildLoginButton(),
         bottomNavigationBar: LoginBottomNavBarWidget());
   }
 
-  Widget _buildMainLogo(){
+  Widget _buildMainLogo() {
     return MainLogoWidget(
       imageHeight: Get.height * 0.1,
       imageCrossAlignment: CrossAxisAlignment.start,
-      contentGap: 5.0  ,
+      contentGap: 5.0,
     );
   }
-  Widget _buildLoginReceiver(){
+
+  Widget _buildSnsLoginButton() {
+    return Container(
+      height: Get.height * 0.15,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SNSJoinButtonWidget(
+                  snsIcon: Image.asset('assets/images/ic_apple.png'),
+                  onPress: () {}),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
+                child: SNSJoinButtonWidget(
+                    snsIcon: Image.asset('assets/images/ic_google.png'),
+                    onPress: () {
+                      _loginController.signInWithGoogle();
+                    }),
+              ),
+              // SNSJoinButtonWidget(
+              //     snsIcon: Image.asset('assets/images/ic_facebook.png'),
+              //     onPress: () {
+              //       _joinController.signInWithFacebook();
+              //     }),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginReceiver() {
     return Container(
       child: Column(
         children: [
@@ -58,16 +95,15 @@ class LoginReciveInfoScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginButton(){
+  Widget _buildLoginButton() {
     return RadiusButtonWidget(
         text: 'Login',
         backgroundColor: GlobalBeautyColor.buttonHotPink,
-        onPress: (){
+        onPress: () {
           // _loginController.loginApp().then((value) =>
           //     Get.to(HomeMainScreen())
           // );
-           Get.to(HomeMainScreen());
+          Get.to(HomeMainScreen());
         });
   }
-
 }

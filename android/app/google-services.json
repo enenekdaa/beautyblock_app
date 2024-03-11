@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "992094078368",
+    "project_id": "beautyblock-412902",
+    "storage_bucket": "beautyblock-412902.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992094078368:android:6670640187dee0b5c410c5",
+        "android_client_info": {
+          "package_name": "com.example.beautyblock_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992094078368-fc76qkheb826n5eock77pt98h4uc066p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.beautyblock_app",
+            "certificate_hash": "096108a8c9d45ec59986ec7129cd78ba63d912d9"
+          }
+        },
+        {
+          "client_id": "992094078368-67n5aid5us7lbcqu8lu4q8l56cd4lhnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDheNnNIfUDObdu3Hj9u5o1gOOaXHUzk-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992094078368-67n5aid5us7lbcqu8lu4q8l56cd4lhnj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "992094078368-g0iia9go59imb1mpl8o443cq4gq0t4s4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.googleusercontent.apps.48475414592-lqqfgh326ok96novje9ls2a9i5kp4dil"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

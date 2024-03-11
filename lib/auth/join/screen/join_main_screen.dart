@@ -12,20 +12,21 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class JoinMainScreen extends StatelessWidget {
-   JoinMainScreen({super.key});
+  JoinMainScreen({super.key});
 
-    final JoinController _joinController = Get.find();
+  final JoinController _joinController = Get.find();
   @override
   Widget build(BuildContext context) {
     return JoinMainScreenScaffold(
       mainLogoWidget: _buildMainLogo(),
       middleContent: _buildmiddleContents(),
-      joinButton: _buildJoinButton(),
+      joinButton: Container(),
+      // joinButton: _buildJoinButton(),
       bottomButtonSection: _buildBottomSNSJoinButton(),
     );
   }
 
-  Widget _buildMainLogo(){
+  Widget _buildMainLogo() {
     return MainLogoWidget(
       imageHeight: Get.height * 0.2,
       imageCrossAlignment: CrossAxisAlignment.center,
@@ -63,40 +64,69 @@ class JoinMainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildJoinButton(){
+  Widget _buildJoinButton() {
     return RadiusButtonWidget(
       text: "Join",
       backgroundColor: GlobalBeautyColor.buttonHotPink,
-      onPress: () {Get.toNamed('/termsScreen');},
+      onPress: () {
+        Get.toNamed('/termsScreen');
+      },
     );
   }
 
-  Widget _buildBottomSNSJoinButton(){
+  Widget _buildBottomSNSJoinButton() {
+    //240311. jaesung.
+    //remove -----OR-----
+    //remove Facebook Login Button
     return Container(
       height: Get.height * 0.15,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Divider(thickness: 1,color:Color.fromRGBO(181, 181, 181, 0.7) ,),
-              Positioned(top: 0,child: Container(padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),color:Colors.white,child: Text('OR',style: AppTheme.boldMyPageTextStyle.copyWith(fontSize: 12,fontWeight: FontWeight.w500,height: 1.5),))),
-            ],
-          ),
-          SizedBox(height: Get.height * 0.02,),
+          // Stack(
+          //   alignment: Alignment.center,
+          //   children: [
+          //     Divider(
+          //       thickness: 1,
+          //       color: Color.fromRGBO(181, 181, 181, 0.7),
+          //     ),
+          //     Positioned(
+          //         top: 0,
+          //         child: Container(
+          //             padding:
+          //                 EdgeInsets.symmetric(horizontal: Get.width * 0.03),
+          //             color: Colors.white,
+          //             child: Text(
+          //               'OR',
+          //               style: AppTheme.boldMyPageTextStyle.copyWith(
+          //                   fontSize: 12,
+          //                   fontWeight: FontWeight.w500,
+          //                   height: 1.5),
+          //             ))),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: Get.height * 0.02,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SNSJoinButtonWidget(snsIcon: Image.asset('assets/images/ic_apple.png'), onPress: (){}),
+              SNSJoinButtonWidget(
+                  snsIcon: Image.asset('assets/images/ic_apple.png'),
+                  onPress: () {}),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
-                child: SNSJoinButtonWidget(snsIcon: Image.asset('assets/images/ic_google.png'), onPress: (){
-
-
-                  _joinController.signInWithGoogle();}),
+                child: SNSJoinButtonWidget(
+                    snsIcon: Image.asset('assets/images/ic_google.png'),
+                    onPress: () {
+                      _joinController.signInWithGoogle();
+                    }),
               ),
-              SNSJoinButtonWidget(snsIcon: Image.asset('assets/images/ic_facebook.png'), onPress: (){_joinController.signInWithFacebook();}),
+              // SNSJoinButtonWidget(
+              //     snsIcon: Image.asset('assets/images/ic_facebook.png'),
+              //     onPress: () {
+              //       _joinController.signInWithFacebook();
+              //     }),
             ],
           )
         ],

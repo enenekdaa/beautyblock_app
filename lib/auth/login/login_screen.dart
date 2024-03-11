@@ -13,41 +13,43 @@ import 'package:get/get.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
- final LoginController _loginController = Get.find();
+  final LoginController _loginController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    //240311 jaesung. bottomNavigationBar 시연용으로 주석처리
     return LoginScaffold(
-          mainLogoWidget: _buildMainLogo(),
-          middleContent: _buildMiddleText(),
-          loginButton: _buildLoginButton(),
-          bottomNavigationBar: LoginBottomNavBarWidget()
-          );
+      mainLogoWidget: _buildMainLogo(),
+      middleContent: _buildMiddleText(),
+      loginButton: _buildLoginButton(),
+      bottomNavigationBar: Container(),
+      // bottomNavigationBar: LoginBottomNavBarWidget()
+    );
   }
 
-  Widget _buildMainLogo(){
+  Widget _buildMainLogo() {
     return MainLogoWidget(
       imageHeight: Get.height * 0.2,
       imageCrossAlignment: CrossAxisAlignment.center,
-      contentGap: 10.0  ,
+      contentGap: 10.0,
     );
   }
-  Widget _buildLoginButton(){
+
+  Widget _buildLoginButton() {
     return RadiusButtonWidget(
         text: 'Login',
         backgroundColor: GlobalBeautyColor.buttonHotPink,
-        onPress: (){
-          Get.offAll(()=>LoginReciveInfoScreen());
+        onPress: () {
+          Get.offAll(() => LoginReciveInfoScreen());
         });
   }
 
-
- Container _buildMiddleText() {
-      return Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text(
-            '당신의 아름다움을 위한 선택',
-            style: AppTheme.smallTitleTextStyle,
-          ));
+  Container _buildMiddleText() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Text(
+          '당신의 아름다움을 위한 선택',
+          style: AppTheme.smallTitleTextStyle,
+        ));
   }
 }

@@ -9,38 +9,39 @@ class JoinMainScreenScaffold extends StatelessWidget {
     required this.middleContent,
     required this.joinButton,
     required this.bottomButtonSection,
-  }):super(key: key);
+  }) : super(key: key);
 
   final mainLogoWidget;
   final middleContent;
   final joinButton;
   final bottomButtonSection;
-
+  //240311. jaesung. remove Alignment, bottomButtonSection added to Column
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0,horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         child: Column(
           children: [
             Expanded(
               child: Container(
-                child:
-                Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     mainLogoWidget,
                     middleContent,
                     joinButton,
+                    bottomButtonSection
                   ],
                 ),
               ),
             ),
-            Align(alignment: Alignment.bottomCenter,child: bottomButtonSection,)
+
+            // Align(alignment: Alignment.bottomCenter,child: bottomButtonSection,)
           ],
         ),
       ),
-      );
+    );
   }
 }

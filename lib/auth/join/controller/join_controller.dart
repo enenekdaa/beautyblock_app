@@ -16,6 +16,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../../constants/firestore_constants.dart';
 import '../../../home/screen/home_main_screen.dart';
 import '../../login/controller/login_controller.dart';
+import '../screen/join_select_category_screen.dart';
 
 class JoinController extends GetxController {
   //240311 jaesung. firestore 추가
@@ -23,7 +24,7 @@ class JoinController extends GetxController {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final LoginController _loginController = Get.find();
   static JoinController get to => Get.find();
-
+  BeautyUser? _user;
   //termsOfUse
   var isChecked = List<bool>.filled(4, false).obs;
 
@@ -176,6 +177,7 @@ class JoinController extends GetxController {
         .collection(FirestoreConstants.pathUserCollection)
         .doc(user.id)
         .set(user.toJson());
+    _user = user;
   }
 
   Future<void> signInWithGoogle() async {
@@ -194,14 +196,29 @@ class JoinController extends GetxController {
           .where('id', isEqualTo: user.id)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
-      if (documents.isEmpty) {
-        //미가입 시 가입 로직(데이터 생성 및 관심지정으로 이동)
-        signUp(user);
-      } else {
-        //기존 아이디 있으면 홈으로 이동
-        Get.to(HomeMainScreen());
-      }
+      // if (documents.isEmpty) {
+      //미가입 시 가입 로직(데이터 생성 및 관심지정으로 이동)
+      signUp(user);
+      signOutWithGoogle();
+      Get.to(() => const JoinSelectCategoryScreen());
+      // } else {
+      //기존 아이디 있으면 홈으로 이동
+      // Get.to(HomeMainScreen());
+      // }
     }
+  }
+
+  void updateInterests() async {
+    firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(_user?.id)
+        .update({
+      'interestTypes': selectedInterestTypeList,
+      'interestCategories': selectedInterestCategoryList,
+      'interestCountry': selectedInterestCountryList.isNotEmpty
+          ? selectedInterestCountryList.first
+          : ''
+    });
   }
 
   Future<void> signOutWithGoogle() async {

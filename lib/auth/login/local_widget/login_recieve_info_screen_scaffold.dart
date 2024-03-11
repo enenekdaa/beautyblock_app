@@ -5,13 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class LoginRecieveScreenScaffold extends StatelessWidget {
-  const LoginRecieveScreenScaffold({
-    Key?key,
-    required this.mainLogoWidget,
-    required this.middleContent,
-    required this.loginButton,
-    required this.bottomNavigationBar
-  }) : super(key:key);
+  const LoginRecieveScreenScaffold(
+      {Key? key,
+      required this.mainLogoWidget,
+      required this.middleContent,
+      required this.loginButton,
+      required this.bottomNavigationBar})
+      : super(key: key);
 
   final Widget mainLogoWidget;
   final Widget middleContent;
@@ -22,25 +22,25 @@ class LoginRecieveScreenScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-        body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 0,horizontal: 20),
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    mainLogoWidget,
-                    middleContent,
-                    loginButton,
-                  ],
-                ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  mainLogoWidget,
+                  middleContent,
+                  loginButton,
+                ],
               ),
-              bottomNavigationBar
-            ],
-          ),
+            ),
+            bottomNavigationBar
+          ],
         ),
+      ),
     );
   }
 }

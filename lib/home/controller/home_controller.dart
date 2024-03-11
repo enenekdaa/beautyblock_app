@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../auth/login/controller/login_controller.dart';
+
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
 
@@ -19,10 +21,9 @@ class HomeController extends GetxController {
   var selectIfluencerIndex = 0.obs;
 
   //search
-  var brandList =[].obs;
+  var brandList = [].obs;
   var filteredData = [].obs;
-  var searchQuery ="".obs;
-
+  var searchQuery = "".obs;
 
   //selectCountry
   var continents = [].obs;
@@ -30,7 +31,7 @@ class HomeController extends GetxController {
 
   //postUpload
   var categories = [].obs;
-  late final fetchImage ;
+  late final fetchImage;
 
   //fetchList
   var channels = <ChannelModel>[].obs;
@@ -94,17 +95,16 @@ class HomeController extends GetxController {
   //   }
   // }
   void updateSearchQuery(String newQuery) {
-      searchQuery.value = newQuery;
-      if (searchQuery.value.isNotEmpty) {
-        filteredData.value = brandList
-            .where((item) =>
-            item.toLowerCase().contains(searchQuery.value.toLowerCase()))
-            .toList();
-      } else {
-        filteredData.value = brandList;
-      }
+    searchQuery.value = newQuery;
+    if (searchQuery.value.isNotEmpty) {
+      filteredData.value = brandList
+          .where((item) =>
+              item.toLowerCase().contains(searchQuery.value.toLowerCase()))
+          .toList();
+    } else {
+      filteredData.value = brandList;
+    }
   }
-
 
   @override
   void onInit() {
@@ -140,6 +140,7 @@ class HomeController extends GetxController {
     ];
     filteredData.value = brandList;
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -150,8 +151,7 @@ class HomeController extends GetxController {
     searchController.dispose();
     influencerList.value = [];
     countries.value = [];
-    continents.value=[];
+    continents.value = [];
     categories.value = [];
   }
-
 }

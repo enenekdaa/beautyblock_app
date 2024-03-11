@@ -10,6 +10,7 @@ import '../../../config.dart';
 import '../../../utils.dart';
 import '../../../widget/widget_radius_button.dart';
 import '../../../widget/widget_text_input.dart';
+import '../../login/controller/login_controller.dart';
 import '../local_widget/join_check_info_scaffold.dart';
 
 class JoinCheckInfoScreen extends StatelessWidget {
@@ -25,41 +26,41 @@ class JoinCheckInfoScreen extends StatelessWidget {
 
   Widget _buildInfoContainer() {
     return Container(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-        child: Column(
-          children: [
-            TextInputWidget(
-              titleText: '이메일주소',
-              hintText: '이메일 주소를 입력해주세요.',
-              isGuideTextVisible: false,
-              // initTextValue: "afhskjfshafhjkdjkfh@dfhkafhdkj",
-              controller: JoinController.to.emailController,
-            ),
-            SizedBox(
-              height: Get.height * 0.03,
-            ),
-            TextInputWidget(
-              titleText: '회원명',
-              hintText: '회원명을 입력해주세요.',
-              isGuideTextVisible: false,
-              // initTextValue: "blackShadow",
-              controller: JoinController.to.nameController,
-            ),
-            SizedBox(
-              height: Get.height * 0.03,
-            ),
-            TextInputWidget(
-              titleText: '회사명',
-              hintText: '회사명을 입력해주세요.',
-              isGuideTextVisible: false,
-              // initTextValue: "blackCompany",
-              controller: JoinController.to.companyNameController,
-            ),
-          ],
-        ),
-      ),
-    );
+        // child: Padding(
+        //   padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
+        //   child: Column(
+        //     children: [
+        //       TextInputWidget(
+        //         titleText: '이메일주소',
+        //         hintText: '이메일 주소를 입력해주세요.',
+        //         isGuideTextVisible: false,
+        //         // initTextValue: "afhskjfshafhjkdjkfh@dfhkafhdkj",
+        //         controller: JoinController.to.emailController,
+        //       ),
+        //       SizedBox(
+        //         height: Get.height * 0.03,
+        //       ),
+        //       TextInputWidget(
+        //         titleText: '회원명',
+        //         hintText: '회원명을 입력해주세요.',
+        //         isGuideTextVisible: false,
+        //         // initTextValue: "blackShadow",
+        //         controller: JoinController.to.nameController,
+        //       ),
+        //       SizedBox(
+        //         height: Get.height * 0.03,
+        //       ),
+        //       TextInputWidget(
+        //         titleText: '회사명',
+        //         hintText: '회사명을 입력해주세요.',
+        //         isGuideTextVisible: false,
+        //         // initTextValue: "blackCompany",
+        //         controller: JoinController.to.companyNameController,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        );
   }
 
   Widget _buildInterestContainer() {
@@ -85,6 +86,9 @@ class JoinCheckInfoScreen extends StatelessWidget {
             Text(
               '나의 관심사',
               style: AppTheme.smallTitleTextStyle,
+            ),
+            SizedBox(
+              height: 6,
             ),
             Wrap(
               spacing: 10, //수평
@@ -118,7 +122,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
         Expanded(
             child: RadiusButtonWidget(
                 onPress: () {
-
+                  Get.back();
                 },
                 text: '수정하기',
                 backgroundColor: Color.fromRGBO(165, 165, 165, 1))),
@@ -134,6 +138,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
                   //         JoinController.to.userModel.value = value;
                   //       }
                   //     );
+                  JoinController.to.updateInterests();
                   showJoinSuccessDialog();
                 },
                 text: '저장',

@@ -24,14 +24,14 @@ class LoginReciveInfoScreen extends StatelessWidget {
         middleContent: Container(),
         // middleContent: _buildLoginReceiver(),
         // loginButton: _buildLoginButton(),
-        loginButton: _buildLoginButton(),
+        loginButton: _buildSnsLoginButton(),
         bottomNavigationBar: LoginBottomNavBarWidget());
   }
 
   Widget _buildMainLogo() {
     return MainLogoWidget(
       imageHeight: Get.height * 0.1,
-      imageCrossAlignment: CrossAxisAlignment.start,
+      imageCrossAlignment: CrossAxisAlignment.center,
       contentGap: 5.0,
     );
   }

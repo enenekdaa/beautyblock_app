@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/auth/login/login_recive_info_screen.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_screen_scaffold.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../auth/login/controller/login_controller.dart';
 import '../../config.dart';
 import '../../widget/widget_radius_button.dart';
 
@@ -42,12 +44,17 @@ class HomeMyPageScreen extends StatelessWidget {
           child: Container(
             height: Get.height * 0.15,
             width: Get.width * 0.3,
-            child: CircleAvatar(
-              radius: Get.height * 0.15,
-              backgroundImage: AssetImage(
-                'assets/images/img_test.png',
-              ),
-            ),
+            child: LoginController.to.getProfile() == ''
+                ? CircleAvatar(
+                    radius: Get.height * 0.15,
+                    backgroundImage: AssetImage(
+                      'assets/images/img_test.png',
+                    ))
+                : CircleAvatar(
+                    radius: Get.height * 0.15,
+                    backgroundImage:
+                        NetworkImage(LoginController.to.getProfile()),
+                  ),
           ),
         ),
         Positioned(
@@ -64,36 +71,42 @@ class HomeMyPageScreen extends StatelessWidget {
   Widget _buildList() {
     return Column(
       children: [
-        myPageListTile('즐겨찾기',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageFavoritesChannelScreen());}),
-        myPageListTile('내 채널',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageMyChannelScreen());}),
-        myPageListTile('나의 영상',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {Get.to(HomeMyPageMyVideoScreen());}),
+        myPageListTile(
+            '즐겨찾기', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+          Get.to(HomeMyPageFavoritesChannelScreen());
+        }),
+        myPageListTile(
+            '내 채널', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+          Get.to(HomeMyPageMyChannelScreen());
+        }),
+        myPageListTile(
+            '나의 영상', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+          Get.to(HomeMyPageMyVideoScreen());
+        }),
         Divider(
           thickness: 1,
           color: Color.fromRGBO(171, 169, 163, 0.24),
         ),
-        myPageListTile('구매결제 내역',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
-        myPageListTile('문의하기',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        // myPageListTile('구매결제 내역',
+        //     SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        // myPageListTile('문의하기',
+        //     SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
         myPageListTile(
             '아이디',
             Text(
-              'adffhakjhfwkhfkd',
+              LoginController.to.getEmail(),
               style: AppTheme.boldMyPageTextStyle,
             ),
             () {}),
         myPageListTile(
             '닉네임',
             Text(
-              '홍길동',
+              LoginController.to.getNick(),
               style: AppTheme.boldMyPageTextStyle,
             ),
             () {}),
-        myPageListTile('비밀번호 재설정',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        // myPageListTile('비밀번호 재설정',
+        //     SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
         Divider(
           color: Color.fromRGBO(171, 169, 163, 0.24),
         ),
@@ -133,7 +146,10 @@ class HomeMyPageScreen extends StatelessWidget {
     return RadiusButtonWidget(
       backgroundColor: GlobalBeautyColor.buttonHotPink,
       text: '로그아웃',
-      onPress: () {},
+      onPress: () {
+        final LoginController _loginController = Get.find();
+        _loginController.logout();
+      },
     );
   }
 

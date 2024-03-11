@@ -52,7 +52,9 @@ class JoinAppDescriptionScreen extends StatelessWidget {
           style:
               AppTheme.smallTitleTextStyle.copyWith(fontSize: 16, height: 1.4),
         ),
-        SizedBox(height: Get.height * 0.01,),
+        SizedBox(
+          height: Get.height * 0.01,
+        ),
         Text(
           '브랜드, 바이어, 마케팅, 상품의 제작생산, 유통 그리고 셀렙,\n인플루언서, 유튜브 등 뷰티산업의 모든 서비스가\n한 화면에서 손쉽게 제공됩니다.',
           style: TextStyle(
@@ -70,7 +72,9 @@ class JoinAppDescriptionScreen extends StatelessWidget {
   Widget _buildBottomButton() {
     return RadiusButtonWidget(
       text: "NEXT",
-      onPress: () {Get.to(HomeMainScreen());},
+      onPress: () {
+        Get.offAll(() => HomeMainScreen());
+      },
       backgroundColor: GlobalBeautyColor.buttonHotPink,
     );
   }

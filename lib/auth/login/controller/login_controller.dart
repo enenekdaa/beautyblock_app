@@ -5,15 +5,17 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../config.dart';
 import '../../../constants/firestore_constants.dart';
+import '../../../home/screen/home_main_screen.dart';
 import '../../../model/firebase_user_model.dart';
 import '../../../model/login_model.dart';
+import '../login_recive_info_screen.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
   GetConnect getConnect = GetConnect();
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  late BeautyUser _user;
+  BeautyUser? _user;
   //Login
   var passwordController = TextEditingController();
   var userIdController = TextEditingController();
@@ -55,10 +57,29 @@ class LoginController extends GetxController {
       final List<DocumentSnapshot> documents = result.docs;
       DocumentSnapshot documentSnapshot = documents[0];
       user = BeautyUser.fromDocument(documentSnapshot);
+      setUser(user);
+      Get.off(HomeMainScreen());
     }
   }
 
   setUser(BeautyUser user) {
     _user = user;
+  }
+
+  logout() {
+    _user = null;
+    Get.off(LoginReciveInfoScreen());
+  }
+
+  String getProfile() {
+    return _user?.profile ?? '';
+  }
+
+  String getEmail() {
+    return _user?.email ?? 'beauty@gmail.com';
+  }
+
+  String getNick() {
+    return _user?.nickName ?? '뷰티블록';
   }
 }

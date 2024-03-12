@@ -117,7 +117,7 @@ class _HomeAddDetailInfoScreen extends State<HomeAddDetailInfoScreen> {
 
   Widget _buildBottomButton() {
     return RadiusButtonWidget(
-        onPress: () {showSaveSuccessDialog();},
+        onPress: () {showUploadDialog();},
         text: '동영상 업로드',
         backgroundColor: GlobalBeautyColor.buttonHotPink);
   }
@@ -177,7 +177,7 @@ class _HomeAddDetailInfoScreen extends State<HomeAddDetailInfoScreen> {
       print('동영상 선택 취소');
     }
   }
-  void showSaveSuccessDialog(){
+  void showUploadDialog(){
     customDialog('Upload 안내', Text('해당 파일을 업로드 하시겠습니까?',textAlign: TextAlign.center,), (){
       navigator?.pop(Get.context);
       HomeController.to.isVideoUploading.value = true;

@@ -6,6 +6,7 @@ class BeautyPost {
   String id = '';
   String userId = '';
   String video = '';
+  String thumbnail = '';
   String category = '';
   String title = '';
   String contents = '';
@@ -14,10 +15,12 @@ class BeautyPost {
   String createdAt = '';
   List<String> likes = [];
   List<String> tags = [];
+
   BeautyPost(
       {required this.id,
       required this.userId,
       this.video = '',
+      this.thumbnail = '',
       this.category = '',
       this.title = '',
       this.contents = '',
@@ -32,6 +35,7 @@ class BeautyPost {
       'id': id,
       'userId': userId,
       'video': video,
+      'thumbnail': thumbnail,
       'category': category,
       'title': title,
       'contents': contents,
@@ -47,6 +51,7 @@ class BeautyPost {
     String id = '';
     String userId = '';
     String video = '';
+    String thumbnail = '';
     String category = '';
     String title = '';
     String contents = '';
@@ -59,6 +64,7 @@ class BeautyPost {
       id = doc.get('id');
       userId = doc.get('userId');
       video = doc.get('video');
+      thumbnail = doc.get('thumbnail');
       category = doc.get('category');
       title = doc.get('title');
       contents = doc.get('contents');
@@ -72,6 +78,7 @@ class BeautyPost {
         id: id,
         userId: userId,
         video: video,
+        thumbnail: thumbnail,
         category: category,
         title: title,
         contents: contents,

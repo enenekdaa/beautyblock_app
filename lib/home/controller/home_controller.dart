@@ -17,11 +17,11 @@ class HomeController extends GetxController {
   var searchController = TextEditingController();
   var videoDescriptionController = TextEditingController();
 
-
   //mainPage
   var isShowSubscriptionChannel = false.obs;
   var influencerList = [].obs;
-  var selectIfluencerIndex = 0.obs;
+  var selectInfluencerIndex = 0.obs;
+  var influencerSelected = false.obs;
 
   //search
   var brandList = [].obs;
@@ -34,9 +34,9 @@ class HomeController extends GetxController {
 
   //postUpload
   var categories = [].obs;
-  var pickerVideoPath= "".obs ;
+  var pickerVideoPath = "".obs;
   var pickerIamgePath = ''.obs;
-  var pickerThumbnailVideoPath =''.obs;
+  var pickerThumbnailVideoPath = ''.obs;
   var isPostUploading = false.obs;
   var isVideoUploading = false.obs;
 
@@ -161,6 +161,5 @@ class HomeController extends GetxController {
     continents.value = [];
     categories.value = [];
     super.dispose();
-
   }
 }

@@ -11,6 +11,7 @@ class BeautyUser {
   String interestCountry = '';
   String company = '';
   String position = '';
+  int subscribeCnt = 0;
   BeautyUser(
       {required this.id,
       this.nickName = '',

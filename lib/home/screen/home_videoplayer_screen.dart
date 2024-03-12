@@ -134,15 +134,15 @@ class HomeVideoplayerScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: Get.width * 0.06),
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/images/ic_share.svg'),
-                              Text(' ')
-                            ],
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(right: Get.width * 0.06),
+                        //   child: Column(
+                        //     children: [
+                        //       SvgPicture.asset('assets/images/ic_share.svg'),
+                        //       Text(' ')
+                        //     ],
+                        //   ),
+                        // ),
                         Padding(
                           padding: EdgeInsets.only(right: Get.width * 0.02),
                           child: Column(

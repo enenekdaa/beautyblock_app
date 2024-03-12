@@ -1,6 +1,7 @@
 import 'package:beautyblock_app/home/screen/home_alarm_screen.dart';
 import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
 import 'package:beautyblock_app/home/screen/home_search_screen.dart';
+import 'package:beautyblock_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -38,76 +39,124 @@ class _TabHomeScreenState extends State<TabHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return TabHomeScaffold(
-      homeAppbarSection: _buildHomeAppbar(),
-      tabBarSection: _buildTabBar(_tabController),
-      subcriptionChannelListSection: Obx(()=>_buildSubscriptionChannelListviewSection()),
-      channelProfileSection: _buildChannelProfileSection(),
-      bottomListviewSection: _buildBottomListViewSection(),
-    );
+    return Obx(() => TabHomeScaffold(
+          homeAppbarSection: _buildHomeAppbar(),
+          tabBarSection: _buildTabBar(_tabController),
+          subcriptionChannelListSection:
+              _buildSubscriptionChannelListviewSection(),
+          channelProfileSection: _buildChannelProfileSection(),
+          bottomListviewSection: _buildBottomListViewSection(),
+        ));
   }
 
   Widget _buildHomeAppbar() {
+    if (HomeController.to.isShowSubscriptionChannel.value) {
+      return AppBar(
+        titleSpacing: 0,
+        leading: GestureDetector(
+            onTap: () {
+              HomeController.to.isShowSubscriptionChannel.value = false;
+            },
+            child: Image.asset('assets/images/ic_back_arrow.png')),
+        title: Row(
+          children: [
+            Text(
+              'Subscription',
+              style: AppTheme.appBarTextStyle,
+            ),
+          ],
+        ),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(4.0),
+            child: Container(
+                decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 2,
+              ),
+            ]))),
+      );
+    }
     return AppBar(
-      leadingWidth: 0,
-      leading: Text(''),
-      title: Padding(
-        padding: EdgeInsets.only(left: 20),
-        child: Image.asset('assets/images/ic_main_leading_logo.png',),
-      ),
-      titleSpacing: 0,
+        leadingWidth: 0,
+        leading: Text(''),
+        title: Container(
+          width: Get.width * 0.4,
+          padding: EdgeInsets.only(left: 20),
+          child: Image.asset(
+            'assets/images/ic_main_leading_logo_2.png',
+          ),
+        ),
+        titleSpacing: 0,
         backgroundColor: Colors.white,
         shadowColor: Colors.black.withOpacity(0.04),
         actions: [
           GestureDetector(
-            onTap: (){HomeController.to.isShowSubscriptionChannel.value = true;},
-            child: SvgPicture.asset('assets/images/ic_bookmark.svg'),
+            onTap: () {
+              if (HomeController.to.isShowSubscriptionChannel.value) {
+                HomeController.to.influencerSelected.value = false;
+              }
+              HomeController.to.isShowSubscriptionChannel.value =
+                  !HomeController.to.isShowSubscriptionChannel.value;
+            },
+            child: SvgPicture.asset(
+                HomeController.to.isShowSubscriptionChannel.value
+                    ? 'assets/images/ic_bookmark_active'
+                        '.svg'
+                    : 'assets/images/ic_bookmark_deactive'
+                        '.svg'),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
             child: GestureDetector(
               child: SvgPicture.asset('assets/images/ic_bell.svg'),
-              onTap: (){Get.to(HomeAlarmScreen());},
+              onTap: () {
+                Get.to(() => const HomeAlarmScreen());
+              },
             ),
           ),
           Padding(
             padding: EdgeInsets.only(right: 20),
             child: GestureDetector(
               child: SvgPicture.asset('assets/images/ic_search.svg'),
-              onTap: (){Get.to(HomeSearchScreen());},
+              onTap: () {
+                Get.to(() => const HomeSearchScreen());
+              },
             ),
           )
         ],
         bottom: PreferredSize(
             preferredSize: Size.fromHeight(2.0),
             child: Container(
-              height: 2,
-                decoration: BoxDecoration(
-                    boxShadow: [
+                height: 2,
+                decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.04),
-                    spreadRadius:1,
+                    spreadRadius: 1,
                     blurRadius: 3,
                     blurStyle: BlurStyle.inner,
                   ),
-                ]
-                ))));
+                ]))));
   }
 
   Widget _buildTabBar(controller) {
     List<dynamic> tabText = ["인기", "신규", "추천", "관심"];
-
-    return TabBarWidget(
-        controller: controller,
-        tabs: tabText
-            .map((text) =>
-                Container(width: Get.width * 0.3, child: Tab(text: text)))
-            .toList());
+    if (HomeController.to.isShowSubscriptionChannel.value) {
+      return Container();
+    } else {
+      return TabBarWidget(
+          controller: controller,
+          tabs: tabText
+              .map((text) =>
+                  Container(width: Get.width * 0.3, child: Tab(text: text)))
+              .toList());
+    }
   }
 
   Widget _buildSubscriptionChannelListviewSection() {
     List<Widget> inflWidgetList = [];
-   HomeController.to.influencerList.forEach((element) {
+    HomeController.to.influencerList.forEach((element) {
       inflWidgetList.add(Padding(
         padding: EdgeInsets.only(right: Get.width * 0.04),
         child: GestureDetector(
@@ -115,37 +164,57 @@ class _TabHomeScreenState extends State<TabHomeScreen>
             backgroundimage: AssetImage('assets/images/img_test.png'),
             text: element,
             bottomTextIsVisible: true,
+            selected: HomeController.to.selectInfluencerIndex.value ==
+                    HomeController.to.influencerList.indexOf(element) &&
+                HomeController.to.influencerSelected.value,
           ),
           onTap: () {
-            HomeController.to.selectIfluencerIndex.value =
-                HomeController.to.influencerList.indexOf(element);
+            if (HomeController.to.influencerSelected.value == false) {
+              //선택 안되었으면 무조건 선택
+              HomeController.to.selectInfluencerIndex.value =
+                  HomeController.to.influencerList.indexOf(element);
+              HomeController.to.influencerSelected.value = true;
+            } else if (HomeController.to.selectInfluencerIndex.value ==
+                HomeController.to.influencerList.indexOf(element)) {
+              //선택 되어있는데 선택한거 다시 선택
+              HomeController.to.influencerSelected.value = false;
+            } else {
+              //선택 되어있는데 다른거 선택
+              HomeController.to.selectInfluencerIndex.value =
+                  HomeController.to.influencerList.indexOf(element);
+              HomeController.to.influencerSelected.value = true;
+            }
           },
         ),
       ));
     });
-  return  HomeController.to.isShowSubscriptionChannel.value ?
-    Container(
-        height: Get.height * 0.13,
-        margin: EdgeInsets.only(top: Get.height * 0.015),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          scrollDirection: Axis.horizontal,
-          children: inflWidgetList,
-        ))
-    : SizedBox();
+    return HomeController.to.isShowSubscriptionChannel.value
+        ? Container(
+            height: Get.height * 0.13,
+            margin: EdgeInsets.only(top: Get.height * 0.015),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              children: inflWidgetList,
+            ))
+        : SizedBox();
   }
 
   Widget _buildChannelProfileSection() {
-    return SubscriptionProfileWidget(
-      imageUrl: AssetImage('assets/images/img_test.png'),
-      userName: HomeController.to
-          .influencerList[HomeController.to.selectIfluencerIndex.value],
-      subscriptionBtnOnPress: () {},
-      isSubscription: true,
-      useLikeButton: false,
-      useSubscriptionCountText: false,
-      channelTextOnPress: (){Get.to(HomeChannelDetailScreen());},
-    );
+    return HomeController.to.influencerSelected.value
+        ? SubscriptionProfileWidget(
+            imageUrl: const AssetImage('assets/images/img_test.png'),
+            userName: HomeController.to
+                .influencerList[HomeController.to.selectInfluencerIndex.value],
+            subscriptionBtnOnPress: () {},
+            isSubscription: true,
+            useLikeButton: false,
+            useSubscriptionCountText: false,
+            channelTextOnPress: () {
+              Get.to(() => const HomeChannelDetailScreen());
+            },
+          )
+        : Container();
   }
 
   Widget _buildBottomListViewSection() {

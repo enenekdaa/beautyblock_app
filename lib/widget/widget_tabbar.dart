@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import '../config.dart';
 
 class TabBarWidget extends StatelessWidget {
-  const TabBarWidget(
-      {
-        Key? key,
-        required this.controller,
-        required this.tabs,
-      }):super(key: key);
+  const TabBarWidget({
+    Key? key,
+    required this.controller,
+    required this.tabs,
+  }) : super(key: key);
 
   final controller;
   final tabs;
@@ -23,15 +22,12 @@ class TabBarWidget extends StatelessWidget {
       indicator: BoxDecoration(
           border: Border(
               bottom: BorderSide(
-                  width: 2,
-                  color: GlobalBeautyColor.buttonHotPink
-              )
-          )
-      ),
+                  width: 2, color: GlobalBeautyColor.buttonHotPink))),
       unselectedLabelColor: Color.fromRGBO(175, 175, 175, 1),
       unselectedLabelStyle: TextStyle(
           fontWeight: FontWeight.w700, fontFamily: 'NotoSans', fontSize: 15),
       labelColor: GlobalBeautyColor.buttonHotPink,
+      labelStyle: TextStyle(fontWeight: FontWeight.w700),
       tabs: tabs,
     );
   }

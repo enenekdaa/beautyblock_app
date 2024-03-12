@@ -55,7 +55,6 @@ class HomePostShareScreen extends StatelessWidget {
 
   Widget _buildShareButtons() {
     return Container(
-      height: Get.height * 0.3,
       child: Column(
         children: [
           Padding(

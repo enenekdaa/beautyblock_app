@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../auth/login/controller/login_controller.dart';
+import '../../model/video_model.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
@@ -14,6 +15,8 @@ class HomeController extends GetxController {
   var uploadContentController = TextEditingController();
   var uploadTagController = TextEditingController();
   var searchController = TextEditingController();
+  var videoDescriptionController = TextEditingController();
+
 
   //mainPage
   var isShowSubscriptionChannel = false.obs;
@@ -31,11 +34,16 @@ class HomeController extends GetxController {
 
   //postUpload
   var categories = [].obs;
-  late final fetchImage;
+  var pickerVideoPath= "".obs ;
+  var pickerIamgePath = ''.obs;
+  var pickerThumbnailVideoPath =''.obs;
+  var isPostUploading = false.obs;
+  var isVideoUploading = false.obs;
 
   //fetchList
   var channels = <ChannelModel>[].obs;
   var roles = <RolesModel>[].obs;
+  var videos = <VideoModel>[].obs;
 
   //dropdown
   var dropdownSelected = <String, String>{
@@ -143,15 +151,16 @@ class HomeController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     uploadTitleController.dispose();
     uploadContentController.dispose();
     uploadTagController.dispose();
     searchController.dispose();
+    videoDescriptionController.dispose();
     influencerList.value = [];
     countries.value = [];
     continents.value = [];
     categories.value = [];
+    super.dispose();
+
   }
 }

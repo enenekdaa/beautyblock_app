@@ -86,6 +86,9 @@ class LoginController extends GetxController {
   String getNick() {
     return _user?.nickName ?? '뷰티블록';
   }
+  String getId(){
+    return _user?.id ?? "001";
+  }
 
   void setProfile() async {
     ImagePicker imagePicker = ImagePicker();

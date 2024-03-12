@@ -61,13 +61,12 @@ class AppTheme {
       color: Color.fromRGBO(91, 89, 84, 1));
 
   static const TextStyle appBarTextStyle = TextStyle(
-  color: Color.fromRGBO(30, 29, 29, 1),
-  fontSize: 16,
-  fontFamily: 'NotoSans',
-  fontWeight: FontWeight.bold,
-  height: 1.45);
+      color: Color.fromRGBO(30, 29, 29, 1),
+      fontSize: 16,
+      fontFamily: 'NotoSans',
+      fontWeight: FontWeight.bold,
+      height: 1.45);
 }
-
 
 customDialog(String titleText, Widget textWidgets, onPress, buttonText) async {
   Get.dialog(

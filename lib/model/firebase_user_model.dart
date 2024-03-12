@@ -9,7 +9,8 @@ class BeautyUser {
   List<String>? interestCategories = [];
   List<String>? interestTypes = [];
   String interestCountry = '';
-
+  String company = '';
+  String position = '';
   BeautyUser(
       {required this.id,
       this.nickName = '',
@@ -18,7 +19,9 @@ class BeautyUser {
       this.phone = '',
       this.interestCategories,
       this.interestTypes,
-      this.interestCountry = ''});
+      this.interestCountry = '',
+      this.position = '',
+      this.company = ''});
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,7 +32,9 @@ class BeautyUser {
       'phone': phone,
       'interestCategories': interestCategories,
       'interestTypes': interestTypes,
-      'interestCountry': interestCountry
+      'interestCountry': interestCountry,
+      'position': position,
+      'company': company
     };
   }
 
@@ -42,6 +47,8 @@ class BeautyUser {
     List<String>? interestCategories = [];
     List<String>? interestTypes = [];
     String interestCountry = '';
+    String position = '';
+    String company = '';
     try {
       id = doc.get('id');
       nickName = doc.get('nickName');
@@ -54,6 +61,14 @@ class BeautyUser {
       doc.get('interestTypes').forEach((data) => {interestTypes.add(data)});
       interestCountry = doc.get('interestCountry');
     } catch (e) {}
+    try {
+      //240312 jaesung. position(담당업무), company(회사명) 추가
+      position = doc.get('position');
+      company = doc.get('company');
+    } catch (e) {
+      position = '';
+      company = '';
+    }
     return BeautyUser(
         id: id,
         phone: phone,
@@ -62,6 +77,8 @@ class BeautyUser {
         email: email,
         interestCategories: interestCategories,
         interestCountry: interestCountry,
-        interestTypes: interestTypes);
+        interestTypes: interestTypes,
+        position: position,
+        company: company);
   }
 }

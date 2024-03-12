@@ -32,16 +32,16 @@ class HomeReviewListviewItem extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+            padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //leftSection
                 Padding(
-                  padding: EdgeInsets.only(left: Get.width * 0.02),
+                  padding: EdgeInsets.only(left: Get.width * 0.02, top: 8),
                   child: CircleAvatar(
-                    radius: Get.height * 0.025,
+                    radius: 16,
                     backgroundImage: imageUrl,
                   ),
                 ),
@@ -60,24 +60,26 @@ class HomeReviewListviewItem extends StatelessWidget {
                               style: AppTheme.tagTextStyle,
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: Get.height * 0.01),
-                              child: Text('·',style: AppTheme.tagTextStyle),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Get.height * 0.01),
+                              child: Text('·', style: AppTheme.tagTextStyle),
                             ),
-                            Text(
-                                date,style: AppTheme.tagTextStyle
-                            )
+                            Text(date, style: AppTheme.tagTextStyle)
                           ],
                         ),
+                        SizedBox(height: 3),
                         Text(
                           reviewText,
-                          style: AppTheme.smallTitleTextStyle
-                              .copyWith(fontWeight: FontWeight.w500),
+                          style: AppTheme.smallTitleTextStyle,
                           softWrap: true,
                         ),
-
+                        SizedBox(height: 3),
                         Row(
                           children: [
-                            SvgPicture.asset('assets/images/ic_heart.svg',color: GlobalBeautyColor.tagGray170,),
+                            SvgPicture.asset(
+                              'assets/images/ic_heart.svg',
+                              color: GlobalBeautyColor.tagGray170,
+                            ),
                             Text(
                               reviewHeartCount,
                               style: AppTheme.tagTextStyle,
@@ -85,14 +87,16 @@ class HomeReviewListviewItem extends StatelessWidget {
                             SizedBox(
                               width: Get.width * 0.03,
                             ),
-                            SvgPicture.asset('assets/images/ic_text.svg',color: GlobalBeautyColor.tagGray170,),
+                            SvgPicture.asset(
+                              'assets/images/ic_text.svg',
+                              color: GlobalBeautyColor.tagGray170,
+                            ),
                             Text(
                               '답글 ${reviewCount}개',
                               style: AppTheme.tagTextStyle,
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),
@@ -101,7 +105,10 @@ class HomeReviewListviewItem extends StatelessWidget {
               ],
             ),
           ),
-          Divider(thickness: 1,color: Color.fromRGBO(239, 239, 239, 1),)
+          Divider(
+            thickness: 1,
+            color: Color.fromRGBO(239, 239, 239, 1),
+          )
         ],
       ),
     );

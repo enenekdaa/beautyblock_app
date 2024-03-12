@@ -30,8 +30,7 @@ class HomeVideoplayerScreen extends StatelessWidget {
         child: Column(
       children: [
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: 20, vertical: Get.height * 0.02),
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
           child: Column(
             children: [
               //header Title Text
@@ -61,7 +60,10 @@ class HomeVideoplayerScreen extends StatelessWidget {
                       style: AppTheme.tagTextStyle,
                     ),
                   ),
-                  Text('3개월전', style: AppTheme.tagTextStyle,),
+                  Text(
+                    '3개월전',
+                    style: AppTheme.tagTextStyle,
+                  ),
                   Text(
                     '#뷰티블록  #뷰티  #페스티발',
                     style: AppTheme.tagTextStyle,
@@ -89,12 +91,12 @@ class HomeVideoplayerScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      '안녕하세요 뷰티블록입니다.이번 런칭 페스티발에 참여해주신 모든 분들게 감사드리고 감사한 마음을 담아 영상을 만들게 되었습니다. 잘 부탁드리겠습니다. 감사합니다.',
-                      softWrap: true,
-                      style: AppTheme.smallTitleTextStyle
-                          .copyWith(fontWeight: FontWeight.w500),
+                        '안녕하세요 뷰티블록입니다.이번 런칭 페스티발에 참여해주신 모든 분들게 감사드리고 감사한 마음을 담아 영상을 만들게 되었습니다. 잘 부탁드리겠습니다. 감사합니다.',
+                        softWrap: true,
+                        style: AppTheme.smallTitleTextStyle),
+                    SizedBox(
+                      height: Get.height * 0.02,
                     ),
-                    SizedBox(height: Get.height * 0.02,),
                     //bottom button
                     Row(
                       children: [
@@ -164,11 +166,13 @@ class HomeVideoplayerScreen extends StatelessWidget {
   }
 
   Widget _buildReviewListview() {
-    return ListView(
-      padding: EdgeInsets.zero,
-      scrollDirection: Axis.vertical,
+    return Column(
+      // padding: EdgeInsets.zero,
+      // scrollDirection: Axis.vertical,
       children: [
-        SizedBox(height: Get.height * 0.02,),
+        SizedBox(
+          height: Get.height * 0.02,
+        ),
         HomeReviewListviewItem(
             imageUrl: AssetImage('assets/images/img_test.png'),
             nickName: '홍길동',
@@ -176,7 +180,7 @@ class HomeVideoplayerScreen extends StatelessWidget {
             reviewText: '계속합시다',
             reviewHeartCount: '123',
             reviewCount: '12',
-            shareButtonOnPress: (){}),
+            shareButtonOnPress: () {}),
         HomeReviewListviewItem(
             imageUrl: AssetImage('assets/images/img_test.png'),
             nickName: '홍길동',
@@ -184,7 +188,7 @@ class HomeVideoplayerScreen extends StatelessWidget {
             reviewText: '계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다',
             reviewHeartCount: '123',
             reviewCount: '12',
-            shareButtonOnPress: (){}),
+            shareButtonOnPress: () {}),
         HomeReviewListviewItem(
             imageUrl: AssetImage('assets/images/img_test.png'),
             nickName: '홍길동',
@@ -192,7 +196,7 @@ class HomeVideoplayerScreen extends StatelessWidget {
             reviewText: '계속합시다',
             reviewHeartCount: '123',
             reviewCount: '12',
-            shareButtonOnPress: (){}),
+            shareButtonOnPress: () {}),
         HomeReviewListviewItem(
             imageUrl: AssetImage('assets/images/img_test.png'),
             nickName: '홍길동',
@@ -200,7 +204,7 @@ class HomeVideoplayerScreen extends StatelessWidget {
             reviewText: '언제까지 될까요?',
             reviewHeartCount: '123',
             reviewCount: '12',
-            shareButtonOnPress: (){}),
+            shareButtonOnPress: () {}),
       ],
     );
   }
@@ -210,25 +214,26 @@ class HomeVideoplayerScreen extends StatelessWidget {
       alignment: Alignment.center,
       child: Stack(
         children: [
-        Positioned(
-          top: 0,
-          bottom: 0,
-          left: Get.width * 0.04,
-          child: CircleAvatar(
-            backgroundImage: AssetImage('assets/images/img_test.png',
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: Get.width * 0.04,
+            child: CircleAvatar(
+              backgroundImage: AssetImage(
+                'assets/images/img_test.png',
+              ),
+              radius: Get.height * 0.02, //서치 픽쳐
             ),
-            radius: Get.height * 0.02,//서치 픽쳐
           ),
-        ) ,
           TextFormField(
             decoration: InputDecoration(
                 isDense: true,
-                hintText: 'Type of meassage',
+                hintText: 'Type of message',
                 // 힌트문자
                 filled: true,
                 fillColor: Color.fromRGBO(171, 169, 163, 0.12),
-                contentPadding:
-                EdgeInsets.only(left: Get.width * 0.15,top: 15,bottom: 15),
+                contentPadding: EdgeInsets.only(
+                    left: Get.width * 0.15, top: 15, bottom: 15),
                 hintStyle: TextStyle(
                     color: Color.fromRGBO(174, 173, 170, 1),
                     fontSize: 14,
@@ -240,16 +245,21 @@ class HomeVideoplayerScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  // 포커스 되었을 경우 모양
+                    // 포커스 되었을 경우 모양
                     borderSide: BorderSide.none),
                 errorBorder: OutlineInputBorder(
-                  // 에러 발생 시 모양
-                ),
+                    // 에러 발생 시 모양
+                    ),
                 focusedErrorBorder: OutlineInputBorder(
-                  // 에러 발생 후 포커스 되었을 경우 모양
-                )),
+                    // 에러 발생 후 포커스 되었을 경우 모양
+                    )),
           ),
-          Positioned(top: 0,bottom:0,right:Get.width * 0.05,child: GestureDetector(child: SvgPicture.asset('assets/images/ic_send.svg')))
+          Positioned(
+              top: 0,
+              bottom: 0,
+              right: Get.width * 0.05,
+              child: GestureDetector(
+                  child: SvgPicture.asset('assets/images/ic_send.svg')))
         ],
       ),
     );

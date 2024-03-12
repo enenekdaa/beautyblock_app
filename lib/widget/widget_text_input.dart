@@ -13,6 +13,7 @@ class TextInputWidget extends StatelessWidget {
     this.guideTextColor = Colors.white,
     this.guideTextAlign = Alignment.topLeft,
     this.focusNode,
+    this.readOnly = false,
     // this.initTextValue = ""
   });
 
@@ -22,7 +23,7 @@ class TextInputWidget extends StatelessWidget {
   final guideText;
   final guideTextColor;
   final guideTextAlign;
-
+  final readOnly;
   // final initTextValue;
   final controller;
   final focusNode;
@@ -40,6 +41,7 @@ class TextInputWidget extends StatelessWidget {
         TextFormField(
           // 1. [유효성 체크]
           // 공백일 경우 메시지 출력..
+          enabled: !readOnly,
           validator: (value) => value!.isEmpty ? "필수항목입니다" : null,
           controller: controller,
           obscureText: titleText == "비밀번호" ||
@@ -48,6 +50,7 @@ class TextInputWidget extends StatelessWidget {
               ? true
               : false,
           // initialValue: initTextValue,
+
           decoration: InputDecoration(
               isDense: true,
               hintText: hintText,
@@ -63,6 +66,11 @@ class TextInputWidget extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   height: 1.6),
               enabledBorder: OutlineInputBorder(
+                // 기본 모양
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              disabledBorder: OutlineInputBorder(
                 // 기본 모양
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(8),

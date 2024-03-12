@@ -16,6 +16,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../../constants/firestore_constants.dart';
 import '../../../home/screen/home_main_screen.dart';
 import '../../login/controller/login_controller.dart';
+import '../screen/join_receive_customer_info_screen.dart';
 import '../screen/join_select_category_screen.dart';
 
 class JoinController extends GetxController {
@@ -200,7 +201,8 @@ class JoinController extends GetxController {
       //미가입 시 가입 로직(데이터 생성 및 관심지정으로 이동)
       signUp(user);
       signOutWithGoogle();
-      Get.to(() => const JoinSelectCategoryScreen());
+      Get.to(() => JoinReceiveCustomerInfoScreen());
+      // Get.to(() => const JoinSelectCategoryScreen());
       // } else {
       //기존 아이디 있으면 홈으로 이동
       // Get.to(HomeMainScreen());
@@ -218,6 +220,34 @@ class JoinController extends GetxController {
       'interestCountry': selectedInterestCountryList.isNotEmpty
           ? selectedInterestCountryList.first
           : ''
+    });
+  }
+
+  void submitCustomerInfo() {
+    if (nameController.text == '' ||
+        companyNameController.text == '' ||
+        responsibilityController.text == '') {
+      customDialog('내용 입력', Text('누락된 내용이 있어요.'), () {
+        Get.back();
+      }, '확인');
+    } else {
+      try {
+        updateCustomerInfo();
+        Get.toNamed('/selectCategory');
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  void updateCustomerInfo() async {
+    firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(_user?.id)
+        .update({
+      'company': companyNameController.text,
+      'nickName': nameController.text,
+      'position': responsibilityController.text
     });
   }
 

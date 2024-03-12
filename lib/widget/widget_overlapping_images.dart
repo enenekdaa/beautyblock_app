@@ -14,7 +14,7 @@ class OverlappingImagesWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: <Widget>[
         Container(
-          height: Get.height * 0.35,
+          height: Get.height * 0.3,
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(

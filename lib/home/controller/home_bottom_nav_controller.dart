@@ -118,29 +118,31 @@ class BottomNavBarController extends GetxController {
                   padding:
                   EdgeInsets.only(top: Get.height * 0.01, left: 20),
                   child: GestureDetector(
-                    child: Text('카메라/동영상'),
+                    child: Text('동영상 업로드'),
                     onTap: () {
-                      _pickImageFromGallery();
-                    },
-                  ),
-                ),
-                Divider(
-                  thickness: 1,
-                  color: Color.fromRGBO(230, 230, 230, 1),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: GestureDetector(
-                    child: Text('업로드'),
-                    onTap: () {
+                      // _pickImageFromGallery();
                       _pickVideoFromGallery();
                     },
+
                   ),
                 ),
                 Divider(
                   thickness: 1,
                   color: Color.fromRGBO(230, 230, 230, 1),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.only(left: 20),
+                //   child: GestureDetector(
+                //     child: Text('업로드'),
+                //     onTap: () {
+                //       _pickVideoFromGallery();
+                //     },
+                //   ),
+                // ),
+                // Divider(
+                //   thickness: 1,
+                //   color: Color.fromRGBO(230, 230, 230, 1),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: GestureDetector(
@@ -158,13 +160,13 @@ class BottomNavBarController extends GetxController {
     );
   }
 
-  Future<void> _pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if(image != null){
-      HomeController.to.pickerIamgePath.value = image.path;
-      Get.to(HomePostUploadScreen());
-    }
-  }
+  // Future<void> _pickImageFromGallery() async {
+  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  //   if(image != null){
+  //     HomeController.to.pickerIamgePath.value = image.path;
+  //     Get.to(HomePostUploadScreen());
+  //   }
+  // }
 
   Future<void> _pickVideoFromGallery() async {
     final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
@@ -176,7 +178,7 @@ class BottomNavBarController extends GetxController {
       );
       HomeController.to.pickerVideoPath.value = video.path;
       HomeController.to.pickerThumbnailVideoPath.value = thumbnailFile.path;
-      Get.to(HomeAddDetailInfoScreen());
+      Get.to(HomePostUploadScreen());
     }
   }
 }

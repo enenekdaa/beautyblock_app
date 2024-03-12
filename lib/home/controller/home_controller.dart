@@ -1,5 +1,6 @@
 import 'package:beautyblock_app/fan/controller/fan_controller.dart';
 import 'package:beautyblock_app/model/channel_model.dart';
+import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/model/roles_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -40,6 +41,18 @@ class HomeController extends GetxController {
   var pickerThumbnailVideoPath = ''.obs;
   var isPostUploading = false.obs;
   var isVideoUploading = false.obs;
+  var tags = emptyList.obs;
+
+  //tag
+  void addTag(tag){
+    if(!tags.contains(tag)){
+      tags.add(tag);
+    }
+    return;
+  }
+  void removeTag(tag){
+    tags.remove(tag);
+  }
 
   //fetchList
   var channels = <ChannelModel>[].obs;

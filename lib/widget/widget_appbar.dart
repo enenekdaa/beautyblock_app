@@ -8,20 +8,21 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
     required this.appbarText,
     this.centerTitle = false,
     this.actions,
+    this.isShowLeading =true
   });
 
   final appbarText;
   final centerTitle;
   final List<Widget>? actions;
-
+  final isShowLeading;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: centerTitle,
       titleSpacing: 0,
-      leading: IconButton(
+      leading: isShowLeading? IconButton(
           icon: Image.asset('assets/images/ic_back_arrow.png'),
-          onPressed: () => Get.back()),
+          onPressed: () => Get.back()):SizedBox.shrink(),
       title: Text(appbarText,
           style: AppTheme.appBarTextStyle),
       // shape: Border(

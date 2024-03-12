@@ -143,7 +143,7 @@ class JoinController extends GetxController {
       '클렌징/필링',
       '베이스'
     ];
-    interestCountryList.value = ['대한민국'];
+    interestCountryList.value = ['Korea'];
   }
 
   @override

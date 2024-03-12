@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/fan/controller/fan_controller.dart';
 import 'package:beautyblock_app/model/channel_model.dart';
 import 'package:beautyblock_app/model/roles_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,6 +82,16 @@ class HomeController extends GetxController {
 
   //dropdownGetValue
   String? getDropdownSelectedValue(String dropdownKey) {
+    return dropdownSelected[dropdownKey];
+  }
+
+  //dropdownGetValue
+  String? getGroupSelectedValue(String dropdownKey) {
+    return dropdownSelected[dropdownKey];
+  }
+
+  //dropdownGetValue
+  String? getTitleSelectedValue(String dropdownKey) {
     return dropdownSelected[dropdownKey];
   }
 

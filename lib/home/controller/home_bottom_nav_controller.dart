@@ -1,4 +1,5 @@
 import 'package:beautyblock_app/config.dart';
+import 'package:beautyblock_app/home/main_bottom_navbar_tab/screen/tab_fan_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +9,7 @@ import 'package:video_compress/video_compress.dart';
 
 import '../../utils.dart';
 import '../main_bottom_navbar_tab/screen/tab_channel_screen.dart';
-import '../main_bottom_navbar_tab/screen/tab_fan_screen.dart';
+import '../../fan/screen/home_select_country_screen.dart';
 import '../main_bottom_navbar_tab/screen/tab_home_screen.dart';
 import '../screen/home_add_detail_info_screen.dart';
 import '../screen/home_post_upload_screen.dart';
@@ -31,8 +32,8 @@ class BottomNavBarController extends GetxController {
       TabHomeScreen(),
       TabChannelScreen(),
       Text('tab3'),
-      TabFanScreen(),
-      HomeMyPageScreen(),
+      HomeSelectCountryScreen(),
+      HomeMyPageScreen()
     ];
   }
   @override
@@ -43,7 +44,7 @@ class BottomNavBarController extends GetxController {
     pages.value = [];
   }
   void onItemTapped(int index) {
-    if(index != 2){
+    if(index != 2 ){
       bottomNavCurrentIndex.value = index;
     }else{
       showModal(Get.context);

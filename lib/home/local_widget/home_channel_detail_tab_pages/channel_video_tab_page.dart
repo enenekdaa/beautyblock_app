@@ -9,7 +9,7 @@ class ChannelVideoTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         _buildRecommandSection(),
         _buildPopularityVideoSection(),
@@ -21,7 +21,11 @@ class ChannelVideoTabPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('추천',style: AppTheme.smallTitleTextStyle.copyWith(fontSize: 18,height: 1.2),),
+        Text(
+          '추천',
+          style:
+              AppTheme.smallTitleTextStyle.copyWith(fontSize: 18, height: 1.2),
+        ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
           child: TabHomeListviewItem(
@@ -35,30 +39,52 @@ class ChannelVideoTabPage extends StatelessWidget {
   }
 
   Widget _buildPopularityVideoSection() {
-    return Expanded(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-            Text('인기영상',style: AppTheme.smallTitleTextStyle.copyWith(fontSize: 18,height: 1.2),),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: Get.height * 0.01),
-                child: ListView(
-                      scrollDirection: Axis.vertical,
-                      children: [
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                    ChannelDetailVideoTabListviewItem(videoText: 'NUXE', followCount: '12만명', contentCount: '1000'),
-                      ],
-                    ),
+    return Container(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '인기영상',
+              style: AppTheme.smallTitleTextStyle
+                  .copyWith(fontSize: 18, height: 1.2),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: Get.height * 0.01),
+              child: Column(
+                children: [
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                  ChannelDetailVideoTabListviewItem(
+                      videoText: 'NUXE',
+                      followCount: '12만명',
+                      contentCount: '1000'),
+                ],
               ),
             ),
           ]),
-        ));
+    );
   }
 }

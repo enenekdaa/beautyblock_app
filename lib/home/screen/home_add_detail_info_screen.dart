@@ -11,19 +11,24 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-
 import '../../config.dart';
 import '../../model/video_model.dart';
 import '../../widget/widget_radius_button.dart';
 import 'home_main_screen.dart';
 
-class HomeAddDetailInfoScreen extends StatelessWidget {
+class HomeAddDetailInfoScreen extends StatefulWidget {
   HomeAddDetailInfoScreen({super.key});
 
-  final HomeController _homeController = Get.put(HomeController());
-  final ImagePicker _picker = ImagePicker();
-
+  @override
+  State<HomeAddDetailInfoScreen> createState() => _HomeAddDetailInfoScreen();
+}
+class _HomeAddDetailInfoScreen extends State<HomeAddDetailInfoScreen> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    resetControllValue();
+  }
   @override
   Widget build(BuildContext context) {
     return HomeAddDetailInfoScaffold(
@@ -39,8 +44,8 @@ class HomeAddDetailInfoScreen extends StatelessWidget {
     return AppbarWidget(
       appbarText: '세부정보 추가',
       actions: [
-        SvgPicture.asset('assets/images/ic_bell.svg'),
-        SvgPicture.asset('assets/images/ic_search.svg')
+        // SvgPicture.asset('assets/images/ic_bell.svg'),
+        // SvgPicture.asset('assets/images/ic_search.svg')
       ],
     );
   }
@@ -85,7 +90,7 @@ class HomeAddDetailInfoScreen extends StatelessWidget {
           SizedBox(height: Get.height * 0.01,),
           Obx(() =>
               HomeAddDetailInfoItem(
-                text: '공개상태:${_homeController.getSwitchValue('isPostOpen')
+                text: '공개상태:${HomeController.to.getSwitchValue('isPostOpen')
                     ? '공개'
                     : '비공개'}', useSwitch: true, switchKey: 'isPostOpen',)),
           SizedBox(height: Get.height * 0.01,),
@@ -177,5 +182,10 @@ class HomeAddDetailInfoScreen extends StatelessWidget {
       navigator?.pop(Get.context);
       HomeController.to.isVideoUploading.value = true;
       uploadFile();}, '확인');
+  }
+  void resetControllValue(){
+    HomeController.to.videoDescriptionController.text = '';
+    HomeController.to.updateSwitchValue("isPostOpen", false);
+    HomeController.to.updateSwitchValue("isUseReview", false);
   }
 }

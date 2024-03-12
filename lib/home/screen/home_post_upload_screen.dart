@@ -20,7 +20,6 @@ class HomePostUploadScreen extends StatelessWidget {
   HomePostUploadScreen({super.key});
 
   final HomeController _homeController = Get.put(HomeController());
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +33,21 @@ class HomePostUploadScreen extends StatelessWidget {
 
   Widget _buildAppBar() {
     return AppbarWidget(
+      isShowLeading: false,
       appbarText: "",
       actions: [
         Padding(
           padding: EdgeInsets.only(right: 20),
-          child: Text(
-            'Cancel',
-            style: AppTheme.smallTitleTextStyle
-                .copyWith(fontWeight: FontWeight.w500),
+          child: GestureDetector(
+            onTap: (){
+              resetControllValue();
+              Get.back();
+            },
+            child: Text(
+              'Cancel',
+              style: AppTheme.smallTitleTextStyle
+                  .copyWith(fontWeight: FontWeight.w500),
+            ),
           ),
         )
       ],
@@ -118,12 +124,16 @@ class HomePostUploadScreen extends StatelessWidget {
 
   void showSaveSuccessDialog(){
     customDialog('저장완료', Text('저장이 완료 되었습니다.\n다른 곳에 자랑하러 가볼까요?',textAlign: TextAlign.center,), (){
-      HomeController.to.updateDropdownSelectedValue('category','Brand');
-      HomeController.to.uploadTitleController.text='';
-      HomeController.to.uploadContentController.text='';
-      HomeController.to.uploadTagController.text ='';
+      resetControllValue();
       Get.to(HomePostShareScreen()
       );}, '자랑하러 가기');
+  }
+
+  void resetControllValue(){
+    HomeController.to.updateDropdownSelectedValue('category','Brand');
+    HomeController.to.uploadTitleController.text='';
+    HomeController.to.uploadContentController.text='';
+    HomeController.to.uploadTagController.text ='';
   }
 
   Future<void> uploadImage() async {

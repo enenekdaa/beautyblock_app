@@ -4,4 +4,5 @@ class FirestoreConstants {
   static const pathSubscriptionCollection = "subscriptions";
   static const pathCategoriesCollection = "Categories";
   static const pathGroupCollection = "group";
+  static const pathRepliesCollection = "replies";
 }

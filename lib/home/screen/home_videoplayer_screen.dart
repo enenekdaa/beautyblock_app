@@ -1,5 +1,7 @@
+import 'package:beautyblock_app/auth/login/controller/login_controller.dart';
 import 'package:beautyblock_app/constants/firestore_constants.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/home_review_listview_item.dart';
+import 'package:beautyblock_app/model/firebase_reply_model.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_channel_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -24,13 +27,20 @@ class HomeVideoplayerScreen extends StatefulWidget {
 
 class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  TextEditingController reply = TextEditingController();
   BeautyPost? post;
-
+  List<BeautyReply> replies = [];
   bool loadComplete = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    updateData();
+    //볼때마다 카운트 증가
+    _incrementViewCount(widget.id ?? '');
+  }
+
+  updateData() {
     firestore
         .collection(FirestoreConstants.pathPostCollection)
         .doc(widget.id)
@@ -41,8 +51,22 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
         loadComplete = true;
       });
     });
-    //볼때마다 카운트 증가
-    _incrementViewCount(widget.id ?? '');
+    firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id)
+        .collection(FirestoreConstants.pathRepliesCollection)
+        .orderBy('createdAt', descending: true) // 댓글을 최신 순으로 정렬
+        .get()
+        .then((value) {
+      List<BeautyReply> tmp = [];
+      for (DocumentSnapshot doc in value.docs) {
+        tmp.add(BeautyReply.fromDocument(doc));
+      }
+      setState(() {
+        replies = tmp;
+        loadComplete = true;
+      });
+    });
   }
 
   @override
@@ -245,47 +269,106 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
   }
 
   Widget _buildReviewListview() {
-    return Column(
-      // padding: EdgeInsets.zero,
-      // scrollDirection: Axis.vertical,
-      children: [
-        SizedBox(
-          height: Get.height * 0.02,
-        ),
-        HomeReviewListviewItem(
-            imageUrl: AssetImage('assets/images/img_test.png'),
-            nickName: '홍길동',
-            date: '2주전',
-            reviewText: '계속합시다',
-            reviewHeartCount: '123',
-            reviewCount: '12',
-            shareButtonOnPress: () {}),
-        HomeReviewListviewItem(
-            imageUrl: AssetImage('assets/images/img_test.png'),
-            nickName: '홍길동',
-            date: '2주전',
-            reviewText: '계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다계속합시다',
-            reviewHeartCount: '123',
-            reviewCount: '12',
-            shareButtonOnPress: () {}),
-        HomeReviewListviewItem(
-            imageUrl: AssetImage('assets/images/img_test.png'),
-            nickName: '홍길동',
-            date: '2주전',
-            reviewText: '계속합시다',
-            reviewHeartCount: '123',
-            reviewCount: '12',
-            shareButtonOnPress: () {}),
-        HomeReviewListviewItem(
-            imageUrl: AssetImage('assets/images/img_test.png'),
-            nickName: '홍길동',
-            date: '2주전',
-            reviewText: '언제까지 될까요?',
-            reviewHeartCount: '123',
-            reviewCount: '12',
-            shareButtonOnPress: () {}),
-      ],
-    );
+    if (widget.id != null && loadComplete) {
+      return Column(
+        // padding: EdgeInsets.zero,
+        // scrollDirection: Axis.vertical,
+        children: [
+          SizedBox(
+            height: Get.height * 0.02,
+          ),
+          replies.isNotEmpty
+              ? Column(
+                  children: replies
+                      .map(
+                        (reply) => HomeReviewListviewItem(
+                            postId: widget.id,
+                            id: reply.id,
+                            imageUrl: NetworkImage(reply.profile),
+                            nickName: reply.nickName,
+                            date: reply.createdAt.substring(0, 10),
+                            reviewText: reply.content,
+                            reviewHeartCount: reply.likes.length.toString(),
+                            reviewCount: '0',
+                            shareButtonOnPress: () {
+                              showModalBottomSheet<void>(
+                                  context: context,
+                                  // isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0,
+                                            12,
+                                            0,
+                                            MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom +
+                                                12),
+                                        color: Colors.transparent,
+                                        child: SingleChildScrollView(
+                                            child: Column(
+                                          children: ['삭제']
+                                              .map((e) => GestureDetector(
+                                                    onTap: () {
+                                                      deleteReply(reply.id);
+                                                      Get.back();
+                                                    },
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          12.0,
+                                                                      horizontal:
+                                                                          20),
+                                                              child: Text(e,
+                                                                  style: AppTheme
+                                                                      .smallTitleTextStyle),
+                                                            ),
+                                                            Container(
+                                                                width:
+                                                                    Get.width,
+                                                                height: 2,
+                                                                color: const Color
+                                                                    .fromRGBO(
+                                                                    240,
+                                                                    240,
+                                                                    240,
+                                                                    1))
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                        )));
+                                  });
+                            }),
+                      )
+                      .toList(),
+                )
+              : Text(
+                  '등록된 댓글이 없습니다',
+                  textAlign: TextAlign.center,
+                ),
+          SizedBox(
+            height: 100,
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildSearchSection() {
@@ -298,13 +381,14 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
             bottom: 0,
             left: Get.width * 0.04,
             child: CircleAvatar(
-              backgroundImage: AssetImage(
-                'assets/images/img_test.png',
+              backgroundImage: NetworkImage(
+                LoginController.to.getProfile(),
               ),
               radius: Get.height * 0.02, //서치 픽쳐
             ),
           ),
           TextFormField(
+            controller: reply,
             decoration: InputDecoration(
                 isDense: true,
                 hintText: 'Type of message',
@@ -338,6 +422,9 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
               bottom: 0,
               right: Get.width * 0.05,
               child: GestureDetector(
+                  onTap: () {
+                    addReply();
+                  },
                   child: SvgPicture.asset('assets/images/ic_send.svg')))
         ],
       ),
@@ -359,6 +446,52 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
         })
         .then((value) => print("View count incremented"))
         .catchError((error) => print("Failed to increment view count: $error"));
+  }
+
+  Future<void> addReply() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference postRef = firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id);
+
+    BeautyReply replyData = BeautyReply(
+        id: '',
+        userId: LoginController.to.getId(),
+        profile: LoginController.to.getProfile(),
+        nickName: LoginController.to.getNick(),
+        createdAt: DateTime.now().toString(),
+        content: reply.text,
+        likes: []);
+
+    DocumentReference doc =
+        await postRef.collection('replies').add(replyData.toJson());
+    await doc.update({'id': doc.id});
+    reply.clear();
+    updateData();
+    showSaveSuccessDialog();
+  }
+
+  Future<void> deleteReply(String replyId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    await firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id)
+        .collection('replies')
+        .doc(replyId)
+        .delete();
+    updateData();
+  }
+
+  void showSaveSuccessDialog() {
+    customDialog(
+        '답글 작성 완료',
+        Text(
+          '답글이 성공적으로 등록되었습니다.',
+          textAlign: TextAlign.center,
+        ), () {
+      FocusScope.of(context).unfocus();
+      navigator?.pop(Get.context);
+    }, '닫기');
   }
 }
 

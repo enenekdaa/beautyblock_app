@@ -1,21 +1,25 @@
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_circle_avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class HomeReviewListviewItem extends StatelessWidget {
-  const HomeReviewListviewItem({
-    Key? key,
-    required this.imageUrl,
-    required this.nickName,
-    required this.date,
-    required this.reviewText,
-    required this.reviewHeartCount,
-    required this.reviewCount,
-    required this.shareButtonOnPress,
-  }) : super(key: key);
+  const HomeReviewListviewItem(
+      {Key? key,
+      required this.imageUrl,
+      required this.nickName,
+      required this.date,
+      required this.reviewText,
+      required this.reviewHeartCount,
+      required this.reviewCount,
+      required this.shareButtonOnPress,
+      required this.postId,
+      required this.id})
+      : super(key: key);
 
   final imageUrl;
   final nickName;
@@ -24,6 +28,8 @@ class HomeReviewListviewItem extends StatelessWidget {
   final reviewHeartCount;
   final reviewCount;
   final shareButtonOnPress;
+  final postId;
+  final id;
 
   @override
   Widget build(BuildContext context) {
@@ -87,21 +93,26 @@ class HomeReviewListviewItem extends StatelessWidget {
                             SizedBox(
                               width: Get.width * 0.03,
                             ),
-                            SvgPicture.asset(
-                              'assets/images/ic_text.svg',
-                              color: GlobalBeautyColor.tagGray170,
-                            ),
-                            Text(
-                              '답글 ${reviewCount}개',
-                              style: AppTheme.tagTextStyle,
-                            ),
+                            // SvgPicture.asset(
+                            //   'assets/images/ic_text.svg',
+                            //   color: GlobalBeautyColor.tagGray170,
+                            // ),
+                            // Text(
+                            //   '답글 ${reviewCount}개',
+                            //   style: AppTheme.tagTextStyle,
+                            // ),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                SvgPicture.asset('assets/images/ic_share2.svg')
+                GestureDetector(
+                    onTap: shareButtonOnPress,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset('assets/images/ic_share2.svg'),
+                    ))
               ],
             ),
           ),

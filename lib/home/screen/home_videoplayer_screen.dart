@@ -1,168 +1,247 @@
+import 'package:beautyblock_app/constants/firestore_constants.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/home_review_listview_item.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_channel_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
+import '../../model/firebase_post_model.dart';
+import '../../model/firebase_user_model.dart';
 import '../local_widget/scaffold/home_videoplayer_screen_scaffold.dart';
 
-class HomeVideoplayerScreen extends StatelessWidget {
-  const HomeVideoplayerScreen({super.key});
+class HomeVideoplayerScreen extends StatefulWidget {
+  final String? id;
+  const HomeVideoplayerScreen({super.key, required this.id});
+
+  @override
+  State<HomeVideoplayerScreen> createState() => _HomeVideoplayerScreenState();
+}
+
+class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  BeautyPost? post;
+
+  bool loadComplete = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id)
+        .get()
+        .then((value) {
+      setState(() {
+        post = BeautyPost.fromDocument(value);
+        loadComplete = true;
+      });
+    });
+    //볼때마다 카운트 증가
+    _incrementViewCount(widget.id ?? '');
+  }
 
   @override
   Widget build(BuildContext context) {
     return HomeVideoplayerScreenScaffold(
-        videoSection: _buildVideoPlayer(context),
+        videoSection: _buildVideoPlayer(),
         videoDescriptionSection: _buildDescriptionSection(),
         reviewSection: _buildReviewListview(),
         searchSection: _buildSearchSection());
   }
 
-  Widget _buildVideoPlayer(context) {
+  Widget _buildVideoPlayer() {
     return Container(
-      color: Colors.red,
-    );
+        height: Get.height * 0.3,
+        child: loadComplete
+            ? BeautyVideoPlayer(
+                url: post?.video,
+              )
+            : Container(
+                color: Colors.black,
+              ));
   }
 
   Widget _buildDescriptionSection() {
-    return Container(
-        child: Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
+    if (widget.id != null && loadComplete) {
+      return Container(
           child: Column(
-            children: [
-              //header Title Text
-              Text(
-                'Beauty Block Launching Festival - Heize & Dean',
-                style: AppTheme.smallTitleTextStyle
-                    .copyWith(fontSize: 18, height: 1.2),
-                softWrap: true,
-              ),
-              SizedBox(
-                height: Get.height * 0.01,
-              ), //title
-              Row(
-                children: [
-                  SvgPicture.asset('assets/images/ic_eye.svg'),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    '2.5k',
-                    style: AppTheme.tagTextStyle,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
-                    child: Text(
-                      '·',
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //header Title Text
+                Text(
+                  post?.title ?? '',
+                  style: AppTheme.smallTitleTextStyle
+                      .copyWith(fontSize: 18, height: 1.2),
+                  softWrap: true,
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(
+                  height: Get.height * 0.01,
+                ), //title
+                Row(
+                  children: [
+                    SvgPicture.asset('assets/images/ic_eye.svg'),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      post!.viewCnt.toString(),
                       style: AppTheme.tagTextStyle,
                     ),
-                  ),
-                  Text(
-                    '3개월전',
-                    style: AppTheme.tagTextStyle,
-                  ),
-                  Text(
-                    '#뷰티블록  #뷰티  #페스티발',
-                    style: AppTheme.tagTextStyle,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(bottom: Get.height * 0.02),
-          color: Color.fromRGBO(246, 246, 246, 1),
-          child: Column(
-            children: [
-              SubscriptionProfileWidget(
-                imageUrl: AssetImage('assets/images/img_test.png'),
-                userName: 'Beauty Block',
-                subscriptionBtnOnPress: () {},
-                isSubscription: false,
-                useGoToChannelText: false,
-                useSubscriptionButton: false,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Text(
-                        '안녕하세요 뷰티블록입니다.이번 런칭 페스티발에 참여해주신 모든 분들게 감사드리고 감사한 마음을 담아 영상을 만들게 되었습니다. 잘 부탁드리겠습니다. 감사합니다.',
-                        softWrap: true,
-                        style: AppTheme.smallTitleTextStyle),
-                    SizedBox(
-                      height: Get.height * 0.02,
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Get.width * 0.02),
+                      child: Text(
+                        '·',
+                        style: AppTheme.tagTextStyle,
+                      ),
                     ),
-                    //bottom button
-                    Row(
+                    Text(
+                      post!.createdAt.substring(0, 10),
+                      style: AppTheme.tagTextStyle,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      post!.tags.map((e) => '#$e').join(' '),
+                      style: AppTheme.tagTextStyle,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          FutureBuilder<DocumentSnapshot>(
+            future: firestore
+                .collection(FirestoreConstants.pathUserCollection)
+                .doc(post?.userId)
+                .get(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // 데이터 불러오기 성공
+                if (snapshot.hasData) {
+                  BeautyUser user = BeautyUser.fromDocument(snapshot.data!);
+                  return Container(
+                    padding: EdgeInsets.only(bottom: Get.height * 0.02),
+                    color: Color.fromRGBO(246, 246, 246, 1),
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: Get.width * 0.03),
-                          child: Column(
-                            children: [
-                              SvgPicture.asset('assets/images/ic_text.svg'),
-                              Text(
-                                '24,415',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'NotoSans',
-                                    fontSize: 12,
-                                    height: 1.7,
-                                    color: Color.fromRGBO(151, 151, 151, 1)),
-                              )
-                            ],
-                          ),
+                        SubscriptionProfileWidget(
+                          imageUrl: NetworkImage(user.profile),
+                          userName: user.company,
+                          subscriptionBtnOnPress: () {},
+                          channelId: user.id,
+                          useGoToChannelText: false,
+                          useSubscriptionButton: true,
+                          useLikeButton: false,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: Get.width * 0.03),
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SvgPicture.asset('assets/images/ic_heart.svg'),
-                              Text(
-                                '24,415',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'NotoSans',
-                                    fontSize: 12,
-                                    height: 1.7,
-                                    color: Color.fromRGBO(151, 151, 151, 1)),
+                              Text(post?.contents ?? '',
+                                  softWrap: true,
+                                  style: AppTheme.smallTitleTextStyle),
+                              SizedBox(
+                                height: Get.height * 0.02,
+                              ),
+                              //bottom button
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        right: Get.width * 0.03),
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/images/ic_text.svg'),
+                                        Text(
+                                          post!.commentCnt.toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'NotoSans',
+                                              fontSize: 12,
+                                              height: 1.7,
+                                              color: Color.fromRGBO(
+                                                  151, 151, 151, 1)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        right: Get.width * 0.03),
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/images/ic_heart.svg'),
+                                        Text(
+                                          post!.likes.length.toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'NotoSans',
+                                              fontSize: 12,
+                                              height: 1.7,
+                                              color: Color.fromRGBO(
+                                                  151, 151, 151, 1)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  // Padding(
+                                  //   padding: EdgeInsets.only(right: Get.width * 0.06),
+                                  //   child: Column(
+                                  //     children: [
+                                  //       SvgPicture.asset('assets/images/ic_share.svg'),
+                                  //       Text(' ')
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        right: Get.width * 0.02),
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/images/ic_declaration.svg'),
+                                        Text(' ')
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               )
-                            ],
-                          ),
-                        ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(right: Get.width * 0.06),
-                        //   child: Column(
-                        //     children: [
-                        //       SvgPicture.asset('assets/images/ic_share.svg'),
-                        //       Text(' ')
-                        //     ],
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.only(right: Get.width * 0.02),
-                          child: Column(
-                            children: [
-                              SvgPicture.asset(
-                                  'assets/images/ic_declaration.svg'),
-                              Text(' ')
                             ],
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-              ),
-            ],
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  // 데이터 불러오기 실패
+                  return Text("Error: ${snapshot.error}");
+                }
+              }
+              // 데이터 불러오는 동안 표시할 위젯
+              return CircularProgressIndicator();
+            },
           ),
-        )
-      ],
-    ));
+        ],
+      ));
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildReviewListview() {
@@ -262,6 +341,166 @@ class HomeVideoplayerScreen extends StatelessWidget {
                   child: SvgPicture.asset('assets/images/ic_send.svg')))
         ],
       ),
+    );
+  }
+
+  Future<void> _incrementViewCount(String postId) async {
+    final DocumentReference postRef =
+        firestore.collection(FirestoreConstants.pathPostCollection).doc(postId);
+
+    // Firestore 트랜잭션을 사용하여 viewCnt 안전하게 증가
+    return firestore
+        .runTransaction<void>((Transaction transaction) async {
+          DocumentSnapshot postSnapshot = await transaction.get(postRef);
+          if (postSnapshot.exists) {
+            int currentViewCount = postSnapshot.get('viewCnt') ?? 0;
+            transaction.update(postRef, {'viewCnt': currentViewCount + 1});
+          }
+        })
+        .then((value) => print("View count incremented"))
+        .catchError((error) => print("Failed to increment view count: $error"));
+  }
+}
+
+class BeautyVideoPlayer extends StatefulWidget {
+  const BeautyVideoPlayer({super.key, required this.url});
+  final String? url;
+  @override
+  State<BeautyVideoPlayer> createState() => _BeautyVideoPlayerState();
+}
+
+class _BeautyVideoPlayerState extends State<BeautyVideoPlayer> {
+  late VideoPlayerController controller;
+  bool isLoading = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller = VideoPlayerController.networkUrl(
+      Uri.parse(widget.url ?? ''),
+    );
+    controller.initialize().then((_) => setState(() {
+          isLoading = false;
+        }));
+    controller.play();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: <Widget>[
+        Container(
+          color: Colors.grey.withOpacity(0.1),
+        ),
+        if (!isLoading)
+          FittedBox(
+              fit: BoxFit.fitWidth,
+              child: SizedBox(
+                  height: controller.value.size.height,
+                  width: controller.value.size.width,
+                  child: VideoPlayer(controller))),
+        controlsOverlay(),
+        VideoProgressIndicator(controller, allowScrubbing: true),
+      ],
+    );
+  }
+
+  Widget controlsOverlay() {
+    return Stack(
+      children: <Widget>[
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 50),
+          reverseDuration: const Duration(milliseconds: 200),
+          child: controller.value.isPlaying
+              ? const SizedBox.shrink()
+              : Align(
+                  alignment: Alignment.topLeft,
+                  child: const ColoredBox(
+                    color: Colors.black26,
+                    child: Center(
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                        size: 100.0,
+                        semanticLabel: 'Play',
+                      ),
+                    ),
+                  ),
+                ),
+        ),
+        GestureDetector(
+          onTap: () {
+            controller.value.isPlaying ? controller.pause() : controller.play();
+            setState(() {});
+          },
+        ),
+        // Align(
+        //   alignment: Alignment.topLeft,
+        //   child: PopupMenuButton<Duration>(
+        //     initialValue: controller.value.captionOffset,
+        //     tooltip: 'Caption Offset',
+        //     onSelected: (Duration delay) {
+        //       controller.setCaptionOffset(delay);
+        //     },
+        //     itemBuilder: (BuildContext context) {
+        //       return <PopupMenuItem<Duration>>[
+        //         for (final Duration offsetDuration in _exampleCaptionOffsets)
+        //           PopupMenuItem<Duration>(
+        //             value: offsetDuration,
+        //             child: Text('${offsetDuration.inMilliseconds}ms'),
+        //           )
+        //       ];
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(
+        //         // Using less vertical padding as the text is also longer
+        //         // horizontally, so it feels like it would need more spacing
+        //         // horizontally (matching the aspect ratio of the video).
+        //         vertical: 12,
+        //         horizontal: 16,
+        //       ),
+        //       child: Text('${controller.value.captionOffset.inMilliseconds}ms'),
+        //     ),
+        //   ),
+        // ),
+        // Align(
+        //   alignment: Alignment.topRight,
+        //   child: PopupMenuButton<double>(
+        //     initialValue: controller.value.playbackSpeed,
+        //     tooltip: 'Playback speed',
+        //     onSelected: (double speed) {
+        //       controller.setPlaybackSpeed(speed);
+        //     },
+        //     itemBuilder: (BuildContext context) {
+        //       return <PopupMenuItem<double>>[
+        //         for (final double speed in _examplePlaybackRates)
+        //           PopupMenuItem<double>(
+        //             value: speed,
+        //             child: Text('${speed}x'),
+        //           )
+        //       ];
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(
+        //         // Using less vertical padding as the text is also longer
+        //         // horizontally, so it feels like it would need more spacing
+        //         // horizontally (matching the aspect ratio of the video).
+        //         vertical: 12,
+        //         horizontal: 16,
+        //       ),
+        //       child: Text('${controller.value.playbackSpeed}x'),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
   }
 }

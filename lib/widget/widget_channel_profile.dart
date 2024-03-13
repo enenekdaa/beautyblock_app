@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/auth/login/controller/login_controller.dart';
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
 import 'package:beautyblock_app/utils.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../home/controller/home_controller.dart';
+
 class SubscriptionProfileWidget extends StatelessWidget {
   const SubscriptionProfileWidget({
     Key? key,
@@ -13,7 +16,6 @@ class SubscriptionProfileWidget extends StatelessWidget {
     required this.userName,
     this.subscriptionBtnOnPress,
     this.useSubscriptionButton = true,
-    this.isSubscription,
     this.useSubscriptionCountText = true,
     this.subscriptionCount = "1234",
     this.useGoToChannelText = true,
@@ -21,13 +23,13 @@ class SubscriptionProfileWidget extends StatelessWidget {
     this.useLikeButton = true,
     this.likeButtonOnPress,
     this.channelTextOnPress,
+    this.channelId,
   }) : super(key: key);
 
   final imageUrl;
   final userName;
   final subscriptionBtnOnPress;
   final useSubscriptionButton;
-  final isSubscription;
   final useSubscriptionCountText;
   final subscriptionCount;
   final useGoToChannelText;
@@ -35,6 +37,7 @@ class SubscriptionProfileWidget extends StatelessWidget {
   final useLikeButton;
   final likeButtonOnPress;
   final channelTextOnPress;
+  final channelId;
 
   @override
   Widget build(BuildContext context) {
@@ -113,45 +116,121 @@ class SubscriptionProfileWidget extends StatelessWidget {
   }
 
   Widget _buildSubscriptionButton() {
-    return Row(
-      children: [
-        useSubscriptionButton
-            ? InkWell(
-                onTap: subscriptionBtnOnPress,
-                child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromRGBO(239, 1, 141, 1),
-                          Color.fromRGBO(6, 136, 255, 1)
+    return GetBuilder<HomeController>(builder: (controller) {
+      return Row(
+        children: [
+          useSubscriptionButton
+              ? InkWell(
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                        context: Get.context!,
+                        // isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  0,
+                                  12,
+                                  0,
+                                  MediaQuery.of(context).viewInsets.bottom +
+                                      12),
+                              color: Colors.transparent,
+                              child: SingleChildScrollView(
+                                  child: Column(
+                                children: ['구독', '알림취소', '구독취소']
+                                    .map((e) => GestureDetector(
+                                          onTap: () {
+                                            if (e == '구독') {
+                                              controller.changeSubscribe(
+                                                  type: 0, targetId: channelId);
+                                            } else if (e == '알림취소') {
+                                              controller.changeSubscribe(
+                                                  type: 1, targetId: channelId);
+                                            } else {
+                                              controller.changeSubscribe(
+                                                  type: 2, targetId: channelId);
+                                            }
+                                            Get.back();
+                                          },
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 12.0,
+                                                        horizontal: 20),
+                                                    child: Text(e,
+                                                        style: AppTheme
+                                                            .smallTitleTextStyle),
+                                                  ),
+                                                  Container(
+                                                      width: Get.width,
+                                                      height: 2,
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              240, 240, 240, 1))
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ))
+                                    .toList(),
+                              )));
+                        });
+                  },
+                  child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                      decoration:
+                          controller.getSubscriptionStatus(channelId) == 2
+                              ? BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(30),
+                                )
+                              : BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(239, 1, 141, 1),
+                                      Color.fromRGBO(6, 136, 255, 1)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                      child: Row(
+                        children: [
+                          if (controller.isSubscribe(channelId))
+                            SvgPicture.asset((controller
+                                        .getSubscriptionStatus(channelId) ==
+                                    0
+                                ? 'assets/images/ic_subscription_bell_on'
+                                    '.svg'
+                                : 'assets/images/ic_subscription_bell_off.svg')),
+                          if (controller.isSubscribe(channelId))
+                            SizedBox(
+                              width: 5,
+                            ),
+                          Text(
+                            (controller.isSubscribe(channelId)) ? '구독중' : '구독',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/ic_subscription_bell.svg'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          isSubscription ? '구독중' : '구독',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    )))
-            : Text(""),
-        useLikeButton
-            ? GestureDetector(
-                child: SvgPicture.asset('assets/images/ic_like.svg'),
-                onTap: likeButtonOnPress,
-              )
-            : Text('')
-      ],
-    );
+                      )))
+              : Text(""),
+          useLikeButton
+              ? GestureDetector(
+                  child: SvgPicture.asset('assets/images/ic_like.svg'),
+                  onTap: likeButtonOnPress,
+                )
+              : Text('')
+        ],
+      );
+    });
   }
 }

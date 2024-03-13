@@ -228,7 +228,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
       FocusScope.of(context).unfocus();
       navigator?.pop(Get.context);
       resetControllValue();
-      Get.to(HomePostShareScreen());
+      Get.off(() => const HomePostShareScreen());
     }, '자랑하러 가기');
   }
 
@@ -295,7 +295,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
   }
 
 // Future<void> uploadImage() async {
-//   var imagePath = HomeController.to.pickerIamgePath.value;
+//   var imagePath = HomeController.to.pickerImagePath.value;
 //   if (imagePath.isNotEmpty) {
 //     File file = File(imagePath);
 //

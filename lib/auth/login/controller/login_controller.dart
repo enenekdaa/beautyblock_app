@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beautyblock_app/model/firebase_subscription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,7 +63,7 @@ class LoginController extends GetxController {
       DocumentSnapshot documentSnapshot = documents[0];
       user = BeautyUser.fromDocument(documentSnapshot);
       setUser(user);
-      Get.off(HomeMainScreen());
+      Get.off(() => HomeMainScreen());
     }
   }
 
@@ -72,7 +73,7 @@ class LoginController extends GetxController {
 
   logout() {
     _user = null;
-    Get.off(LoginReciveInfoScreen());
+    Get.off(() => LoginReciveInfoScreen());
   }
 
   String getProfile() {
@@ -86,7 +87,8 @@ class LoginController extends GetxController {
   String getNick() {
     return _user?.nickName ?? '뷰티블록';
   }
-  String getId(){
+
+  String getId() {
     return _user?.id ?? "001";
   }
 

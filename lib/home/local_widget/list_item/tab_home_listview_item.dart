@@ -5,23 +5,32 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class TabHomeListviewItem extends StatelessWidget {
-  const TabHomeListviewItem({
+  static const List<String> empty = [];
+  TabHomeListviewItem({
     Key? key,
     // required this.imageWidget,
+    required this.id,
     required this.duration,
     required this.videoTitle,
     required this.views,
     required this.date,
+    this.thumbnail = '',
+    this.tags = empty,
   }) : super(key: key);
 
   // final imageWidget;
+  final id;
   final duration;
   final videoTitle;
   final views;
   final date;
+  String thumbnail = '';
+  List<String> tags;
+  String tagString = '';
 
   @override
   Widget build(BuildContext context) {
+    tagString = tags.map((e) => '#$e').join(' ');
     return Row(
       children: [
         Expanded(
@@ -35,7 +44,9 @@ class TabHomeListviewItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
       child: GestureDetector(
-        onTap: (){Get.to(HomeVideoplayerScreen());},
+        onTap: () {
+          Get.to(() => HomeVideoplayerScreen(id: id));
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -45,13 +56,21 @@ class TabHomeListviewItem extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/images/img_test_video_thumbnail.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ))
+                        child: SizedBox(
+                      height: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: thumbnail == ''
+                            ? Image.asset(
+                                'assets/images/img_test_video_thumbnail.png',
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                thumbnail,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ))
                   ],
                 ),
                 Positioned(
@@ -103,9 +122,15 @@ class TabHomeListviewItem extends StatelessWidget {
                     style: AppTheme.tagTextStyle,
                   ),
                 ),
-                Text(date, style: AppTheme.tagTextStyle,),
                 Text(
-                  '#뷰티블록  #뷰티  #페스티발',
+                  date,
+                  style: AppTheme.tagTextStyle,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  tagString,
                   style: AppTheme.tagTextStyle,
                 ),
               ],

@@ -2,16 +2,29 @@ import 'package:beautyblock_app/fan/controller/fan_controller.dart';
 import 'package:beautyblock_app/model/channel_model.dart';
 import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/model/roles_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../auth/login/controller/login_controller.dart';
+import '../../constants/firestore_constants.dart';
+import '../../model/firebase_subscription_model.dart';
+import '../../model/firebase_user_model.dart';
 import '../../model/video_model.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
+  List<BeautyPost> popularPosts = [];
+  List<BeautyPost> newPosts = [];
+  List<BeautyPost> recommendPosts = [];
+  List<BeautyPost> interestPosts = [];
+  List<BeautySubscription> subscriptions = [];
+  List<BeautyUser> subscriptionChannels = [];
   //textEditingController
   var uploadTitleController = TextEditingController();
   var uploadContentController = TextEditingController();
@@ -20,10 +33,9 @@ class HomeController extends GetxController {
   var videoDescriptionController = TextEditingController();
 
   //mainPage
-  var isShowSubscriptionChannel = false.obs;
-  var influencerList = [].obs;
-  var selectInfluencerIndex = 0.obs;
-  var influencerSelected = false.obs;
+  bool isShowSubscriptionChannel = false;
+  String selectInfluencerId = '';
+  bool influencerSelected = false;
 
   //search
   var brandList = [].obs;
@@ -37,20 +49,21 @@ class HomeController extends GetxController {
   //postUpload
   var categories = [].obs;
   var pickerVideoPath = "".obs;
-  var pickerIamgePath = ''.obs;
+  var pickerImagePath = ''.obs;
   var pickerThumbnailVideoPath = ''.obs;
   var isPostUploading = false.obs;
   var isVideoUploading = false.obs;
   var tags = emptyList.obs;
 
   //tag
-  void addTag(tag){
-    if(!tags.contains(tag)){
+  void addTag(tag) {
+    if (!tags.contains(tag)) {
       tags.add(tag);
     }
     return;
   }
-  void removeTag(tag){
+
+  void removeTag(tag) {
     tags.remove(tag);
   }
 
@@ -139,9 +152,9 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    influencerList.value = ['홍길동', '존박', '아리수', '고릴라', '쌈바', '손오공', '보노보노'];
+
     countries.value = ['대한민국', '중국', '미국', '말레이시아', '캐나다', '영국', '네덜란드'];
     continents.value = [
       '아시아',
@@ -156,9 +169,9 @@ class HomeController extends GetxController {
       'Total',
       "Brand",
       "Distribute",
-      "Celeb/Influencer",
-      "Marketing/PR",
-      'OEM/ODM',
+      "Celeb / Influencer",
+      "Marketing / PR",
+      'OEM / ODM',
       'Logistic',
     ];
     brandList.value = [
@@ -171,6 +184,126 @@ class HomeController extends GetxController {
       '뷰티블록',
     ];
     filteredData.value = brandList;
+    final postsRef = FirebaseFirestore.instance
+        .collection('posts')
+        .orderBy('createdAt', descending: true)
+        .limit(10);
+    //10개까지만 추출
+    final querySnapshot = await postsRef.get();
+    List<BeautyPost> posts = [];
+
+    for (var doc in querySnapshot.docs) {
+      posts.add(BeautyPost.fromDocument(doc));
+    }
+    popularPosts = posts;
+    interestPosts = posts;
+    newPosts = posts;
+    recommendPosts = posts;
+    updateSubscribe();
+    getSubscriptionChannels();
+  }
+
+  updateSubscribe() async {
+    QuerySnapshot result = await firebaseFirestore
+        .collection(FirestoreConstants.pathSubscriptionCollection)
+        .where('userId', isEqualTo: LoginController.to.getId())
+        .get();
+    List<BeautySubscription> tmp = [];
+    for (var doc in result.docs) {
+      BeautySubscription sub = BeautySubscription.fromDocument(doc);
+      tmp.add(sub);
+    }
+    subscriptions = tmp;
+    update();
+  }
+
+  changeSubscribe({required int type, required String targetId}) async {
+    //0: 구독, 1: 알림취소, 2: 구독취소(삭제)
+    QuerySnapshot result = await firebaseFirestore
+        .collection(FirestoreConstants.pathSubscriptionCollection)
+        .where('userId', isEqualTo: LoginController.to.getId())
+        .where('channelId', isEqualTo: targetId)
+        .get();
+    final List<DocumentSnapshot> documents = result.docs;
+    if (type == 0) {
+      // 문서의 존재 여부를 확인합니다.
+      if (!documents.isNotEmpty) {
+        // 문서가 존재하지 않는 경우, 새로운 문서를 생성합니다.
+        print("Creating new subscription with type 0.");
+        await firebaseFirestore
+            .collection(FirestoreConstants.pathSubscriptionCollection)
+            .add(BeautySubscription(
+                    userId: LoginController.to.getId(),
+                    type: type,
+                    channelId: targetId)
+                .toJson());
+      } else {
+        // 문서가 이미 존재하는 경우, type을 업데이트합니다.
+        DocumentReference documentRef = FirebaseFirestore.instance
+            .collection(FirestoreConstants.pathSubscriptionCollection)
+            .doc(documents[0].id);
+        documentRef.update({'type': type});
+      }
+    } else if (type == 1) {
+      // type을 1로 업데이트합니다.
+      DocumentReference documentRef = FirebaseFirestore.instance
+          .collection(FirestoreConstants.pathSubscriptionCollection)
+          .doc(documents[0].id);
+      documentRef.update({'type': type});
+    } else if (type == 2) {
+      // type이 2인 경우, 해당 구독 데이터(문서)를 삭제합니다.
+      DocumentReference documentRef = FirebaseFirestore.instance
+          .collection(FirestoreConstants.pathSubscriptionCollection)
+          .doc(documents[0].id);
+      documentRef.delete();
+    }
+    updateSubscribe();
+  }
+
+  bool isSubscribe(String channelId) {
+    return subscriptions
+        .where((element) => element.channelId == channelId)
+        .toList()
+        .isNotEmpty;
+  }
+
+  int getSubscriptionStatus(String channelId) {
+    List<BeautySubscription> list = subscriptions
+        .where((element) => element.channelId == channelId)
+        .toList();
+    if (list.isEmpty) {
+      return 2;
+    } else {
+      return list.first.type;
+    }
+  }
+
+  getSubscriptionChannels() async {
+    List<String> channelIdList = [];
+    List<DocumentSnapshot> allResults = [];
+    for (var element in subscriptions) {
+      channelIdList.add(element.channelId);
+    }
+    print(channelIdList);
+    // channelIds 배열을 10개 단위로 분할
+    for (int i = 0; i < channelIdList.length; i += 10) {
+      List<String> subset = channelIdList.sublist(
+          i, i + 10 > channelIdList.length ? channelIdList.length : i + 10);
+
+      final QuerySnapshot querySnapshot = await firebaseFirestore
+          .collection(FirestoreConstants.pathUserCollection)
+          .where(FieldPath.documentId, whereIn: subset)
+          .get();
+
+      allResults.addAll(querySnapshot.docs);
+    }
+    List<BeautyUser> tmp = [];
+    for (DocumentSnapshot doc in allResults) {
+      tmp.add(BeautyUser.fromDocument(doc));
+    }
+    subscriptionChannels = tmp;
+    print(subscriptionChannels);
+    update();
   }
 
   @override
@@ -180,10 +313,33 @@ class HomeController extends GetxController {
     uploadTagController.dispose();
     searchController.dispose();
     videoDescriptionController.dispose();
-    influencerList.value = [];
     countries.value = [];
     continents.value = [];
     categories.value = [];
     super.dispose();
+  }
+
+  void toggleShowSubscriptionChannel() {
+    if (!isShowSubscriptionChannel) {
+      updateSubscribe();
+      getSubscriptionChannels();
+    }
+    influencerSelected = false;
+    isShowSubscriptionChannel = !isShowSubscriptionChannel;
+    update();
+  }
+
+  void tapInfluencer(BeautyUser element) {
+    if (!influencerSelected) {
+      selectInfluencerId == element.id;
+      influencerSelected = true;
+    } else {
+      if (selectInfluencerId == element.id) {
+        influencerSelected = false;
+      } else {
+        selectInfluencerId = element.id;
+      }
+    }
+    update();
   }
 }

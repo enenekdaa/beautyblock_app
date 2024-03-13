@@ -94,11 +94,15 @@ class MyApp extends StatelessWidget {
         // GetPage(name: '/homeAlarm', page: ()=>HomeAlarmPage(),binding: InitBinding()),
         GetPage(
             name: '/homeVideo',
-            page: () => HomeVideoplayerScreen(),
+            page: () => const HomeVideoplayerScreen(
+                  id: null,
+                ),
             binding: InitBinding()),
         GetPage(
             name: '/homeChannelDetail',
-            page: () => HomeChannelDetailScreen(),
+            page: () => HomeChannelDetailScreen(
+                  id: null,
+                ),
             binding: InitBinding()),
         GetPage(
             name: '/selectCountry',

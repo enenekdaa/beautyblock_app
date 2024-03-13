@@ -17,11 +17,11 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
         bottomListviewSection: _buildFavoritesVideos());
   }
 
-  Widget _buildAppbar(){
+  Widget _buildAppbar() {
     return AppbarWidget(appbarText: '즐겨찾기 채널');
   }
 
-  Widget _buildChannelListview(){
+  Widget _buildChannelListview() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -30,9 +30,24 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _channelItem(Image.asset('assets/images/img_test_chanel.png',fit: BoxFit.cover,),"Chanel"),
-              _channelItem(Image.asset('assets/images/img_test_chanel.png',fit: BoxFit.cover,),"Chanel"),
-              _channelItem(Image.asset('assets/images/img_test_chanel.png',fit: BoxFit.cover,),"Chanel"),
+              _channelItem(
+                  Image.asset(
+                    'assets/images/img_test_chanel.png',
+                    fit: BoxFit.cover,
+                  ),
+                  "Chanel"),
+              _channelItem(
+                  Image.asset(
+                    'assets/images/img_test_chanel.png',
+                    fit: BoxFit.cover,
+                  ),
+                  "Chanel"),
+              _channelItem(
+                  Image.asset(
+                    'assets/images/img_test_chanel.png',
+                    fit: BoxFit.cover,
+                  ),
+                  "Chanel"),
             ],
           ),
         ],
@@ -40,7 +55,7 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoritesVideos(){
+  Widget _buildFavoritesVideos() {
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -48,33 +63,41 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-          child: Text('즐겨찾기 영상',style:AppTheme.appBarTextStyle ,),
+          child: Text(
+            '즐겨찾기 영상',
+            style: AppTheme.appBarTextStyle,
+          ),
         ),
         TabHomeListviewItem(
+          id: '',
           duration: "10:24:52",
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
           date: '1달전',
         ),
         TabHomeListviewItem(
+          id: '',
           duration: "10:24:52",
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
           date: '1달전',
         ),
         TabHomeListviewItem(
+          id: '',
           duration: "10:24:52",
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
           date: '1달전',
         ),
         TabHomeListviewItem(
+          id: '',
           duration: "10:24:52",
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
           date: '1달전',
         ),
         TabHomeListviewItem(
+          id: '',
           duration: "10:24:52",
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
@@ -84,7 +107,7 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
     );
   }
 
-  Container _channelItem(image,channelName){
+  Container _channelItem(image, channelName) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,11 +115,11 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
           Container(
             height: Get.height * 0.12,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(6.0),
-              child: image
-            ),
+                borderRadius: BorderRadius.circular(6.0), child: image),
           ),
-          SizedBox(height: Get.height * 0.01,),
+          SizedBox(
+            height: Get.height * 0.01,
+          ),
           Text(channelName)
         ],
       ),

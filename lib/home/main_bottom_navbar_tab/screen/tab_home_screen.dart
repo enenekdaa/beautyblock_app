@@ -5,6 +5,7 @@ import 'package:beautyblock_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../model/firebase_user_model.dart';
 import '../../../widget/widget_circle_avatar.dart';
 import '../../../widget/widget_channel_profile.dart';
 import '../../../widget/widget_tabbar.dart';
@@ -39,23 +40,25 @@ class _TabHomeScreenState extends State<TabHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => TabHomeScaffold(
-          homeAppbarSection: _buildHomeAppbar(),
-          tabBarSection: _buildTabBar(_tabController),
-          subcriptionChannelListSection:
-              _buildSubscriptionChannelListviewSection(),
-          channelProfileSection: _buildChannelProfileSection(),
-          bottomListviewSection: _buildBottomListViewSection(),
-        ));
+    return GetBuilder<HomeController>(builder: (context) {
+      return TabHomeScaffold(
+        homeAppbarSection: _buildHomeAppbar(),
+        tabBarSection: _buildTabBar(_tabController),
+        subcriptionChannelListSection:
+            _buildSubscriptionChannelListviewSection(),
+        channelProfileSection: _buildChannelProfileSection(),
+        bottomListviewSection: _buildBottomListViewSection(),
+      );
+    });
   }
 
   Widget _buildHomeAppbar() {
-    if (HomeController.to.isShowSubscriptionChannel.value) {
+    if (HomeController.to.isShowSubscriptionChannel) {
       return AppBar(
         titleSpacing: 0,
         leading: GestureDetector(
             onTap: () {
-              HomeController.to.isShowSubscriptionChannel.value = false;
+              HomeController.to.toggleShowSubscriptionChannel();
             },
             child: Image.asset('assets/images/ic_back_arrow.png')),
         title: Row(
@@ -94,18 +97,13 @@ class _TabHomeScreenState extends State<TabHomeScreen>
         actions: [
           GestureDetector(
             onTap: () {
-              if (HomeController.to.isShowSubscriptionChannel.value) {
-                HomeController.to.influencerSelected.value = false;
-              }
-              HomeController.to.isShowSubscriptionChannel.value =
-                  !HomeController.to.isShowSubscriptionChannel.value;
+              HomeController.to.toggleShowSubscriptionChannel();
             },
-            child: SvgPicture.asset(
-                HomeController.to.isShowSubscriptionChannel.value
-                    ? 'assets/images/ic_bookmark_active'
-                        '.svg'
-                    : 'assets/images/ic_bookmark_deactive'
-                        '.svg'),
+            child: SvgPicture.asset(HomeController.to.isShowSubscriptionChannel
+                ? 'assets/images/ic_bookmark_active'
+                    '.svg'
+                : 'assets/images/ic_bookmark_deactive'
+                    '.svg'),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
@@ -142,7 +140,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
 
   Widget _buildTabBar(controller) {
     List<dynamic> tabText = ["인기", "신규", "추천", "관심"];
-    if (HomeController.to.isShowSubscriptionChannel.value) {
+    if (HomeController.to.isShowSubscriptionChannel) {
       return Container();
     } else {
       return TabBarWidget(
@@ -156,39 +154,24 @@ class _TabHomeScreenState extends State<TabHomeScreen>
 
   Widget _buildSubscriptionChannelListviewSection() {
     List<Widget> inflWidgetList = [];
-    HomeController.to.influencerList.forEach((element) {
+    for (BeautyUser element in HomeController.to.subscriptionChannels) {
       inflWidgetList.add(Padding(
         padding: EdgeInsets.only(right: Get.width * 0.04),
         child: GestureDetector(
           child: CircleAvatarWidget(
-            backgroundimage: AssetImage('assets/images/img_test.png'),
-            text: element,
+            backgroundimage: NetworkImage(element.profile),
+            text: element.company,
             bottomTextIsVisible: true,
-            selected: HomeController.to.selectInfluencerIndex.value ==
-                    HomeController.to.influencerList.indexOf(element) &&
-                HomeController.to.influencerSelected.value,
+            selected: HomeController.to.selectInfluencerId == element.id &&
+                HomeController.to.influencerSelected,
           ),
           onTap: () {
-            if (HomeController.to.influencerSelected.value == false) {
-              //선택 안되었으면 무조건 선택
-              HomeController.to.selectInfluencerIndex.value =
-                  HomeController.to.influencerList.indexOf(element);
-              HomeController.to.influencerSelected.value = true;
-            } else if (HomeController.to.selectInfluencerIndex.value ==
-                HomeController.to.influencerList.indexOf(element)) {
-              //선택 되어있는데 선택한거 다시 선택
-              HomeController.to.influencerSelected.value = false;
-            } else {
-              //선택 되어있는데 다른거 선택
-              HomeController.to.selectInfluencerIndex.value =
-                  HomeController.to.influencerList.indexOf(element);
-              HomeController.to.influencerSelected.value = true;
-            }
+            HomeController.to.tapInfluencer(element);
           },
         ),
       ));
-    });
-    return HomeController.to.isShowSubscriptionChannel.value
+    }
+    return HomeController.to.isShowSubscriptionChannel
         ? Container(
             height: Get.height * 0.13,
             margin: EdgeInsets.only(top: Get.height * 0.015),
@@ -201,18 +184,22 @@ class _TabHomeScreenState extends State<TabHomeScreen>
   }
 
   Widget _buildChannelProfileSection() {
-    return HomeController.to.influencerSelected.value
+    BeautyUser channel = HomeController.to.subscriptionChannels
+        .where((item) => item.id == HomeController.to.selectInfluencerId)
+        .first;
+    return HomeController.to.influencerSelected
         ? SubscriptionProfileWidget(
-            imageUrl: const AssetImage('assets/images/img_test.png'),
-            userName: HomeController.to
-                .influencerList[HomeController.to.selectInfluencerIndex.value],
+            imageUrl: NetworkImage(channel.profile),
+            userName: channel.company,
             subscriptionBtnOnPress: () {},
-            isSubscription: true,
             useLikeButton: false,
             useSubscriptionCountText: false,
             channelTextOnPress: () {
-              Get.to(() => const HomeChannelDetailScreen());
+              Get.to(() => HomeChannelDetailScreen(
+                    id: channel.id,
+                  ));
             },
+            channelId: HomeController.to.selectInfluencerId,
           )
         : Container();
   }
@@ -225,58 +212,65 @@ class _TabHomeScreenState extends State<TabHomeScreen>
           controller: _tabController,
           children: [
             ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                TabHomeListviewItem(
-                  duration: "10:24:52",
-                  videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-                  views: "234121",
-                  date: '1달전',
-                ),
-                TabHomeListviewItem(
-                  duration: "10:24:52",
-                  videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-                  views: "234121",
-                  date: '1달전',
-                ),
-                TabHomeListviewItem(
-                  duration: "10:24:52",
-                  videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-                  views: "234121",
-                  date: '1달전',
-                ),
-                TabHomeListviewItem(
-                  duration: "10:24:52",
-                  videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-                  views: "234121",
-                  date: '1달전',
-                ),
-                TabHomeListviewItem(
-                  duration: "10:24:52",
-                  videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-                  views: "234121",
-                  date: '1달전',
-                ),
-              ],
-            ),
-            Container(
-              child: ListView(
                 scrollDirection: Axis.vertical,
-                children: [Text("data2")],
-              ),
-            ),
-            Container(
-              child: ListView(
+                children: HomeController.to.popularPosts
+                    .map(
+                      (post) => TabHomeListviewItem(
+                        id: post.id,
+                        duration: "10:24:52",
+                        videoTitle: post.title,
+                        views: post.viewCnt.toString(),
+                        date: post.createdAt.substring(0, 10),
+                        thumbnail: post.thumbnail,
+                        tags: post.tags,
+                      ),
+                    )
+                    .toList()),
+            ListView(
                 scrollDirection: Axis.vertical,
-                children: [Text("data3")],
-              ),
-            ),
-            Container(
-              child: ListView(
+                children: HomeController.to.newPosts
+                    .map(
+                      (post) => TabHomeListviewItem(
+                        id: post.id,
+                        duration: "10:24:52",
+                        videoTitle: post.title,
+                        views: post.viewCnt.toString(),
+                        date: post.createdAt.substring(0, 10),
+                        thumbnail: post.thumbnail,
+                        tags: post.tags,
+                      ),
+                    )
+                    .toList()),
+            ListView(
                 scrollDirection: Axis.vertical,
-                children: [Text("data4")],
-              ),
-            ),
+                children: HomeController.to.recommendPosts
+                    .map(
+                      (post) => TabHomeListviewItem(
+                        id: post.id,
+                        duration: "10:24:52",
+                        videoTitle: post.title,
+                        views: post.viewCnt.toString(),
+                        date: post.createdAt.substring(0, 10),
+                        thumbnail: post.thumbnail,
+                        tags: post.tags,
+                      ),
+                    )
+                    .toList()),
+            ListView(
+                scrollDirection: Axis.vertical,
+                children: HomeController.to.interestPosts
+                    .map(
+                      (post) => TabHomeListviewItem(
+                        id: post.id,
+                        duration: "10:24:52",
+                        videoTitle: post.title,
+                        views: post.viewCnt.toString(),
+                        date: post.createdAt.substring(0, 10),
+                        thumbnail: post.thumbnail,
+                        tags: post.tags,
+                      ),
+                    )
+                    .toList()),
           ],
         ),
       ),

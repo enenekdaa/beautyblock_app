@@ -163,7 +163,7 @@ class BottomNavBarController extends GetxController {
   // Future<void> _pickImageFromGallery() async {
   //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
   //   if(image != null){
-  //     HomeController.to.pickerIamgePath.value = image.path;
+  //     HomeController.to.pickerImagePath.value = image.path;
   //     Get.to(HomePostUploadScreen());
   //   }
   // }

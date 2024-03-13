@@ -29,6 +29,7 @@ class ChannelVideoTabPage extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
           child: TabHomeListviewItem(
+              id: '',
               duration: '12:22:11',
               videoTitle: '영상제목 여기래',
               views: '1.2k',

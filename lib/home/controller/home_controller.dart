@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/constants/beauty_constants.dart';
 import 'package:beautyblock_app/fan/controller/fan_controller.dart';
 import 'package:beautyblock_app/model/channel_model.dart';
 import 'package:beautyblock_app/model/firebase_post_model.dart';
@@ -165,15 +166,7 @@ class HomeController extends GetxController {
       ' 유럽',
       ' 오세아니아'
     ];
-    categories.value = [
-      'Total',
-      "Brand",
-      "Distribute",
-      "Celeb / Influencer",
-      "Marketing / PR",
-      'OEM / ODM',
-      'Logistic',
-    ];
+    categories.value = [...BeautyConstants.positions];
     brandList.value = [
       '샤넬',
       '루이비통',
@@ -284,7 +277,6 @@ class HomeController extends GetxController {
     for (var element in subscriptions) {
       channelIdList.add(element.channelId);
     }
-    print(channelIdList);
     // channelIds 배열을 10개 단위로 분할
     for (int i = 0; i < channelIdList.length; i += 10) {
       List<String> subset = channelIdList.sublist(
@@ -302,7 +294,6 @@ class HomeController extends GetxController {
       tmp.add(BeautyUser.fromDocument(doc));
     }
     subscriptionChannels = tmp;
-    print(subscriptionChannels);
     update();
   }
 

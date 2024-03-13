@@ -20,7 +20,7 @@ class TabHomeListviewItem extends StatelessWidget {
 
   // final imageWidget;
   final id;
-  final duration;
+  int duration;
   final videoTitle;
   final views;
   final date;
@@ -85,7 +85,7 @@ class TabHomeListviewItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(5.0), // 둥근 모서리 반경
                       ),
                       child: Text(
-                        duration,
+                        formatDuration(duration),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -139,5 +139,19 @@ class TabHomeListviewItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatDuration(int seconds) {
+    int hours = seconds ~/ 3600;
+    int minutes = (seconds % 3600) ~/ 60;
+    int remainingSeconds = seconds % 60;
+
+    // 1시간 미만인 경우 분:초 형식으로 반환
+    if (hours == 0) {
+      return "${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}";
+    } else {
+      // 1시간 이상인 경우 시:분:초 형식으로 반환
+      return "${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}";
+    }
   }
 }

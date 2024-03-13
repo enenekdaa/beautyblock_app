@@ -26,11 +26,13 @@ class ChannelVideoTabPage extends StatelessWidget {
           style:
               AppTheme.smallTitleTextStyle.copyWith(fontSize: 18, height: 1.2),
         ),
+
+        ///TODO: 데이터 연동
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
           child: TabHomeListviewItem(
               id: '',
-              duration: '12:22:11',
+              duration: 1,
               videoTitle: '영상제목 여기래',
               views: '1.2k',
               date: '2달전'),

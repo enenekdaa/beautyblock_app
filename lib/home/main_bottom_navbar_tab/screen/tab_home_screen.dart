@@ -184,24 +184,29 @@ class _TabHomeScreenState extends State<TabHomeScreen>
   }
 
   Widget _buildChannelProfileSection() {
-    BeautyUser channel = HomeController.to.subscriptionChannels
+    List<BeautyUser> channels = HomeController.to.subscriptionChannels
         .where((item) => item.id == HomeController.to.selectInfluencerId)
-        .first;
-    return HomeController.to.influencerSelected
-        ? SubscriptionProfileWidget(
-            imageUrl: NetworkImage(channel.profile),
-            userName: channel.company,
-            subscriptionBtnOnPress: () {},
-            useLikeButton: false,
-            useSubscriptionCountText: false,
-            channelTextOnPress: () {
-              Get.to(() => HomeChannelDetailScreen(
-                    id: channel.id,
-                  ));
-            },
-            channelId: HomeController.to.selectInfluencerId,
-          )
-        : Container();
+        .toList();
+    BeautyUser? channel = channels.isNotEmpty ? channels.first : null;
+    if (channel != null) {
+      return HomeController.to.influencerSelected
+          ? SubscriptionProfileWidget(
+              imageUrl: NetworkImage(channel.profile),
+              userName: channel.company,
+              subscriptionBtnOnPress: () {},
+              useLikeButton: false,
+              useSubscriptionCountText: false,
+              channelTextOnPress: () {
+                Get.to(() => HomeChannelDetailScreen(
+                      id: channel.id,
+                    ));
+              },
+              channelId: HomeController.to.selectInfluencerId,
+            )
+          : Container();
+    } else {
+      return Container();
+    }
   }
 
   Widget _buildBottomListViewSection() {
@@ -217,7 +222,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                     .map(
                       (post) => TabHomeListviewItem(
                         id: post.id,
-                        duration: "10:24:52",
+                        duration: post.videoLength,
                         videoTitle: post.title,
                         views: post.viewCnt.toString(),
                         date: post.createdAt.substring(0, 10),
@@ -232,7 +237,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                     .map(
                       (post) => TabHomeListviewItem(
                         id: post.id,
-                        duration: "10:24:52",
+                        duration: post.videoLength,
                         videoTitle: post.title,
                         views: post.viewCnt.toString(),
                         date: post.createdAt.substring(0, 10),
@@ -247,7 +252,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                     .map(
                       (post) => TabHomeListviewItem(
                         id: post.id,
-                        duration: "10:24:52",
+                        duration: post.videoLength,
                         videoTitle: post.title,
                         views: post.viewCnt.toString(),
                         date: post.createdAt.substring(0, 10),
@@ -262,7 +267,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                     .map(
                       (post) => TabHomeListviewItem(
                         id: post.id,
-                        duration: "10:24:52",
+                        duration: post.videoLength,
                         videoTitle: post.title,
                         views: post.viewCnt.toString(),
                         date: post.createdAt.substring(0, 10),

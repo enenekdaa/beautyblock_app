@@ -68,37 +68,11 @@ class HomeMyPageFavoritesChannelScreen extends StatelessWidget {
             style: AppTheme.appBarTextStyle,
           ),
         ),
+
+        ///TODO : 데이터 연동
         TabHomeListviewItem(
           id: '',
-          duration: "10:24:52",
-          videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-          views: "234121",
-          date: '1달전',
-        ),
-        TabHomeListviewItem(
-          id: '',
-          duration: "10:24:52",
-          videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-          views: "234121",
-          date: '1달전',
-        ),
-        TabHomeListviewItem(
-          id: '',
-          duration: "10:24:52",
-          videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-          views: "234121",
-          date: '1달전',
-        ),
-        TabHomeListviewItem(
-          id: '',
-          duration: "10:24:52",
-          videoTitle: "여기가 비디오 타이들입니다. 타이틀",
-          views: "234121",
-          date: '1달전',
-        ),
-        TabHomeListviewItem(
-          id: '',
-          duration: "10:24:52",
+          duration: 1,
           videoTitle: "여기가 비디오 타이들입니다. 타이틀",
           views: "234121",
           date: '1달전',

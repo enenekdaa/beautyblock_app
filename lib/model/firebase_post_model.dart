@@ -13,6 +13,7 @@ class BeautyPost {
   int commentCnt = 0;
   int viewCnt = 0;
   String createdAt = '';
+  int videoLength = 0;
   List<String> likes = [];
   List<String> tags = [];
 
@@ -27,6 +28,7 @@ class BeautyPost {
       this.commentCnt = 0,
       this.viewCnt = 0,
       this.createdAt = '',
+      this.videoLength = 0,
       this.likes = emptyList,
       this.tags = emptyList});
 
@@ -42,6 +44,7 @@ class BeautyPost {
       'commentCnt': commentCnt,
       'viewCnt': viewCnt,
       'createdAt': createdAt,
+      'videoLength': videoLength,
       'tags': tags,
       'likes': likes,
     };
@@ -58,6 +61,7 @@ class BeautyPost {
     int commentCnt = 0;
     int viewCnt = 0;
     String createdAt = '';
+    int videoLength = 0;
     List<String> tags = [];
     List<String> likes = [];
     try {
@@ -74,6 +78,11 @@ class BeautyPost {
       doc.get('tags').forEach((data) => {tags.add(data)});
       doc.get('likes').forEach((data) => {likes.add(data)});
     } catch (e) {}
+    try {
+      videoLength = doc.get('videoLength');
+    } catch (e) {
+      videoLength = 0;
+    }
     return BeautyPost(
         id: id,
         userId: userId,
@@ -86,6 +95,7 @@ class BeautyPost {
         viewCnt: viewCnt,
         createdAt: createdAt,
         tags: tags,
-        likes: likes);
+        likes: likes,
+        videoLength: videoLength);
   }
 }

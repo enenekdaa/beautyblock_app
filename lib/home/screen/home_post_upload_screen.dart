@@ -15,6 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 import '../../constants/firestore_constants.dart';
 import '../../model/firebase_post_model.dart';
 import '../../utils.dart';
@@ -31,6 +32,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
   @override
   void dispose() {
     resetControllValue();
+
     super.dispose();
   }
 
@@ -248,6 +250,12 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
     if (videoPath.isNotEmpty) {
       File videofile = File(videoPath);
       File videoThumbnailFile = File(videoThumbnailPath);
+      //영상 길이 추가
+      VideoPlayerController? controller;
+      controller = VideoPlayerController.file(videofile);
+      await controller.initialize();
+      int duration = controller.value.duration.inSeconds;
+      controller.dispose();
       final firebaseStorageRef = FirebaseStorage.instance;
       final firebaseStoreRef = FirebaseFirestore.instance;
       TaskSnapshot task = await firebaseStorageRef
@@ -283,7 +291,8 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
                     title: HomeController.to.uploadTitleController.text,
                     contents: HomeController.to.uploadContentController.text,
                     createdAt: DateTime.now().toString(),
-                    tags: HomeController.to.tags)
+                    tags: HomeController.to.tags,
+                    videoLength: duration)
                 .toJson());
         await doc.update({'id': doc.id});
         HomeController.to.isPostUploading.value = false;

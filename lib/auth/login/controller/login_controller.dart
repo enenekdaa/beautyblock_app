@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/model/firebase_subscription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -69,6 +70,9 @@ class LoginController extends GetxController {
 
   setUser(BeautyUser user) {
     _user = user;
+    //로그인시 미리 구독 데이터 가져오기
+    HomeController.to.updateSubscribe();
+    HomeController.to.getSubscriptionChannels();
   }
 
   logout() {

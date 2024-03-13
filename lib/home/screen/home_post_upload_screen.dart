@@ -15,6 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../constants/firestore_constants.dart';
 import '../../model/firebase_post_model.dart';
 import '../../utils.dart';
 import '../../widget/widget_appbar.dart';
@@ -25,12 +26,14 @@ class HomePostUploadScreen extends StatefulWidget {
   @override
   State<HomePostUploadScreen> createState() => _HomePostUploadScreen();
 }
+
 class _HomePostUploadScreen extends State<HomePostUploadScreen> {
   @override
   void dispose() {
     resetControllValue();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return HomePostUploadScreenScaffold(
@@ -129,8 +132,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
             )
           ]),
           SizedBox(height: Get.height * 0.03),
-          Stack(
-              children: [
+          Stack(children: [
             TextInputWidget(
               titleText: '태그',
               hintText: "태그",
@@ -138,18 +140,18 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
               controller: HomeController.to.uploadTagController,
             ),
             Positioned(
-              right: 0,
+                right: 0,
                 top: 30,
                 child: IconButton(
-              icon: Icon(CupertinoIcons.add_circled),
-              onPressed: () {
-                if(HomeController.to.uploadTagController.text.isNotEmpty){
-                  HomeController.to
-                      .addTag(HomeController.to.uploadTagController.text);
-                  HomeController.to.uploadTagController.text ='';
-                }
-              },
-            ))
+                  icon: Icon(CupertinoIcons.add_circled),
+                  onPressed: () {
+                    if (HomeController.to.uploadTagController.text.isNotEmpty) {
+                      HomeController.to
+                          .addTag(HomeController.to.uploadTagController.text);
+                      HomeController.to.uploadTagController.text = '';
+                    }
+                  },
+                ))
           ]),
           SizedBox(height: Get.height * 0.015),
           _tagsWidget(),
@@ -168,7 +170,8 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
   }
 
   Widget _tagsWidget() {
-    return Obx(()=>Container(
+    return Obx(
+      () => Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -260,18 +263,18 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
       if (task != null) {
         var videoDownloadUrl = await task.ref.getDownloadURL();
         var thumbnailDownloadUrl = await thumbnailTask.ref.getDownloadURL();
-        var doc = firebaseStoreRef
-            .collection('users')
-            .doc(LoginController.to.getId());
-        DocumentSnapshot documentSnapshot = await doc.get();
-       List postsList =documentSnapshot.get('posts') as List;
+        // var doc = firebaseStoreRef
+        //     .collection('users')
+        //     .doc(LoginController.to.getId());
+        // DocumentSnapshot documentSnapshot = await doc.get();
+        // List postsList = documentSnapshot.get('posts') as List;
 
-        print("=================$postsList");
-        print(LoginController.to.getId());
-        doc.update({
-          'posts': FieldValue.arrayUnion([
-            BeautyPost(
-                    id: (postsList.length + 1).toString(),
+        // print("=================$postsList");
+        // print(LoginController.to.getId());
+        DocumentReference doc = await firebaseStoreRef
+            .collection(FirestoreConstants.pathPostCollection)
+            .add(BeautyPost(
+                    id: 'temp',
                     userId: LoginController.to.getId(),
                     video: await videoDownloadUrl.toString(),
                     thumbnail: await thumbnailDownloadUrl.toString(),
@@ -281,12 +284,10 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
                     contents: HomeController.to.uploadContentController.text,
                     createdAt: DateTime.now().toString(),
                     tags: HomeController.to.tags)
-                .toJson()
-          ])
-        }).then((onValue) {
-          HomeController.to.isPostUploading.value = false;
-          showSaveSuccessDialog();
-        });
+                .toJson());
+        await doc.update({'id': doc.id});
+        HomeController.to.isPostUploading.value = false;
+        showSaveSuccessDialog();
       }
     } else {
       print('동영상 선택 취소');

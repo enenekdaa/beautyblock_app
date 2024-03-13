@@ -285,7 +285,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
           ])
         }).then((onValue) {
           HomeController.to.isPostUploading.value = false;
-          Get.offAll(HomeMainScreen());
+          showSaveSuccessDialog();
         });
       }
     } else {

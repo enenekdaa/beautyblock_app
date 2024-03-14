@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../../constants/firestore_constants.dart';
 import '../../../home/screen/home_main_screen.dart';
@@ -117,6 +118,28 @@ class JoinController extends GetxController {
     }
   }
 
+  void clearData() {
+    // interestTypeList = [].obs;
+    interestTypeIsChecked = List<bool>.filled(9, false).obs;
+    selectedInterestTypeList = [].obs;
+    // interestCategoryList = [].obs;
+    interestCategoryIsChecked = List<bool>.filled(7, false).obs;
+    selectedInterestCategoryList = [].obs;
+    // interestCountryList = [].obs;
+    interestCountryIsChecked = List<bool>.filled(1, false).obs;
+    selectedInterestCountryList = [].obs;
+
+    //textEditingController
+    inviteCodeController.clear();
+    emailController.clear();
+    emailCertifyController.clear();
+    passwordController.clear();
+    rePasswordController.clear();
+    nameController.clear();
+    companyNameController.clear();
+    responsibilityController.clear();
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -162,14 +185,67 @@ class JoinController extends GetxController {
     companyNameController.dispose();
   }
 
+  // Future<void> signInWithApple() async {
+  //   final AuthorizationCredentialAppleID appleCredential =
+  //       await SignInWithApple.getAppleIDCredential(
+  //     scopes: [
+  //       AppleIDAuthorizationScopes.email,
+  //       AppleIDAuthorizationScopes.fullName,
+  //     ],
+  //   );
+  // }
+
   Future<void> signInWithApple() async {
-    final AuthorizationCredentialAppleID appleCredential =
-        await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+    bool isApple = await TheAppleSignIn.isAvailable();
+
+    if (!isApple) {
+      customDialog('안내', Text("애플 로그인을 지원하지 않는 기기입니다"), () {
+        Get.back();
+      }, '확인');
+    } else {
+      final AuthorizationResult result = await TheAppleSignIn.performRequests([
+        const AppleIdRequest(requestedScopes: [
+          Scope.email,
+          Scope.fullName,
+        ])
+      ]);
+      String id = '';
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          id = result.credential?.user ?? '';
+          final QuerySnapshot res = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where('id', isEqualTo: id)
+              .get();
+          final List<DocumentSnapshot> documents = res.docs;
+          if (res.docs.isEmpty) {
+            BeautyUser user = BeautyUser(
+                id: id,
+                email: result.credential?.email ?? 'beauty@beauty.com',
+                nickName: result.credential?.fullName?.nickname ?? 'Beauty',
+                profile: 'https://picsum.photos/150/150');
+            signUp(user);
+            signOutWithGoogle();
+            LoginController.to.setUser(user);
+            Get.to(() => JoinReceiveCustomerInfoScreen());
+          } else {
+            //이미 가입된 계정
+            DocumentSnapshot documentSnapshot = documents[0];
+            BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+            LoginController.to.setUser(user);
+            Get.off(() => HomeMainScreen());
+          }
+          break;
+
+        case AuthorizationStatus.error:
+          print("Sign in failed: ${result.error?.localizedDescription}");
+          break;
+
+        case AuthorizationStatus.cancelled:
+          print('User cancelled');
+          break;
+      }
+    }
   }
 
   signUp(BeautyUser user) {
@@ -197,16 +273,19 @@ class JoinController extends GetxController {
           .where('id', isEqualTo: user.id)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
-      // if (documents.isEmpty) {
-      //미가입 시 가입 로직(데이터 생성 및 관심지정으로 이동)
-      signUp(user);
-      signOutWithGoogle();
-      Get.to(() => JoinReceiveCustomerInfoScreen());
-      // Get.to(() => const JoinSelectCategoryScreen());
-      // } else {
-      //기존 아이디 있으면 홈으로 이동
-      // Get.to(HomeMainScreen());
-      // }
+      if (documents.isEmpty) {
+        //미가입 시 가입 로직(데이터 생성 및 관심지정으로 이동)
+        signUp(user);
+        signOutWithGoogle();
+        Get.to(() => JoinReceiveCustomerInfoScreen());
+        // Get.to(() => const JoinSelectCategoryScreen());
+      } else {
+        //기존 아이디 있으면 홈으로 이동
+        DocumentSnapshot documentSnapshot = documents[0];
+        BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+        LoginController.to.setUser(user);
+        Get.off(() => HomeMainScreen());
+      }
     }
   }
 

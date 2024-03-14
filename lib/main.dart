@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:beautyblock_app/auth/join/screen/join_app_description_screen.dart';
 import 'package:beautyblock_app/auth/join/screen/join_certify_email_screen.dart';
 import 'package:beautyblock_app/auth/join/screen/join_check_info_screen.dart';
@@ -29,7 +31,17 @@ import 'auth/join/screen/join_terms_of_use_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (Platform.isIOS) {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: "AIzaSyCufbnh5CYD8ze_QDIUjNd1xUoSI5ASaBo",
+            appId: "1:992094078368:ios:ac43638a641ef621c410c5",
+            messagingSenderId: "992094078368",
+            projectId: "beautyblock-412902",
+            storageBucket: "beautyblock-412902.appspot.com"));
+  } else {
+    await Firebase.initializeApp();
+  }
   runApp(const MyApp());
 }
 

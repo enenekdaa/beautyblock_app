@@ -1,6 +1,7 @@
 import 'package:beautyblock_app/home/local_widget/home_channel_detail_tab_pages/channel_fan_tab_page.dart';
 import 'package:beautyblock_app/home/local_widget/home_channel_detail_tab_pages/channel_video_tab_page.dart';
 import 'package:beautyblock_app/home/local_widget/scaffold/home_channel_detail_screen_scaffold.dart';
+import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_appbar.dart';
 import 'package:beautyblock_app/widget/widget_channel_profile.dart';
 import 'package:beautyblock_app/widget/widget_tabbar.dart';
@@ -71,21 +72,21 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
     return AppbarWidget(
       appbarText: channel?.company ?? '',
       actions: [
-        GestureDetector(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: SvgPicture.asset('assets/images/ic_bell.svg'),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: SvgPicture.asset('assets/images/ic_search.svg'),
-          ),
-        ),
-        SizedBox(width: 20)
+        // GestureDetector(
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        //     child: SvgPicture.asset('assets/images/ic_bell.svg'),
+        //   ),
+        // ),
+        // GestureDetector(
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        //     child: SvgPicture.asset('assets/images/ic_search.svg'),
+        //   ),
+        // ),
+        // SizedBox(width: 20)
       ],
     );
   }
@@ -119,12 +120,29 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
       child: TabBarView(
         controller: controller,
         children: [
-          ChannelVideoTabPage(),
-          Text('22222'),
-          Text('333333'),
+          ChannelVideoTabPage(channel?.id ?? ''),
+          _buildOnProgress('라이브 준비 중입니다.'),
+          _buildOnProgress('재생 목록 준비 중입니다.'),
           ChannelFanTabPage(),
         ],
       ),
+    );
+  }
+
+  Widget _buildOnProgress(String text) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/img_world_community.png'),
+        SizedBox(height: 24),
+        Text(
+          text,
+          style: AppTheme.appBarTextStyle.copyWith(fontSize: 20),
+        ),
+        SizedBox(height: 60),
+      ],
     );
   }
 }

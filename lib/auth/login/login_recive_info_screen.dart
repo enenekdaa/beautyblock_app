@@ -47,7 +47,9 @@ class LoginReciveInfoScreen extends StatelessWidget {
             children: [
               SNSJoinButtonWidget(
                   snsIcon: Image.asset('assets/images/ic_apple.png'),
-                  onPress: () {}),
+                  onPress: () {
+                    _loginController.signInWithApple();
+                  }),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
                 child: SNSJoinButtonWidget(

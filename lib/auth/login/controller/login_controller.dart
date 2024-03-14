@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/model/firebase_subscription_model.dart';
+import 'package:beautyblock_app/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,11 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../../config.dart';
 import '../../../constants/firestore_constants.dart';
 import '../../../home/screen/home_main_screen.dart';
 import '../../../model/firebase_user_model.dart';
 import '../../../model/login_model.dart';
+import '../../join/screen/join_main_screen.dart';
 import '../login_recive_info_screen.dart';
 
 class LoginController extends GetxController {
@@ -48,9 +51,6 @@ class LoginController extends GetxController {
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
-      print('name = ${googleUser.displayName}');
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
       BeautyUser user = BeautyUser(
           id: googleUser.id,
           email: googleUser.email,
@@ -61,11 +61,72 @@ class LoginController extends GetxController {
           .where('id', isEqualTo: user.id)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
-      DocumentSnapshot documentSnapshot = documents[0];
-      user = BeautyUser.fromDocument(documentSnapshot);
-      setUser(user);
-      Get.off(() => HomeMainScreen());
+      if (result.docs.isEmpty) {
+        customDialog('알림', Text("존재하지 않는 계정입니다.\n회원가입 후 로그인을 진행해 주세요."), () {
+          Get.to(() => JoinMainScreen());
+        }, '회원가입');
+      } else {
+        await GoogleSignIn().signOut();
+        DocumentSnapshot documentSnapshot = documents[0];
+        BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+        setUser(user);
+        Get.off(() => HomeMainScreen());
+      }
     }
+  }
+
+  Future<void> signInWithApple() async {
+    bool isApple = await TheAppleSignIn.isAvailable();
+    if (!isApple) {
+      customDialog('안내', Text("애플 로그인을 지원하지 않는 기기입니다"), () {
+        Get.back();
+      }, '확인');
+    } else {
+      final AuthorizationResult result =
+          await TheAppleSignIn.performRequests([const AppleIdRequest()]);
+      String id = '';
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          id = result.credential?.user ?? '';
+          final QuerySnapshot res = await firebaseFirestore
+              .collection(FirestoreConstants.pathUserCollection)
+              .where('id', isEqualTo: id)
+              .get();
+          final List<DocumentSnapshot> documents = res.docs;
+          if (res.docs.isEmpty) {
+            customDialog('알림', Text("존재하지 않는 계정입니다.\n회원가입 후 로그인을 진행해 주세요."),
+                () {
+              Get.to(() => JoinMainScreen());
+            }, '회원가입');
+          } else {
+            DocumentSnapshot documentSnapshot = documents[0];
+            BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+            setUser(user);
+            Get.off(() => HomeMainScreen());
+          }
+          break;
+
+        case AuthorizationStatus.error:
+          print("Sign in failed: ${result.error?.localizedDescription}");
+          break;
+
+        case AuthorizationStatus.cancelled:
+          print('User cancelled');
+          break;
+      }
+    }
+  }
+
+  Future<void> updateUserInfo() async {
+    final QuerySnapshot result = await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .where('id', isEqualTo: _user?.id)
+        .get();
+    final List<DocumentSnapshot> documents = result.docs;
+
+    DocumentSnapshot documentSnapshot = documents[0];
+    BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+    setUser(user);
   }
 
   setUser(BeautyUser user) {
@@ -73,6 +134,7 @@ class LoginController extends GetxController {
     //로그인시 미리 구독 데이터 가져오기
     HomeController.to.updateSubscribe();
     HomeController.to.getSubscriptionChannels();
+    update();
   }
 
   logout() {

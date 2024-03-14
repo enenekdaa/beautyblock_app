@@ -2,6 +2,7 @@ import 'package:beautyblock_app/home/screen/home_alarm_screen.dart';
 import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
 import 'package:beautyblock_app/home/screen/home_search_screen.dart';
 import 'package:beautyblock_app/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -153,33 +154,40 @@ class _TabHomeScreenState extends State<TabHomeScreen>
   }
 
   Widget _buildSubscriptionChannelListviewSection() {
-    List<Widget> inflWidgetList = [];
-    for (BeautyUser element in HomeController.to.subscriptionChannels) {
-      inflWidgetList.add(Padding(
-        padding: EdgeInsets.only(right: Get.width * 0.04),
-        child: GestureDetector(
-          child: CircleAvatarWidget(
-            backgroundimage: NetworkImage(element.profile),
-            text: element.company,
-            bottomTextIsVisible: true,
-            selected: HomeController.to.selectInfluencerId == element.id &&
-                HomeController.to.influencerSelected,
-          ),
-          onTap: () {
-            HomeController.to.tapInfluencer(element);
-          },
-        ),
-      ));
-    }
     return HomeController.to.isShowSubscriptionChannel
         ? Container(
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        width: 1, color: Colors.grey.withOpacity(0.1)))),
             height: Get.height * 0.13,
             margin: EdgeInsets.only(top: Get.height * 0.015),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              scrollDirection: Axis.horizontal,
-              children: inflWidgetList,
-            ))
+            child: HomeController.to.subscriptionChannels.isEmpty
+                ? const Center(child: Text('구독한 채널이 없습니다'))
+                : ListView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    children: HomeController.to.subscriptionChannels
+                        .map((element) => Padding(
+                              padding: EdgeInsets.only(right: Get.width * 0.04),
+                              child: GestureDetector(
+                                child: CircleAvatarWidget(
+                                  backgroundimage:
+                                      NetworkImage(element.profile),
+                                  text: element.company,
+                                  bottomTextIsVisible: true,
+                                  selected:
+                                      HomeController.to.selectInfluencerId ==
+                                              element.id &&
+                                          HomeController.to.influencerSelected,
+                                ),
+                                onTap: () {
+                                  HomeController.to.tapInfluencer(element);
+                                },
+                              ),
+                            ))
+                        .toList(),
+                  ))
         : SizedBox();
   }
 
@@ -210,75 +218,130 @@ class _TabHomeScreenState extends State<TabHomeScreen>
   }
 
   Widget _buildBottomListViewSection() {
-    return Expanded(
-      child: Padding(
+    if (HomeController.to.isShowSubscriptionChannel) {
+      return Expanded(
+          child: Padding(
         padding: EdgeInsets.only(top: Get.height * 0.005),
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            ListView(
-                scrollDirection: Axis.vertical,
-                children: HomeController.to.popularPosts
-                    .map(
-                      (post) => TabHomeListviewItem(
-                        id: post.id,
-                        duration: post.videoLength,
-                        videoTitle: post.title,
-                        views: post.viewCnt.toString(),
-                        date: post.createdAt.substring(0, 10),
-                        thumbnail: post.thumbnail,
-                        tags: post.tags,
-                      ),
-                    )
-                    .toList()),
-            ListView(
-                scrollDirection: Axis.vertical,
-                children: HomeController.to.newPosts
-                    .map(
-                      (post) => TabHomeListviewItem(
-                        id: post.id,
-                        duration: post.videoLength,
-                        videoTitle: post.title,
-                        views: post.viewCnt.toString(),
-                        date: post.createdAt.substring(0, 10),
-                        thumbnail: post.thumbnail,
-                        tags: post.tags,
-                      ),
-                    )
-                    .toList()),
-            ListView(
-                scrollDirection: Axis.vertical,
-                children: HomeController.to.recommendPosts
-                    .map(
-                      (post) => TabHomeListviewItem(
-                        id: post.id,
-                        duration: post.videoLength,
-                        videoTitle: post.title,
-                        views: post.viewCnt.toString(),
-                        date: post.createdAt.substring(0, 10),
-                        thumbnail: post.thumbnail,
-                        tags: post.tags,
-                      ),
-                    )
-                    .toList()),
-            ListView(
-                scrollDirection: Axis.vertical,
-                children: HomeController.to.interestPosts
-                    .map(
-                      (post) => TabHomeListviewItem(
-                        id: post.id,
-                        duration: post.videoLength,
-                        videoTitle: post.title,
-                        views: post.viewCnt.toString(),
-                        date: post.createdAt.substring(0, 10),
-                        thumbnail: post.thumbnail,
-                        tags: post.tags,
-                      ),
-                    )
-                    .toList()),
-          ],
+        child: RefreshIndicator(
+          onRefresh: () async {
+            HomeController.to.updateSubscribingPosts();
+          },
+          child: ListView(
+              scrollDirection: Axis.vertical,
+              children: HomeController.to.subscribingPosts
+                  .where((element) {
+                    if (HomeController.to.influencerSelected) {
+                      return element.userId ==
+                          HomeController.to.selectInfluencerId;
+                    } else {
+                      return true;
+                    }
+                  })
+                  .map(
+                    (post) => TabHomeListviewItem(
+                      id: post.id,
+                      duration: post.videoLength,
+                      videoTitle: post.title,
+                      views: post.viewCnt.toString(),
+                      date: post.createdAt.substring(0, 10),
+                      thumbnail: post.thumbnail,
+                      tags: post.tags,
+                    ),
+                  )
+                  .toList()),
         ),
-      ),
-    );
+      ));
+    } else {
+      return Expanded(
+        child: Padding(
+          padding: EdgeInsets.only(top: Get.height * 0.005),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              RefreshIndicator(
+                onRefresh: () async {
+                  HomeController.to.updateMainPosts();
+                },
+                child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: HomeController.to.popularPosts
+                        .map(
+                          (post) => TabHomeListviewItem(
+                            id: post.id,
+                            duration: post.videoLength,
+                            videoTitle: post.title,
+                            views: post.viewCnt.toString(),
+                            date: post.createdAt.substring(0, 10),
+                            thumbnail: post.thumbnail,
+                            tags: post.tags,
+                          ),
+                        )
+                        .toList()),
+              ),
+              RefreshIndicator(
+                onRefresh: () async {
+                  HomeController.to.updateMainPosts();
+                },
+                child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: HomeController.to.newPosts
+                        .map(
+                          (post) => TabHomeListviewItem(
+                            id: post.id,
+                            duration: post.videoLength,
+                            videoTitle: post.title,
+                            views: post.viewCnt.toString(),
+                            date: post.createdAt.substring(0, 10),
+                            thumbnail: post.thumbnail,
+                            tags: post.tags,
+                          ),
+                        )
+                        .toList()),
+              ),
+              RefreshIndicator(
+                onRefresh: () async {
+                  HomeController.to.updateMainPosts();
+                },
+                child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: HomeController.to.recommendPosts
+                        .map(
+                          (post) => TabHomeListviewItem(
+                            id: post.id,
+                            duration: post.videoLength,
+                            videoTitle: post.title,
+                            views: post.viewCnt.toString(),
+                            date: post.createdAt.substring(0, 10),
+                            thumbnail: post.thumbnail,
+                            tags: post.tags,
+                          ),
+                        )
+                        .toList()),
+              ),
+              RefreshIndicator(
+                onRefresh: () async {
+                  HomeController.to.updateMainPosts();
+                },
+                child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: HomeController.to.interestPosts
+                        .map(
+                          (post) => TabHomeListviewItem(
+                            id: post.id,
+                            duration: post.videoLength,
+                            videoTitle: post.title,
+                            views: post.viewCnt.toString(),
+                            date: post.createdAt.substring(0, 10),
+                            thumbnail: post.thumbnail,
+                            tags: post.tags,
+                          ),
+                        )
+                        .toList()),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

@@ -24,6 +24,7 @@ class HomeController extends GetxController {
   List<BeautyPost> newPosts = [];
   List<BeautyPost> recommendPosts = [];
   List<BeautyPost> interestPosts = [];
+  List<BeautyPost> subscribingPosts = [];
   List<BeautySubscription> subscriptions = [];
   List<BeautyUser> subscriptionChannels = [];
   //textEditingController
@@ -39,9 +40,10 @@ class HomeController extends GetxController {
   bool influencerSelected = false;
 
   //search
-  var brandList = [].obs;
-  var filteredData = [].obs;
-  var searchQuery = "".obs;
+  // var brandList = [].obs;
+  // var filteredData = [].obs;
+  // var searchQuery = "".obs;
+  List<BeautyPost> searchedList = [];
 
   //selectCountry
   var continents = [].obs;
@@ -140,16 +142,24 @@ class HomeController extends GetxController {
   //     list.sort((a,b)=> a.po.compareTo(b.po));
   //   }
   // }
-  void updateSearchQuery(String newQuery) {
-    searchQuery.value = newQuery;
-    if (searchQuery.value.isNotEmpty) {
-      filteredData.value = brandList
-          .where((item) =>
-              item.toLowerCase().contains(searchQuery.value.toLowerCase()))
-          .toList();
-    } else {
-      filteredData.value = brandList;
+  void updateSearchQuery() async {
+    // 검색어로 시작하는 title을 가진 posts 문서를 조회
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .where('title', isGreaterThanOrEqualTo: searchController.text)
+        .where('title', isLessThan: '${searchController.text}\uf8ff')
+        .get();
+    List<BeautyPost> tmp = [];
+    for (DocumentSnapshot item in querySnapshot.docs) {
+      tmp.add(BeautyPost.fromDocument(item));
     }
+    searchedList = tmp;
+    update();
+  }
+
+  void clearSearchResult() {
+    searchedList = [];
+    update();
   }
 
   @override
@@ -167,16 +177,12 @@ class HomeController extends GetxController {
       ' 오세아니아'
     ];
     categories.value = [...BeautyConstants.positions];
-    brandList.value = [
-      '샤넬',
-      '루이비통',
-      '쿠션',
-      '맥',
-      '프라다',
-      '디올',
-      '뷰티블록',
-    ];
-    filteredData.value = brandList;
+    updateMainPosts();
+    updateSubscribe();
+    getSubscriptionChannels();
+  }
+
+  void updateMainPosts() async {
     final postsRef = FirebaseFirestore.instance
         .collection('posts')
         .orderBy('createdAt', descending: true)
@@ -188,12 +194,13 @@ class HomeController extends GetxController {
     for (var doc in querySnapshot.docs) {
       posts.add(BeautyPost.fromDocument(doc));
     }
-    popularPosts = posts;
-    interestPosts = posts;
-    newPosts = posts;
-    recommendPosts = posts;
-    updateSubscribe();
-    getSubscriptionChannels();
+    popularPosts = posts.toList();
+    popularPosts.sort((a, b) => b.viewCnt - a.viewCnt);
+    interestPosts = posts.toList();
+    newPosts = posts.toList();
+    newPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    recommendPosts = posts.toList();
+    update();
   }
 
   updateSubscribe() async {
@@ -294,6 +301,36 @@ class HomeController extends GetxController {
       tmp.add(BeautyUser.fromDocument(doc));
     }
     subscriptionChannels = tmp;
+    //구독 중인 채널들의 포스트 호출
+    updateSubscribingPosts();
+  }
+
+  updateSubscribingPosts() async {
+    List<String> channelIdList = [];
+    List<DocumentSnapshot> allResults = [];
+    for (var element in subscriptions) {
+      channelIdList.add(element.channelId);
+    }
+    List<DocumentSnapshot> allPosts = [];
+
+    // userIds를 10개 단위로 분할하여 쿼리
+    for (int i = 0; i < channelIdList.length; i += 10) {
+      List<String> subset = channelIdList.sublist(
+          i, i + 10 > channelIdList.length ? channelIdList.length : i + 10);
+
+      QuerySnapshot querySnapshot = await firebaseFirestore
+          .collection(FirestoreConstants.pathPostCollection)
+          .where('userId', whereIn: subset)
+          // .orderBy('createdAt', descending: true)
+          .get();
+
+      allPosts.addAll(querySnapshot.docs);
+    }
+    List<BeautyPost> postTmp = [];
+    for (DocumentSnapshot doc in allPosts) {
+      postTmp.add(BeautyPost.fromDocument(doc));
+    }
+    subscribingPosts = postTmp;
     update();
   }
 
@@ -322,7 +359,7 @@ class HomeController extends GetxController {
 
   void tapInfluencer(BeautyUser element) {
     if (!influencerSelected) {
-      selectInfluencerId == element.id;
+      selectInfluencerId = element.id;
       influencerSelected = true;
     } else {
       if (selectInfluencerId == element.id) {

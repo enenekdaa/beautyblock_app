@@ -1,23 +1,41 @@
+import 'dart:math';
+
+import 'package:beautyblock_app/constants/firestore_constants.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/tab_home_listview_item.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/channel_detail_video_tab_listview_item.dart';
 import 'package:beautyblock_app/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../model/firebase_post_model.dart';
+
 class ChannelVideoTabPage extends StatelessWidget {
-  const ChannelVideoTabPage({super.key});
+  final String id;
+  const ChannelVideoTabPage(this.id, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        _buildRecommandSection(),
-        _buildPopularityVideoSection(),
-      ],
-    );
+    return FutureBuilder<List<BeautyPost>>(
+        future: getPostData(id),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<BeautyPost> posts = snapshot.data ?? [];
+            Random random = Random();
+            BeautyPost rand = posts[random.nextInt(posts.length)];
+            return ListView(
+              children: [
+                _buildRecommandSection(rand),
+                _buildPopularityVideoSection(posts),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
-  Widget _buildRecommandSection() {
+  Widget _buildRecommandSection(BeautyPost item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,17 +49,20 @@ class ChannelVideoTabPage extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
           child: TabHomeListviewItem(
-              id: '',
-              duration: 1,
-              videoTitle: '영상제목 여기래',
-              views: '1.2k',
-              date: '2달전'),
+            thumbnail: item.thumbnail,
+            id: item.id,
+            duration: item.videoLength,
+            videoTitle: item.title,
+            views: item.viewCnt.toString(),
+            date: item.createdAt.substring(0, 10),
+            tags: item.tags,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildPopularityVideoSection() {
+  Widget _buildPopularityVideoSection(List<BeautyPost> posts) {
     return Container(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,39 +76,32 @@ class ChannelVideoTabPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: Get.height * 0.01),
               child: Column(
-                children: [
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                  ChannelDetailVideoTabListviewItem(
-                      videoText: 'NUXE',
-                      followCount: '12만명',
-                      contentCount: '1000'),
-                ],
+                children: posts
+                    .map(
+                      (e) => ChannelDetailVideoTabListviewItem(
+                          id: e.id,
+                          thumbnail: e.thumbnail,
+                          videoText: e.title,
+                          followCount: e.likes.length.toString(),
+                          contentCount: e.commentCnt.toString()),
+                    )
+                    .toList(),
               ),
             ),
           ]),
     );
+  }
+
+  Future<List<BeautyPost>> getPostData(id) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    QuerySnapshot querySnapshot = await firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .where('userId', isEqualTo: id)
+        .get();
+    List<BeautyPost> list = [];
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      list.add(BeautyPost.fromDocument(doc));
+    }
+    return list;
   }
 }

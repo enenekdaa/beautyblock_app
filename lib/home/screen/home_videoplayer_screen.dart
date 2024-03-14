@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import '../../model/firebase_post_model.dart';
@@ -291,68 +292,78 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                             reviewHeartCount: reply.likes.length.toString(),
                             reviewCount: '0',
                             shareButtonOnPress: () {
-                              showModalBottomSheet<void>(
-                                  context: context,
-                                  // isScrollControlled: true,
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                        padding: EdgeInsets.fromLTRB(
-                                            0,
-                                            12,
-                                            0,
-                                            MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom +
-                                                12),
-                                        color: Colors.transparent,
-                                        child: SingleChildScrollView(
-                                            child: Column(
-                                          children: ['삭제']
-                                              .map((e) => GestureDetector(
-                                                    onTap: () {
-                                                      deleteReply(reply.id);
-                                                      Get.back();
-                                                    },
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          12.0,
-                                                                      horizontal:
-                                                                          20),
-                                                              child: Text(e,
-                                                                  style: AppTheme
-                                                                      .smallTitleTextStyle),
-                                                            ),
-                                                            Container(
-                                                                width:
-                                                                    Get.width,
-                                                                height: 2,
-                                                                color: const Color
-                                                                    .fromRGBO(
-                                                                    240,
-                                                                    240,
-                                                                    240,
-                                                                    1))
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ))
-                                              .toList(),
-                                        )));
-                                  });
+                              if (reply.userId != LoginController.to.getId()) {
+                                Fluttertoast.showToast(
+                                    msg: "댓글 수정/삭제는 본인만 가능합니다",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    fontSize: 14.0);
+                              } else {
+                                showModalBottomSheet<void>(
+                                    context: context,
+                                    // isScrollControlled: true,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0,
+                                              12,
+                                              0,
+                                              MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom +
+                                                  12),
+                                          color: Colors.transparent,
+                                          child: SingleChildScrollView(
+                                              child: Column(
+                                            children: ['삭제']
+                                                .map((e) => GestureDetector(
+                                                      onTap: () {
+                                                        deleteReply(reply.id);
+                                                        Get.back();
+                                                      },
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        12.0,
+                                                                    horizontal:
+                                                                        20),
+                                                                child: Text(e,
+                                                                    style: AppTheme
+                                                                        .smallTitleTextStyle),
+                                                              ),
+                                                              Container(
+                                                                  width:
+                                                                      Get.width,
+                                                                  height: 2,
+                                                                  color: const Color
+                                                                      .fromRGBO(
+                                                                      240,
+                                                                      240,
+                                                                      240,
+                                                                      1))
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ))
+                                                .toList(),
+                                          )));
+                                    });
+                              }
                             }),
                       )
                       .toList(),

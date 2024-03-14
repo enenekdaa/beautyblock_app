@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/home/screen/home_videoplayer_screen.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,24 +11,36 @@ class ChannelDetailVideoTabListviewItem extends StatelessWidget {
     required this.videoText,
     required this.followCount,
     required this.contentCount,
+    required this.thumbnail,
+    required this.id,
   }) : super(key: key);
 
   // final imageUrl;
   final videoText;
   final followCount;
   final contentCount;
+  final String thumbnail;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
-      child: Container(
-        child: Row(
-          children: [
-            _buildLeftImageSection(),
-            _buildMiddleSection(),
-            _buildRightShareSection(),
-          ],
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        Get.to(() => HomeVideoplayerScreen(id: id));
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+        child: Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildLeftImageSection(),
+              SizedBox(width: 4),
+              _buildMiddleSection(),
+              // _buildRightShareSection(),
+            ],
+          ),
         ),
       ),
     );
@@ -35,12 +48,16 @@ class ChannelDetailVideoTabListviewItem extends StatelessWidget {
 
   Widget _buildLeftImageSection() {
     return Container(
-      height: Get.height * 0.06,
+      height: 50,
+      width: 75,
       child: Padding(
         padding: EdgeInsets.only(right: Get.width * 0.02),
         child: ClipRRect(
             borderRadius: BorderRadius.circular(12.0),
-            child: Image.asset('assets/images/img_test_video_thumbnail.png')),
+            child: Image.network(
+              thumbnail,
+              fit: BoxFit.cover,
+            )),
       ),
     );
   }
@@ -55,26 +72,31 @@ class ChannelDetailVideoTabListviewItem extends StatelessWidget {
               Text(
                 videoText,
                 style: AppTheme.smallTitleTextStyle
-                    .copyWith(fontWeight: FontWeight.w500),
+                    .copyWith(fontWeight: FontWeight.w700),
               ),
-              SizedBox(width: Get.height * 0.02,),
+              SizedBox(
+                width: 12,
+              ),
               SvgPicture.asset('assets/images/ic_heart2.svg'),
             ],
           ),
           Row(
             children: [
               Text(
-                'Follow : $followCount',
+                'Like : $followCount',
                 style: AppTheme.tagTextStyle,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
+                padding: EdgeInsets.symmetric(horizontal: 4),
                 child: Text(
                   '·',
                   style: AppTheme.tagTextStyle,
                 ),
               ),
-              Text('Content : $contentCount'),
+              Text(
+                'Comment : $contentCount',
+                style: AppTheme.tagTextStyle,
+              ),
             ],
           )
         ],

@@ -14,51 +14,48 @@ class HomeSearchScreen extends StatefulWidget {
   State<HomeSearchScreen> createState() => _HomeSearchScreen();
 }
 
-
-
 class _HomeSearchScreen extends State<HomeSearchScreen> {
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    HomeController.to.searchQuery.value = '';
-    HomeController.to.searchController.text = '';
-    HomeController.to.filteredData.value = HomeController.to.brandList;
+    HomeController.to.searchController.clear();
+    HomeController.to.clearSearchResult();
   }
 
   @override
   Widget build(BuildContext context) {
-    return HomeSearchScreenScaffold(
-      AppbarSection:_buildAppbar(),
-      bodySection:_buildListview(),
-    );
+    return GetBuilder<HomeController>(builder: (context) {
+      return HomeSearchScreenScaffold(
+        AppbarSection: _buildAppbar(),
+        bodySection: _buildListview(),
+      );
+    });
   }
 
   Widget _buildAppbar() {
     return AppBar(
-        titleSpacing: 0,
-        leading: IconButton(
-            icon: Image.asset('assets/images/ic_back_arrow.png'),
-            onPressed: () {
-
-              Get.back();
-
-            }
-        ),
-        title: Row(
-          children: [
-            Flexible(
-            fit: FlexFit.tight,
-            child: TextFormField(
-              controller: HomeController.to.searchController,
-              decoration: InputDecoration(
+      titleSpacing: 0,
+      leading: IconButton(
+          icon: Image.asset('assets/images/ic_back_arrow.png'),
+          onPressed: () {
+            Get.back();
+          }),
+      title: Row(children: [
+        Flexible(
+          fit: FlexFit.tight,
+          child: TextFormField(
+            controller: HomeController.to.searchController,
+            onFieldSubmitted: (value) {
+              HomeController.to.updateSearchQuery();
+            },
+            decoration: InputDecoration(
               isDense: true,
               hintText: 'Beauty Block Search',
               filled: true,
               fillColor: Color.fromRGBO(171, 169, 163, 0.12),
               contentPadding:
-              EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               hintStyle: TextStyle(
                   color: Color.fromRGBO(174, 173, 170, 1),
                   fontSize: 14,
@@ -68,38 +65,53 @@ class _HomeSearchScreen extends State<HomeSearchScreen> {
                 // 기본 모양
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(8),
-              ),),),
-          ),]
+              ),
+            ),
+          ),
+        ),
+      ]),
+      actions: [
+        GestureDetector(
+          child: Container(
+              width: Get.width * 0.15,
+              child: SvgPicture.asset('assets/images/ic_search.svg')),
+          onTap: () {
+            HomeController.to.updateSearchQuery();
+            print(
+                'search Query ========== ${HomeController.to.searchController.text}');
+          },
         )
-        ,actions: [
-          GestureDetector(child: Container(width:Get.width * 0.15 ,child: SvgPicture.asset('assets/images/ic_search.svg')),onTap: (){
-            HomeController.to.updateSearchQuery(HomeController.to.searchController.text);
-            print('search Query ========== ${HomeController.to.searchController.text}');
-          },)
-    ],
+      ],
       bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.0),
           child: Container(
               decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 0.5,
-                  blurRadius: 2,
-                  offset: Offset(0, 4), // 그림자의 방향과 거리
-                ),
-              ]))),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 0.5,
+              blurRadius: 2,
+              offset: Offset(0, 4), // 그림자의 방향과 거리
+            ),
+          ]))),
     );
   }
 
-  Widget _buildListview(){
-    print('filtered length ==== ${HomeController.to.filteredData.length}');
-    return Obx(()=> ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: HomeController.to.filteredData.length,
-        itemBuilder: (context,index){
-        return HomeBrandSearchListViewItem(text:HomeController.to.filteredData[index]);
-        },
-      ),
-    );
+  Widget _buildListview() {
+    return HomeController.to.searchedList.isEmpty
+        ? Center(
+            child: Text(
+              '검색 결과가 없습니다',
+              textAlign: TextAlign.center,
+            ),
+          )
+        : ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: HomeController.to.searchedList.length,
+            itemBuilder: (context, index) {
+              return homeBrandSearchListViewItem(
+                post: HomeController.to.searchedList[index],
+              );
+            },
+          );
   }
 }

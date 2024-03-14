@@ -138,6 +138,7 @@ class SubscriptionProfileWidget extends StatelessWidget {
                                   child: Column(
                                 children: ['구독', '알림취소', '구독취소']
                                     .map((e) => GestureDetector(
+                                          behavior: HitTestBehavior.translucent,
                                           onTap: () {
                                             if (e == '구독') {
                                               controller.changeSubscribe(

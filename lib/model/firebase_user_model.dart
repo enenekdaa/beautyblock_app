@@ -12,7 +12,7 @@ class BeautyUser {
   String company = '';
   String position = '';
   int followCnt = 0;
-  int subscribeCnt = 0;
+
   BeautyUser(
       {required this.id,
       this.nickName = '',

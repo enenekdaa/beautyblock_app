@@ -164,7 +164,7 @@ class LoginController extends GetxController {
   }
 
   int getSubscribeCnt() {
-    return _user?.subscribeCnt ?? 0;
+    return _user?.followCnt ?? 0;
   }
 
   void setProfile() async {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'constants/firestore_constants.dart';
+import 'model/firebase_user_model.dart';
 
 class AppTheme {
   static const TextTheme textTheme = TextTheme(
@@ -136,13 +137,25 @@ String formatDateString(String inputDate) {
   }
 }
 
-//구독자 수 카운트
-Future<int> followCount(String channelId) async {
+//구독자 수 싱크 맞추는 기능
+void followCountUpdate() async {
+  //구독자 수 싱크 맞추기
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   QuerySnapshot querySnapshot = await firebaseFirestore
-      .collection(FirestoreConstants.pathSubscriptionCollection)
-      .where('channelId', isEqualTo: channelId)
-      // .orderBy('createdAt', descending: true)
+      .collection(FirestoreConstants.pathUserCollection)
       .get();
-  return querySnapshot.docs.length;
+  List<BeautyUser> channels = [];
+  for (DocumentSnapshot doc in querySnapshot.docs) {
+    channels.add(BeautyUser.fromDocument(doc));
+  }
+  for (BeautyUser channel in channels) {
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathSubscriptionCollection)
+        .where('channelId', isEqualTo: channel.id)
+        .get();
+    FirebaseFirestore.instance
+        .collection(FirestoreConstants.pathUserCollection)
+        .doc(channel.id)
+        .update({'followCnt': querySnapshot.docs.length});
+  }
 }

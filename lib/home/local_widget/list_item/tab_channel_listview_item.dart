@@ -78,17 +78,8 @@ class TabChannelListviewItem extends StatelessWidget {
           ),
           Row(
             children: [
-              FutureBuilder(
-                  future: followCount(channel.id),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text('Follow : ${snapshot.data.toString()}',
-                          style: AppTheme.tagTextStyle);
-                    } else {
-                      return const Text('Follow : 0',
-                          style: AppTheme.tagTextStyle);
-                    }
-                  }),
+              Text('Follow : ${channel.followCnt}',
+                  style: AppTheme.tagTextStyle),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
                 child: Text(

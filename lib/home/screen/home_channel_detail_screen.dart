@@ -97,7 +97,7 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
       imageUrl: NetworkImage(channel?.profile ?? ''),
       userName: channel?.nickName ?? '',
       subscriptionBtnOnPress: () {},
-      subscriptionCount: channel?.subscribeCnt.toString(),
+      subscriptionCount: channel?.followCnt.toString(),
       useGoToChannelText: false,
       useLikeButton: false,
       channelId: channel?.id,

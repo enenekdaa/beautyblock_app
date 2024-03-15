@@ -4,6 +4,7 @@ import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart'
 import 'package:beautyblock_app/model/channel_model.dart';
 import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/model/roles_model.dart';
+import 'package:beautyblock_app/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -244,7 +245,6 @@ class HomeController extends GetxController {
       // 문서의 존재 여부를 확인합니다.
       if (!documents.isNotEmpty) {
         // 문서가 존재하지 않는 경우, 새로운 문서를 생성합니다.
-        print("Creating new subscription with type 0.");
         await firebaseFirestore
             .collection(FirestoreConstants.pathSubscriptionCollection)
             .add(BeautySubscription(
@@ -252,6 +252,11 @@ class HomeController extends GetxController {
                     type: type,
                     channelId: targetId)
                 .toJson());
+        // 문서를 생성하고 나서 타겟 채널의 구독자 수를 증가시킵니다
+        FirebaseFirestore.instance
+            .collection(FirestoreConstants.pathUserCollection)
+            .doc(targetId)
+            .update({'followCnt': FieldValue.increment(1)});
       } else {
         // 문서가 이미 존재하는 경우, type을 업데이트합니다.
         DocumentReference documentRef = FirebaseFirestore.instance
@@ -271,6 +276,11 @@ class HomeController extends GetxController {
           .collection(FirestoreConstants.pathSubscriptionCollection)
           .doc(documents[0].id);
       documentRef.delete();
+      // 문서를 생성하고 나서 타겟 채널의 구독자 수를 증가시킵니다
+      FirebaseFirestore.instance
+          .collection(FirestoreConstants.pathUserCollection)
+          .doc(targetId)
+          .update({'followCnt': FieldValue.increment(-1)});
     }
     updateSubscribe();
   }
@@ -424,7 +434,7 @@ class HomeController extends GetxController {
         .collection(FirestoreConstants.pathUserCollection)
         .where('position', isEqualTo: selectedCategory)
         .where('interestCountry', isEqualTo: selectedCountry)
-        .orderBy('followCnt',descending: true)
+        .orderBy('followCnt', descending: true)
         .get();
     List<BeautyUser> tmp = [];
     for (DocumentSnapshot doc in querySnapshot.docs) {

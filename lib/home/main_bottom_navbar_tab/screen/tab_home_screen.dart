@@ -210,6 +210,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                     ));
               },
               channelId: HomeController.to.selectInfluencerId,
+              subscriptionCount: channel.followCnt,
             )
           : Container();
     } else {

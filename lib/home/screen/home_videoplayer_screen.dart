@@ -171,6 +171,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                           useGoToChannelText: false,
                           useSubscriptionButton: true,
                           useLikeButton: false,
+                          subscriptionCount: user.followCnt,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),

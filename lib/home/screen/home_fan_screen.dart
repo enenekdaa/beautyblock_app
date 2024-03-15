@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../fan/controller/fan_controller.dart';
 import '../../home/main_bottom_navbar_tab/local_widget/scaffold/tab_fan_screen_scaffold.dart';
 import '../../widget/widget_appbar.dart';
+import '../controller/home_controller.dart';
 
 class HomeFanScreen extends StatelessWidget {
   HomeFanScreen({super.key});
@@ -20,7 +21,7 @@ class HomeFanScreen extends StatelessWidget {
       return TabFanScreenScaffold(
         appbarSection: _buildAppbar(),
         listviewSection: FutureBuilder(
-          future: RankingController.to.getRanking('Korea'),
+          future: RankingController.to.getRanking(HomeController.to.getTitleSelectedValue('title')??'S.Korea'),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData == false) {
                     return CircularProgressIndicator(); // CircularProgressIndicator : 로딩 에니메이션
@@ -38,7 +39,16 @@ class HomeFanScreen extends StatelessWidget {
                   // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 부분
                   else {
                     List<BeautyUser>? userNameList=snapshot.data;
-                    print('testest123123:: ${userNameList?[0].nickName}');
+                    if(userNameList!.isEmpty)
+                    {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '데이터가 없습니다.', // 에러명을 텍스트에 뿌려줌
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      );
+                    }
                     return _buildListview(userNameList!);
                   }
           }),

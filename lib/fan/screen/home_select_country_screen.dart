@@ -1,4 +1,5 @@
 import 'package:beautyblock_app/fan/controller/fan_controller.dart';
+import 'package:beautyblock_app/fan/controller/ranking_controller.dart';
 import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/screen/home_fan_screen.dart';
@@ -112,7 +113,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
         ), () {
           HomeController.to.selectCategory('Brand');
           HomeController.to.selectContinent('Asia');
-          HomeController.to.selectCountry('${HomeController.to.getDropdownSelectedValue('title')}');
+          HomeController.to.selectCountryFan('${HomeController.to.getDropdownSelectedValue('title')}');
       Get.to(TabChannelScreen());
     }, "확인");
   }

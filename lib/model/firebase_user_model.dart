@@ -11,6 +11,7 @@ class BeautyUser {
   String interestCountry = '';
   String company = '';
   String position = '';
+  int followCnt = 0;
   int subscribeCnt = 0;
   BeautyUser(
       {required this.id,
@@ -22,6 +23,7 @@ class BeautyUser {
       this.interestTypes,
       this.interestCountry = '',
       this.position = '',
+      this.followCnt = 0,
       this.company = ''});
 
   Map<String, dynamic> toJson() {
@@ -35,6 +37,7 @@ class BeautyUser {
       'interestTypes': interestTypes,
       'interestCountry': interestCountry,
       'position': position,
+      'followCnt': followCnt,
       'company': company
     };
   }
@@ -50,6 +53,7 @@ class BeautyUser {
     String interestCountry = '';
     String position = '';
     String company = '';
+    int followCnt = 0;
     try {
       id = doc.get('id');
       nickName = doc.get('nickName');
@@ -61,6 +65,7 @@ class BeautyUser {
           .forEach((data) => {interestCategories.add(data)});
       doc.get('interestTypes').forEach((data) => {interestTypes.add(data)});
       interestCountry = doc.get('interestCountry');
+      followCnt = doc.get('followCnt');
     } catch (e) {}
     try {
       //240312 jaesung. position(담당업무), company(회사명) 추가
@@ -80,6 +85,7 @@ class BeautyUser {
         interestCountry: interestCountry,
         interestTypes: interestTypes,
         position: position,
+        followCnt: followCnt,
         company: company);
   }
 }

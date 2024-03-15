@@ -14,12 +14,10 @@ class RankingController extends GetxController {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<BeautyUser>? _userList;
+  String selectedCountry = "";
+  List<BeautyUser> filteredChannels = [];
 
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  
 
   Future<List<BeautyUser>> getRanking(String contury) async {
 
@@ -46,5 +44,26 @@ class RankingController extends GetxController {
 
   setRankingUser(List<BeautyUser> userList) {
     _userList = userList;
+  }
+  @override
+  void onInit() async {
+  }
+
+
+  selectCountry(String value) async {
+    selectedCountry = value;
+    //필터 검색
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .where('interestCountry', isEqualTo: selectedCountry)
+        .orderBy('followCnt',descending: true)
+        .get();
+    List<BeautyUser> tmp = [];
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      tmp.add(BeautyUser.fromDocument(doc));
+    }
+    print('value :: ${value}');
+    filteredChannels = tmp;
+    update();
   }
 }

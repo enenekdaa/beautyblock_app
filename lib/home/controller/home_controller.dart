@@ -417,6 +417,24 @@ class HomeController extends GetxController {
     update();
   }
 
+  selectCountryFan(String value) async {
+    selectedCountry = value;
+    //필터 검색
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .where('position', isEqualTo: selectedCategory)
+        .where('interestCountry', isEqualTo: selectedCountry)
+        .orderBy('followCnt',descending: true)
+        .get();
+    List<BeautyUser> tmp = [];
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      tmp.add(BeautyUser.fromDocument(doc));
+    }
+    print('value :: ${value}');
+    filteredChannels = tmp;
+    update();
+  }
+
   closeDrawer() {
     BottomNavBarController.to.scaffoldKey.currentState?.closeDrawer();
   }

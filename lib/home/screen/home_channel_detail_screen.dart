@@ -41,6 +41,7 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
         .then((value) {
       setState(() {
         channel = BeautyUser.fromDocument(value);
+        print('Doc : ${channel}');
         loadComplete = true;
       });
     });

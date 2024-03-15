@@ -182,7 +182,10 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                                           HomeController.to.influencerSelected,
                                 ),
                                 onTap: () {
-                                  HomeController.to.tapInfluencer(element);
+                                  // QA사항. 채널 페이지로 바로 이동되도록 변경
+                                  Get.to(() =>
+                                      HomeChannelDetailScreen(id: element.id));
+                                  // HomeController.to.tapInfluencer(element);
                                 },
                               ),
                             ))

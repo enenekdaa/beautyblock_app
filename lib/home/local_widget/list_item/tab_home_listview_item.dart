@@ -107,24 +107,29 @@ class TabHomeListviewItem extends StatelessWidget {
             ),
             Row(
               children: [
-                SvgPicture.asset('assets/images/ic_eye.svg'),
+                SvgPicture.asset(
+                  'assets/images/ic_eye.svg',
+                ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
                   views,
-                  style: AppTheme.tagTextStyle,
+                  style: AppTheme.tagTextStyle
+                      .copyWith(color: Color.fromRGBO(101, 99, 99, 1)),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
                   child: Text(
                     '·',
-                    style: AppTheme.tagTextStyle,
+                    style: AppTheme.tagTextStyle
+                        .copyWith(color: Color.fromRGBO(101, 99, 99, 1)),
                   ),
                 ),
                 Text(
                   date,
-                  style: AppTheme.tagTextStyle,
+                  style: AppTheme.tagTextStyle
+                      .copyWith(color: Color.fromRGBO(101, 99, 99, 1)),
                 ),
                 SizedBox(
                   width: 5,

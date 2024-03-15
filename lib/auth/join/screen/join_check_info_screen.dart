@@ -72,10 +72,10 @@ class JoinCheckInfoScreen extends StatelessWidget {
       return CategoryButtonWidget(text: value, onPress: null, isSelected: true);
     }).toList();
 
-    List<Widget> selectedInterestCountryButtonList =
-        JoinController.to.selectedInterestCountryList.map((value) {
-      return CategoryButtonWidget(text: value, onPress: null, isSelected: true);
-    }).toList();
+    Widget selectedInterestCountryButtonList = CategoryButtonWidget(
+        text: JoinController.to.countryController.text,
+        onPress: null,
+        isSelected: true);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
@@ -108,7 +108,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
             Wrap(
               spacing: 12, //수평
               runSpacing: 3, //수직
-              children: selectedInterestCountryButtonList,
+              children: [selectedInterestCountryButtonList],
             ),
           ],
         ),

@@ -28,6 +28,7 @@ class HomeController extends GetxController {
   List<BeautyPost> interestPosts = [];
   List<BeautyPost> subscribingPosts = [];
   List<BeautySubscription> subscriptions = [];
+  List<BeautySubscription> followers = [];
   List<BeautyUser> subscriptionChannels = [];
   List<BeautyUser> filteredChannels = [];
   //textEditingController
@@ -216,6 +217,20 @@ class HomeController extends GetxController {
       return scoreB - scoreA;
     });
 
+    update();
+  }
+
+  updateFollower() async {
+    QuerySnapshot result = await firebaseFirestore
+        .collection(FirestoreConstants.pathSubscriptionCollection)
+        .where('channelId', isEqualTo: LoginController.to.getId())
+        .get();
+    List<BeautySubscription> tmp = [];
+    for (var doc in result.docs) {
+      BeautySubscription sub = BeautySubscription.fromDocument(doc);
+      tmp.add(sub);
+    }
+    subscriptions = tmp;
     update();
   }
 

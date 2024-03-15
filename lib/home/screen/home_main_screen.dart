@@ -24,6 +24,10 @@ class HomeMainScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         DateTime now = DateTime.now();
+        if (BottomNavBarController.to.bottomNavCurrentIndex.value != 0) {
+          BottomNavBarController.to.bottomNavCurrentIndex.value = 0;
+          return Future.value(false);
+        }
         if (BottomNavBarController.to.bottomNavCurrentIndex.value == 0 &&
             HomeController.to.isShowSubscriptionChannel) {
           HomeController.to.toggleShowSubscriptionChannel();

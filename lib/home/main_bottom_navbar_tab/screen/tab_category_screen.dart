@@ -3,15 +3,16 @@ import 'package:beautyblock_app/home/local_widget/list_item/tab_channel_listview
 import 'package:beautyblock_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../local_widget/scaffold/tab_category_screen_scaffold.dart';
 import '../local_widget/scaffold/tab_channel_screen_scaffold.dart';
 
-class TabChannelScreen extends StatelessWidget {
-  const TabChannelScreen({super.key});
+class TabCategoryScreen extends StatelessWidget {
+  const TabCategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (controller) {
-      return TabChannelScreenScaffold(
+      return TabCategoryScreenScaffold(
           appbarSection: _buildAppbar(), listviewSection: _buildListview());
     });
   }
@@ -33,7 +34,7 @@ class TabChannelScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '${HomeController.to.selectedCountry} FAN RANKING',
+                      HomeController.to.getCategoryString(),
                       style: AppTheme.appBarTextStyle.copyWith(fontSize: 14),
                       softWrap: true,
                     ),

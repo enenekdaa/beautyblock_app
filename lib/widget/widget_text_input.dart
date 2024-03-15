@@ -35,7 +35,7 @@ class TextInputWidget extends StatelessWidget {
       children: [
         Text(
           titleText,
-          style: AppTheme.smallTitleTextStyle.copyWith(fontSize: 13),
+          style: AppTheme.smallTitleTextStyle,
         ),
         SizedBox(height: 6),
         TextFormField(

@@ -139,10 +139,27 @@ class SubscriptionProfileWidget extends StatelessWidget {
                                 children: ['구독', '알림취소', '구독취소']
                                     .map((e) => GestureDetector(
                                           behavior: HitTestBehavior.translucent,
-                                          onTap: () {
+                                          onTap: () async {
                                             if (e == '구독') {
-                                              controller.changeSubscribe(
-                                                  type: 0, targetId: channelId);
+                                              if (controller
+                                                      .getSubscriptionStatus(
+                                                          channelId) ==
+                                                  0) {
+                                                Future.delayed(Duration(
+                                                        milliseconds: 500))
+                                                    .then((value) {
+                                                  customDialog(
+                                                      '알림',
+                                                      Text('이미 구독 중인 '
+                                                          '채널 입니다.'), () {
+                                                    Get.back();
+                                                  }, '확인');
+                                                });
+                                              } else {
+                                                controller.changeSubscribe(
+                                                    type: 0,
+                                                    targetId: channelId);
+                                              }
                                             } else if (e == '알림취소') {
                                               controller.changeSubscribe(
                                                   type: 1, targetId: channelId);

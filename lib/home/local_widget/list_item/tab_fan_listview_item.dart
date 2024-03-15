@@ -10,16 +10,18 @@ import 'package:get/get.dart';
 import '../../../constants/firestore_constants.dart';
 import '../../../model/firebase_user_model.dart';
 
-class TabChannelListviewItem extends StatelessWidget {
-  TabChannelListviewItem({Key? key, required this.channel}) : super(key: key);
+class TabFanListviewItem extends StatelessWidget {
+  const TabFanListviewItem(
+      {Key? key, required this.channel, required this.ranking})
+      : super(key: key);
 
-  BeautyUser channel;
+  final BeautyUser channel;
+  final int ranking;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(channel.id);
         Get.to(() => HomeChannelDetailScreen(id: channel.id),
             preventDuplicates: false);
       },
@@ -31,6 +33,14 @@ class TabChannelListviewItem extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
               child: Row(
                 children: [
+                  if (ranking < 5)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Text(
+                        (ranking + 1).toString(),
+                        style: AppTheme.smallTitleTextStyle,
+                      ),
+                    ),
                   _buildLeftImageSection(),
                   _buildMiddleSection(),
                   // _buildRightShareSection(),
@@ -51,17 +61,15 @@ class TabChannelListviewItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(right: Get.width * 0.03),
       height: Get.height * 0.05, // 가능한 최대 너비
-      child: AspectRatio(
-        aspectRatio: 1 / 1, // 가로 세로 비율을 1:1로 설정
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-                fit: BoxFit.cover,
-
-                // 이미지가 컨테이너를 꽉 채우도록
-                image: NetworkImage(channel.profile)), // 여기에 이미지 URL을 넣으세요.
-          ),
+      child: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+              fit: BoxFit.cover,
+              // 이미지가 컨테이너를 꽉 채우도록
+              image: NetworkImage(channel.profile)), // 여기에 이미지 URL을 넣으세요.
         ),
       ),
     );

@@ -49,7 +49,7 @@ class JoinController extends GetxController {
   var interestCountryList = [].obs;
   var interestCountryIsChecked = List<bool>.filled(1, false).obs;
   var selectedInterestCountryList = [].obs;
-
+  var countryController = TextEditingController();
   //textEditingController
   var inviteCodeController = TextEditingController();
   var emailController = TextEditingController();
@@ -147,15 +147,15 @@ class JoinController extends GetxController {
     emailController.addListener(emailValidFromString);
     passwordController.addListener(passwordValidFromString);
     interestTypeList.value = [
-      "BUYER",
-      "CELEB",
+      "Buyer",
+      "Celeb",
       "MKT",
-      "PR",
-      "OEM",
+      "Media",
+      "Brand",
       "ODM",
-      "LOGISTIC",
-      "INFLUENCER",
-      "OTHERS"
+      "Logistic",
+      "Influencer",
+      "Others"
     ];
     interestCategoryList.value = [
       '뷰티',
@@ -296,9 +296,7 @@ class JoinController extends GetxController {
         .update({
       'interestTypes': selectedInterestTypeList,
       'interestCategories': selectedInterestCategoryList,
-      'interestCountry': selectedInterestCountryList.isNotEmpty
-          ? selectedInterestCountryList.first
-          : ''
+      'interestCountry': countryController.text
     });
   }
 

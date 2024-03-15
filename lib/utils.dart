@@ -46,7 +46,10 @@ class AppTheme {
       letterSpacing: 1,
       fontFamily: 'NotoSans',
       fontWeight: FontWeight.w500,
-      color: Color.fromRGBO(174, 173, 170, 1));
+      color: Color.fromRGBO(101, 99, 99, 1)
+      // color: Color.fromRGBO(174, 173, 170, 1)
+      //QA상 색상 더 진하게 요청주심. 240315
+      );
 
   static const TextStyle whiteTextStyle = TextStyle(
       fontSize: 14,

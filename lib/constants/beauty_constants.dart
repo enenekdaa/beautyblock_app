@@ -1,12 +1,12 @@
 class BeautyConstants {
   static const List<String> positions = [
     "Brand",
-    "Distribute",
+    "Distributor",
     "Celeb / Influencer",
     "Marketing / PR",
-    "OEM / "
-        "ODM",
-    "Logistic",
+    "ODM / "
+        "OBM",
+    "Logistics",
     "Others"
   ];
 

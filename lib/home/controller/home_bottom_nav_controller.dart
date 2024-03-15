@@ -1,4 +1,5 @@
 import 'package:beautyblock_app/config.dart';
+import 'package:beautyblock_app/home/main_bottom_navbar_tab/screen/tab_category_screen.dart';
 import 'package:beautyblock_app/home/main_bottom_navbar_tab/screen/tab_fan_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class BottomNavBarController extends GetxController {
     setBottomItems();
     pages.value = [
       TabHomeScreen(),
-      TabChannelScreen(),
+      TabCategoryScreen(),
       Text('tab3'),
       HomeSelectCountryScreen(),
       HomeMyPageScreen()
@@ -45,6 +46,9 @@ class BottomNavBarController extends GetxController {
   }
 
   void onItemTapped(int index) {
+    if (HomeController.to.isShowSubscriptionChannel) {
+      HomeController.to.toggleShowSubscriptionChannel();
+    }
     if (index == 1) {
       //Drawer 열고 카테고리 진행
       if (bottomNavCurrentIndex.value != 1) {
@@ -76,7 +80,7 @@ class BottomNavBarController extends GetxController {
           matchTextDirection: true,
         ),
         icon: SvgPicture.asset('assets/images/ic_channel.svg'),
-        label: 'CHANNEL',
+        label: 'CATEGORY',
       ),
       BottomNavigationBarItem(
         activeIcon: SvgPicture.asset(

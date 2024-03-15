@@ -22,6 +22,8 @@ class RankingController extends GetxController {
   }
 
   Future<List<BeautyUser>> getRanking(String contury) async {
+
+      print('contury:: ${contury}');
     final QuerySnapshot result = await firebaseFirestore
           .collection(FirestoreConstants.pathUserCollection)
           .where('interestCountry', isEqualTo: contury)

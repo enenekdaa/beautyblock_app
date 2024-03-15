@@ -19,6 +19,7 @@ class TabChannelListviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print(channel.id);
         Get.to(() => HomeChannelDetailScreen(id: channel.id));
       },
       behavior: HitTestBehavior.translucent,

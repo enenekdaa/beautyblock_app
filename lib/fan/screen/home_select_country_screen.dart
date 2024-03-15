@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../config.dart';
 import '../../../widget/widget_radius_button.dart';
+import '../../home/main_bottom_navbar_tab/screen/tab_channel_screen.dart';
 import '../../widget/widget_appbar.dart';
 import '../../home/local_widget/scaffold/home_select_country_screen_scaffold.dart';
 
@@ -109,7 +110,10 @@ class HomeSelectCountryScreen extends StatelessWidget {
           '\n선택하신 항목으로 검색하시겠습니까?',
           textAlign: TextAlign.center,
         ), () {
-      Get.to(HomeFanScreen());
+          HomeController.to.selectCategory('Brand');
+          HomeController.to.selectContinent('Asia');
+          HomeController.to.selectCountry('${HomeController.to.getDropdownSelectedValue('title')}');
+      Get.to(TabChannelScreen());
     }, "확인");
   }
 }

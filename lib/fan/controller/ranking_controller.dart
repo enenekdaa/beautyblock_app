@@ -27,6 +27,7 @@ class RankingController extends GetxController {
     final QuerySnapshot result = await firebaseFirestore
           .collection(FirestoreConstants.pathUserCollection)
           .where('interestCountry', isEqualTo: contury)
+          .where('interestTypes',isEqualTo:'BUYER')
           .get();
     final List<DocumentSnapshot> documents = result.docs;
     List<BeautyUser> tempList = [];

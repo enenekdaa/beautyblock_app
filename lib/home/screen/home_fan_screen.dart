@@ -7,6 +7,7 @@ import '../../fan/controller/fan_controller.dart';
 import '../../home/main_bottom_navbar_tab/local_widget/scaffold/tab_fan_screen_scaffold.dart';
 import '../../widget/widget_appbar.dart';
 import '../controller/home_controller.dart';
+import '../local_widget/list_item/tab_channel_listview_item.dart';
 
 class HomeFanScreen extends StatelessWidget {
   HomeFanScreen({super.key});
@@ -49,7 +50,7 @@ class HomeFanScreen extends StatelessWidget {
                         ),
                       );
                     }
-                    return _buildListview(userNameList!);
+                    return _buildListview();
                   }
           }),
         );
@@ -60,40 +61,17 @@ class HomeFanScreen extends StatelessWidget {
     return AppbarWidget(appbarText: 'MY FAN RANKING');
   }
 
-  Widget _buildListview(List<BeautyUser> userNameList){
-    
-    print('456456456:: ${userNameList?[0].nickName}');
 
-    return ListView.separated(
-      padding: EdgeInsets.zero,
+  Widget _buildListview() {
+    return Expanded(
+      child: ListView(
+        padding: EdgeInsets.only(top: Get.height * 0.02),
         scrollDirection: Axis.vertical,
-        itemCount: userNameList!.length,
-        itemBuilder: (context,index){
-        return fanListItem(userNameList[index],index);
-    }
-      ,  separatorBuilder: (BuildContext context, int index) {
-      return Divider(thickness: 1,color: Color.fromRGBO(239, 239, 239, 1),);
-    }
-    );
-    // return Text('data');
-  }
-
-  Container fanListItem(userName,index){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      height: Get.height * 0.1,
-      child: Row(
-        children: [
-         index <= 4 ? Text('${index +1}'): Text(''),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
-            height: Get.height * 0.05,
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/img_test.png'),
-            ),
-          ),
-          Text(userName.nickName),
-        ],
+        children: HomeController.to.filteredChannels
+            .map((channel) => TabChannelListviewItem(
+                  channel: channel,
+                ))
+            .toList(),
       ),
     );
   }

@@ -412,6 +412,7 @@ class HomeController extends GetxController {
     for (DocumentSnapshot doc in querySnapshot.docs) {
       tmp.add(BeautyUser.fromDocument(doc));
     }
+    print('value :: ${value}');
     filteredChannels = tmp;
     update();
   }

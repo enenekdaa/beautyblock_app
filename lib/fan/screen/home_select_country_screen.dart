@@ -23,10 +23,10 @@ class HomeSelectCountryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<FanController>(builder: (controller) {
       return HomeSelectCountryScreenScaffold(
-        appBarSection: _buildAppBar(),
-        selectCountrySection: _buildDropDownSection(),
-        bottomButtonSection: _buildBottomButton());
-       });
+          appBarSection: _buildAppBar(),
+          selectCountrySection: _buildDropDownSection(),
+          bottomButtonSection: _buildBottomButton());
+    });
   }
 
   Widget _buildAppBar() {
@@ -52,7 +52,8 @@ class HomeSelectCountryScreen extends StatelessWidget {
                 height: Get.height * 0.005,
               ),
               CustomTitleDropDownWidget(
-                  itemList: FanController.to.getCategory(), dropdownKey: 'title')
+                  itemList: FanController.to.getCategory(),
+                  dropdownKey: 'title')
             ],
           ),
         ), //Counties
@@ -103,12 +104,12 @@ class HomeSelectCountryScreen extends StatelessWidget {
     customDialog(
         '선택 확인',
         Text(
-            '검색 : ${HomeController.to.selectedSearchCategory.value}'
-                '\n국가 : ${HomeController.to.getDropdownSelectedValue('title')}'
-                '\n선택하신 항목으로 검색하시겠습니까?',textAlign: TextAlign.center,),
-        (){
-          Get.to(HomeFanScreen());
-        },
-        "확인");
+          '검색 : ${HomeController.to.selectedCategory}'
+          '\n국가 : ${HomeController.to.getDropdownSelectedValue('title')}'
+          '\n선택하신 항목으로 검색하시겠습니까?',
+          textAlign: TextAlign.center,
+        ), () {
+      Get.to(HomeFanScreen());
+    }, "확인");
   }
 }

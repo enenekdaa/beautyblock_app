@@ -166,7 +166,7 @@ class JoinController extends GetxController {
       '클렌징/필링',
       '베이스'
     ];
-    interestCountryList.value = ['Korea'];
+    interestCountryList.value = ['S.Korea'];
   }
 
   @override
@@ -375,5 +375,9 @@ class JoinController extends GetxController {
             .then((_) => focusNode.unfocus());
       }
     });
+  }
+
+  void joinToLogin() {
+    LoginController.to.updateUserInfo(_user?.id ?? '');
   }
 }

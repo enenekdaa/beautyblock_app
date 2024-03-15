@@ -1,5 +1,6 @@
 import 'package:beautyblock_app/constants/beauty_constants.dart';
 import 'package:beautyblock_app/fan/controller/fan_controller.dart';
+import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart';
 import 'package:beautyblock_app/model/channel_model.dart';
 import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/model/roles_model.dart';
@@ -27,6 +28,7 @@ class HomeController extends GetxController {
   List<BeautyPost> subscribingPosts = [];
   List<BeautySubscription> subscriptions = [];
   List<BeautyUser> subscriptionChannels = [];
+  List<BeautyUser> filteredChannels = [];
   //textEditingController
   var uploadTitleController = TextEditingController();
   var uploadContentController = TextEditingController();
@@ -83,7 +85,10 @@ class HomeController extends GetxController {
   }.obs;
 
   //drawer
-  var selectedSearchCategory = 'Brand'.obs;
+  int drawerIndex = 0;
+  String selectedCategory = '';
+  String selectedContinent = "";
+  String selectedCountry = "";
 
   //alarmPage
   var isAlarmClicked = false.obs;
@@ -159,7 +164,6 @@ class HomeController extends GetxController {
 
   void clearSearchResult() {
     searchedList = [];
-    update();
   }
 
   @override
@@ -184,9 +188,9 @@ class HomeController extends GetxController {
 
   void updateMainPosts() async {
     final postsRef = FirebaseFirestore.instance
-        .collection('posts')
+        .collection(FirestoreConstants.pathPostCollection)
         .orderBy('createdAt', descending: true)
-        .limit(10);
+        .limit(20);
     //10개까지만 추출
     final querySnapshot = await postsRef.get();
     List<BeautyPost> posts = [];
@@ -197,9 +201,20 @@ class HomeController extends GetxController {
     popularPosts = posts.toList();
     popularPosts.sort((a, b) => b.viewCnt - a.viewCnt);
     interestPosts = posts.toList();
+    interestPosts.sort((a, b) => b.likes.length - a.likes.length);
     newPosts = posts.toList();
-    newPosts.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    newPosts.sort((a, b) {
+      DateTime dateA = DateTime.parse(b.createdAt);
+      DateTime dateB = DateTime.parse(a.createdAt);
+      return dateA.compareTo(dateB);
+    });
     recommendPosts = posts.toList();
+    recommendPosts.sort((a, b) {
+      int scoreA = a.viewCnt + a.likes.length * 10;
+      int scoreB = b.viewCnt + b.likes.length * 10;
+      return scoreB - scoreA;
+    });
+
     update();
   }
 
@@ -369,5 +384,67 @@ class HomeController extends GetxController {
       }
     }
     update();
+  }
+
+  selectCategory(String value) {
+    selectedCategory = value;
+    drawerIndex = 1;
+    update();
+  }
+
+  selectContinent(String value) {
+    selectedContinent = value;
+    drawerIndex = 2;
+    update();
+  }
+
+  selectCountry(String value) async {
+    selectedCountry = value;
+    closeDrawer();
+    BottomNavBarController.to.bottomNavCurrentIndex.value = 1;
+    //필터 검색
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathUserCollection)
+        .where('position', isEqualTo: selectedCategory)
+        .where('interestCountry', isEqualTo: selectedCountry)
+        .get();
+    List<BeautyUser> tmp = [];
+    for (DocumentSnapshot doc in querySnapshot.docs) {
+      tmp.add(BeautyUser.fromDocument(doc));
+    }
+    filteredChannels = tmp;
+    update();
+  }
+
+  closeDrawer() {
+    BottomNavBarController.to.scaffoldKey.currentState?.closeDrawer();
+  }
+
+  selectDrawerBack() {
+    if (drawerIndex > 0) {
+      if (drawerIndex == 2) {
+        //국가 선택
+        selectedCountry = '';
+      } else if (drawerIndex == 1) {
+        selectedContinent = '';
+      } else if (drawerIndex == 0) {
+        selectedCategory = '';
+      }
+      drawerIndex--;
+    }
+    update();
+  }
+
+  String getCategoryString() {
+    return '$selectedCategory > $selectedContinent > $selectedCountry';
+  }
+
+  void openDrawer() {
+    selectedCountry = '';
+    selectedContinent = '';
+    selectedCategory = '';
+    drawerIndex = 0;
+    update();
+    BottomNavBarController.to.scaffoldKey.currentState?.openDrawer();
   }
 }

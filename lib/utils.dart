@@ -1,7 +1,10 @@
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/widget/widget_radius_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'constants/firestore_constants.dart';
 
 class AppTheme {
   static const TextTheme textTheme = TextTheme(
@@ -94,4 +97,52 @@ customDialog(String titleText, Widget textWidgets, onPress, buttonText) async {
       ),
     ),
   );
+}
+
+String formatDateString(String inputDate) {
+  try {
+    DateTime parsedDate = DateTime.parse(inputDate);
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime yesterday = today.subtract(Duration(days: 1));
+
+    if (inputDate == '') {
+      return '';
+    }
+    // 오늘 날짜와 같은 경우
+    if (parsedDate.year == today.year &&
+        parsedDate.month == today.month &&
+        parsedDate.day == today.day) {
+      return '오늘';
+    }
+
+    // 어제 날짜와 같은 경우
+    if (parsedDate.year == yesterday.year &&
+        parsedDate.month == yesterday.month &&
+        parsedDate.day == yesterday.day) {
+      return '1일 전';
+    }
+
+    // 2일 전부터 10일 전까지
+    int difference = today.difference(parsedDate).inDays;
+    if (difference >= 2 && difference <= 10) {
+      return '${difference}일 전';
+    }
+
+    // 그 이후일 경우
+    return '${parsedDate.year}-${parsedDate.month.toString().padLeft(2, '0')}-${parsedDate.day.toString().padLeft(2, '0')}';
+  } catch (e) {
+    return '';
+  }
+}
+
+//구독자 수 카운트
+Future<int> followCount(String channelId) async {
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  QuerySnapshot querySnapshot = await firebaseFirestore
+      .collection(FirestoreConstants.pathSubscriptionCollection)
+      .where('channelId', isEqualTo: channelId)
+      // .orderBy('createdAt', descending: true)
+      .get();
+  return querySnapshot.docs.length;
 }

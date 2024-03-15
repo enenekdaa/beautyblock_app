@@ -1,39 +1,46 @@
+import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
+import 'package:beautyblock_app/home/screen/home_videoplayer_screen.dart';
+import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class TabChannelListviewItem extends StatelessWidget {
-  const TabChannelListviewItem({
-    Key? key,
-    // required this.imageUrl,
-    required this.videoText,
-    required this.followCount,
-    required this.contentCount,
-  }) : super(key: key);
+import '../../../constants/firestore_constants.dart';
+import '../../../model/firebase_user_model.dart';
 
-  // final imageUrl;
-  final videoText;
-  final followCount;
-  final contentCount;
+class TabChannelListviewItem extends StatelessWidget {
+  TabChannelListviewItem({Key? key, required this.channel}) : super(key: key);
+
+  BeautyUser channel;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-            child: Row(
-              children: [
-                _buildLeftImageSection(),
-                _buildMiddleSection(),
-                _buildRightShareSection(),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeChannelDetailScreen(id: channel.id));
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: Get.height * 0.02),
+              child: Row(
+                children: [
+                  _buildLeftImageSection(),
+                  _buildMiddleSection(),
+                  // _buildRightShareSection(),
+                ],
+              ),
             ),
-          ),
-          Divider(thickness: 1,color: Color.fromRGBO(239, 239, 239, 1),)
-        ],
+            Divider(
+              thickness: 1,
+              color: Color.fromRGBO(239, 239, 239, 1),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -48,9 +55,10 @@ class TabChannelListviewItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
-                fit: BoxFit.cover, // 이미지가 컨테이너를 꽉 채우도록
-                image: AssetImage(
-                    'assets/images/img_test_video_thumbnail.png')), // 여기에 이미지 URL을 넣으세요.
+                fit: BoxFit.cover,
+
+                // 이미지가 컨테이너를 꽉 채우도록
+                image: NetworkImage(channel.profile)), // 여기에 이미지 URL을 넣으세요.
           ),
         ),
       ),
@@ -63,16 +71,23 @@ class TabChannelListviewItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            videoText,
+            channel.nickName,
             style: AppTheme.smallTitleTextStyle
                 .copyWith(fontWeight: FontWeight.w500),
           ),
           Row(
             children: [
-              Text(
-                'Follow : $followCount',
-                style: AppTheme.tagTextStyle,
-              ),
+              FutureBuilder(
+                  future: followCount(channel.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text('Follow : ${snapshot.data.toString()}',
+                          style: AppTheme.tagTextStyle);
+                    } else {
+                      return const Text('Follow : 0',
+                          style: AppTheme.tagTextStyle);
+                    }
+                  }),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
                 child: Text(
@@ -80,7 +95,17 @@ class TabChannelListviewItem extends StatelessWidget {
                   style: AppTheme.tagTextStyle,
                 ),
               ),
-              Text('Content : $contentCount',style: AppTheme.tagTextStyle),
+              FutureBuilder(
+                  future: contentCount(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text('Content : ${snapshot.data.toString()}',
+                          style: AppTheme.tagTextStyle);
+                    } else {
+                      return const Text('Content : 0',
+                          style: AppTheme.tagTextStyle);
+                    }
+                  }),
             ],
           ),
         ],
@@ -102,5 +127,15 @@ class TabChannelListviewItem extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<int> contentCount() async {
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    QuerySnapshot querySnapshot = await firebaseFirestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .where('userId', isEqualTo: channel.id)
+        // .orderBy('createdAt', descending: true)
+        .get();
+    return querySnapshot.docs.length;
   }
 }

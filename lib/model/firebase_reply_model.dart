@@ -39,8 +39,8 @@ class BeautyReply {
     String nickName = '';
     String createdAt = '';
     String content = '';
-    List<String> likes = emptyList;
-
+    List<String> likes = [];
+    print(doc.get('likes'));
     try {
       id = doc.get('id');
       userId = doc.get('userId');
@@ -49,7 +49,10 @@ class BeautyReply {
       createdAt = doc.get('createdAt');
       content = doc.get('content');
       doc.get('likes').forEach((data) => {likes.add(data)});
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
+
     return BeautyReply(
         id: id,
         userId: userId,

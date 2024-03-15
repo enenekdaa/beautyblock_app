@@ -22,13 +22,19 @@ class ChannelVideoTabPage extends StatelessWidget {
           if (snapshot.hasData) {
             List<BeautyPost> posts = snapshot.data ?? [];
             Random random = Random();
-            BeautyPost rand = posts[random.nextInt(posts.length)];
-            return ListView(
-              children: [
-                _buildRecommandSection(rand),
-                _buildPopularityVideoSection(posts),
-              ],
-            );
+            if (posts.isEmpty) {
+              return Center(
+                child: Text('등록된 컨텐츠가 없습니다'),
+              );
+            } else {
+              BeautyPost rand = posts[random.nextInt(posts.length)];
+              return ListView(
+                children: [
+                  _buildRecommandSection(rand),
+                  _buildPopularityVideoSection(posts),
+                ],
+              );
+            }
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -54,7 +60,7 @@ class ChannelVideoTabPage extends StatelessWidget {
             duration: item.videoLength,
             videoTitle: item.title,
             views: item.viewCnt.toString(),
-            date: item.createdAt.substring(0, 10),
+            date: formatDateString(item.createdAt),
             tags: item.tags,
           ),
         ),

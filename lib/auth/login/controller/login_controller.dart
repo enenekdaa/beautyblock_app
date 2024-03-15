@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/model/firebase_subscription_model.dart';
 import 'package:beautyblock_app/utils.dart';
@@ -117,20 +118,22 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> updateUserInfo() async {
+  Future<void> updateUserInfo(String id) async {
     final QuerySnapshot result = await firebaseFirestore
         .collection(FirestoreConstants.pathUserCollection)
-        .where('id', isEqualTo: _user?.id)
+        .where('id', isEqualTo: id)
         .get();
     final List<DocumentSnapshot> documents = result.docs;
 
     DocumentSnapshot documentSnapshot = documents[0];
     BeautyUser user = BeautyUser.fromDocument(documentSnapshot);
+    print(user.nickName);
     setUser(user);
   }
 
   setUser(BeautyUser user) {
     _user = user;
+    print(user.nickName);
     //로그인시 미리 구독 데이터 가져오기
     HomeController.to.updateSubscribe();
     HomeController.to.getSubscriptionChannels();
@@ -139,7 +142,9 @@ class LoginController extends GetxController {
 
   logout() {
     _user = null;
+    update();
     Get.off(() => LoginReciveInfoScreen());
+    BottomNavBarController.to.bottomNavCurrentIndex.value = 0;
   }
 
   String getProfile() {
@@ -156,6 +161,10 @@ class LoginController extends GetxController {
 
   String getId() {
     return _user?.id ?? "001";
+  }
+
+  int getSubscribeCnt() {
+    return _user?.subscribeCnt ?? 0;
   }
 
   void setProfile() async {

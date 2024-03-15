@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../model/firebase_post_model.dart';
 import '../../../utils.dart';
 
 class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
   const MyPageMyChannelMyVideoListviewItem({
-    Key?key,
-    required this.image,
+    Key? key,
+    required this.post,
     required this.userName,
-    required this.videoName,
-    required this.views,
-    required this.date,
+    required this.userProfile,
   });
 
-  final image;
+  final BeautyPost post;
   final userName;
-  final videoName;
-  final views;
-  final date;
+  final userProfile;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:Get.height * 0.015),
+      padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
       child: Row(
         children: [
           Flexible(
@@ -36,9 +33,9 @@ class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: Get.height * 0.015,
-                        backgroundImage: image,
+                        backgroundImage: NetworkImage(userProfile),
                       ),
-                      SizedBox(width: Get.width * 0.01),
+                      SizedBox(width: 8),
                       Text(
                         userName,
                         style: AppTheme.smallTitleTextStyle
@@ -46,11 +43,14 @@ class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
                       )
                     ],
                   ),
-                  Text(
-                    videoName,
-                    style: AppTheme.smallTitleTextStyle
-                        .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
-                    softWrap: true,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      post.title,
+                      style: AppTheme.smallTitleTextStyle
+                          .copyWith(fontSize: 12, fontWeight: FontWeight.w700),
+                      softWrap: true,
+                    ),
                   ),
                   Row(
                     children: [
@@ -59,18 +59,19 @@ class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        views,
+                        post.viewCnt.toString(),
                         style: AppTheme.tagTextStyle,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.02),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Get.width * 0.02),
                         child: Text(
                           '·',
                           style: AppTheme.tagTextStyle,
                         ),
                       ),
                       Text(
-                        date,
+                        formatDateString(post.createdAt),
                         style: AppTheme.tagTextStyle,
                       ),
                     ],
@@ -84,9 +85,10 @@ class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
             child: Container(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6.0),
-                child: Image.asset(
-                  'assets/images/img_test_video_thumbnail.png',
+                child: Image.network(
+                  post.thumbnail,
                   fit: BoxFit.cover,
+                  height: 100,
                 ),
               ),
             ),

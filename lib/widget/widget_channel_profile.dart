@@ -91,13 +91,17 @@ class SubscriptionProfileWidget extends StatelessWidget {
               AppTheme.smallTitleTextStyle.copyWith(fontSize: 18, height: 1.2),
         ),
         useSubscriptionCountText
-            ? Padding(
-                padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
-                child: Text(
-                  subscriptionCount,
-                  style: AppTheme.tagTextStyle,
-                ),
-              )
+            ? FutureBuilder(
+                future: followCount(channelId),
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: Get.height * 0.005),
+                    child: Text(
+                      snapshot.data.toString(),
+                      style: AppTheme.tagTextStyle,
+                    ),
+                  );
+                })
             : SizedBox(
                 height: Get.height * 0.005,
               ),

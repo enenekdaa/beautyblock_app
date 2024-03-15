@@ -140,7 +140,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
                   //     );
                   JoinController.to.updateInterests();
                   JoinController.to.clearData();
-                  LoginController.to.updateUserInfo();
+                  JoinController.to.joinToLogin();
                   showJoinSuccessDialog();
                 },
                 text: '저장',
@@ -159,7 +159,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
           style: AppTheme.smallTitleTextStyle
               .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
         ),
-        () => {Get.offAll(const JoinAppDescriptionScreen())},
+        () => {Get.offAll(() => const JoinAppDescriptionScreen())},
         '확인');
   }
 }

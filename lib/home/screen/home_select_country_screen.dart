@@ -111,16 +111,16 @@ class HomeSelectCountryScreen extends StatelessWidget {
   }
 
   showSelectedSearchInfo() {
-    customDialog(
-        '선택 확인',
-        Text(
-            '검색 : ${HomeController.to.selectedSearchCategory.value}'
-                '\n지역 : ${HomeController.to.getDropdownSelectedValue('country')}'
-                '\n국가 : ${HomeController.to.getDropdownSelectedValue('continent')}'
-                '\n선택하신 항목으로 검색하시겠습니까?',textAlign: TextAlign.center,),
-        (){
-          BottomNavBarController.to.onItemTapped(1);
-          Get.back();},
-        "확인");
+    // customDialog(
+    //     '선택 확인',
+    //     Text(
+    //         '검색 : ${HomeController.to.selectedSearchCategory.value}'
+    //             '\n지역 : ${HomeController.to.getDropdownSelectedValue('country')}'
+    //             '\n국가 : ${HomeController.to.getDropdownSelectedValue('continent')}'
+    //             '\n선택하신 항목으로 검색하시겠습니까?',textAlign: TextAlign.center,),
+    //     (){
+    //       BottomNavBarController.to.onItemTapped(1);
+    //       Get.back();},
+    //     "확인");
   }
 }

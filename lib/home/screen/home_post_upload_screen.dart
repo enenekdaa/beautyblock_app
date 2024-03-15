@@ -3,7 +3,6 @@ import 'package:beautyblock_app/auth/login/controller/login_controller.dart';
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/scaffold/home_post_upload_screen_scaffold.dart';
-import 'package:beautyblock_app/home/screen/home_main_screen.dart';
 import 'package:beautyblock_app/home/screen/home_post_share_screen.dart';
 import 'package:beautyblock_app/widget/widget_custom_dropdown.dart';
 import 'package:beautyblock_app/widget/widget_overlapping_images.dart';
@@ -272,34 +271,65 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
         var videoDownloadUrl = await task.ref.getDownloadURL();
         var thumbnailDownloadUrl = await thumbnailTask.ref.getDownloadURL();
         // var doc = firebaseStoreRef
-        //     .collection('users')
+        //     .collection(FirestoreConstants.pathUserCollection)
         //     .doc(LoginController.to.getId());
         // DocumentSnapshot documentSnapshot = await doc.get();
         // List postsList = documentSnapshot.get('posts') as List;
 
         // print("=================$postsList");
         // print(LoginController.to.getId());
+        BeautyPost postData = BeautyPost(
+            id: 'temp',
+            userId: LoginController.to.getId(),
+            video: await videoDownloadUrl.toString(),
+            thumbnail: await thumbnailDownloadUrl.toString(),
+            category: HomeController.to.getDropdownSelectedValue('category')!,
+            title: HomeController.to.uploadTitleController.text,
+            contents: HomeController.to.uploadContentController.text,
+            createdAt: DateTime.now().toString(),
+            tags: HomeController.to.tags,
+            videoLength: duration);
         DocumentReference doc = await firebaseStoreRef
             .collection(FirestoreConstants.pathPostCollection)
-            .add(BeautyPost(
-                    id: 'temp',
-                    userId: LoginController.to.getId(),
-                    video: await videoDownloadUrl.toString(),
-                    thumbnail: await thumbnailDownloadUrl.toString(),
-                    category:
-                        HomeController.to.getDropdownSelectedValue('category')!,
-                    title: HomeController.to.uploadTitleController.text,
-                    contents: HomeController.to.uploadContentController.text,
-                    createdAt: DateTime.now().toString(),
-                    tags: HomeController.to.tags,
-                    videoLength: duration)
-                .toJson());
+            .add(postData.toJson());
         await doc.update({'id': doc.id});
+        postData.id = doc.id;
+        notifyFollowers(postData);
         HomeController.to.isPostUploading.value = false;
         showSaveSuccessDialog();
       }
     } else {
       print('동영상 선택 취소');
+    }
+  }
+
+  void notifyFollowers(BeautyPost postData) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // 채널의 구독자 목록 조회
+    QuerySnapshot subscriptionSnapshot = await firestore
+        .collection(FirestoreConstants.pathSubscriptionCollection)
+        .where('channelId', isEqualTo: postData.userId)
+        .get();
+
+    // 각 구독자에 대해 알림 생성
+    for (var doc in subscriptionSnapshot.docs) {
+      String subscriberId = doc['userId']; // 구독자 ID를 얻습니다.
+
+      // 알림 데이터를 생성합니다. 예를 들면 아래와 같습니다:
+      Map<String, dynamic> notificationData = {
+        'toId': subscriberId, // 알림을 받을 구독자 ID
+        'fromId': postData.userId, // 알림을 보내는 채널(포스트 작성자) ID
+        'image': postData.thumbnail, // 포스트 이미지
+        'content':
+            '${LoginController.to.getNick()}에서 업로드한 동영상:${postData.title}',
+        // 알림 내용
+        'createdAt': DateTime.now().toString(), // 알림 생성 시간
+        'type': 'post', // 알림 타입
+        'postId': postData.id
+      };
+
+      // 'notifications' 컬렉션에 알림 문서를 추가합니다.
+      await firestore.collection('notifications').add(notificationData);
     }
   }
 
@@ -319,7 +349,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
 //       var downloadUrl = await task.ref.getDownloadURL();
 //
 //       var doc =
-//       firebaseStoreRef.collection('users').doc(LoginController.to.getId());
+//       firebaseStoreRef.collection(FirestoreConstants.pathUserCollection).doc(LoginController.to.getId());
 //       doc.update({
 //         'posts': FieldValue.arrayUnion([PostModel(
 //           id: doc.id,

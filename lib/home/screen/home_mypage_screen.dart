@@ -4,6 +4,7 @@ import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_screen_sc
 import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_mychannel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_myvideo_screen.dart';
+import 'package:beautyblock_app/home/screen/home_policy_screen.dart';
 import 'package:beautyblock_app/model/login_model.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_appbar.dart';
@@ -76,18 +77,18 @@ class HomeMyPageScreen extends StatelessWidget {
   Widget _buildList() {
     return Column(
       children: [
-        myPageListTile(
-            '즐겨찾기', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
-          Get.to(HomeMyPageFavoritesChannelScreen());
-        }),
+        // myPageListTile(
+        //     '즐겨찾기', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+        //   Get.to(HomeMyPageFavoritesChannelScreen());
+        // }),
         myPageListTile(
             '내 채널', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
           Get.to(HomeMyPageMyChannelScreen());
         }),
-        myPageListTile(
-            '나의 영상', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
-          Get.to(HomeMyPageMyVideoScreen());
-        }),
+        // myPageListTile(
+        //     '나의 영상', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+        //   Get.to(HomeMyPageMyVideoScreen());
+        // }),
         Divider(
           thickness: 1,
           color: Color.fromRGBO(171, 169, 163, 0.24),
@@ -115,10 +116,21 @@ class HomeMyPageScreen extends StatelessWidget {
         Divider(
           color: Color.fromRGBO(171, 169, 163, 0.24),
         ),
-        myPageListTile('서비스 이용약관',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
-        myPageListTile('개인정보취급방침',
-            SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
+        myPageListTile(
+            '서비스 이용약관', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+            () {
+          Get.to(() => HomePolicyScreen(type: 'terms'));
+        }),
+        myPageListTile(
+            '개인정보 취급 방침', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+            () {
+          Get.to(() => HomePolicyScreen(type: 'privacy'));
+        }),
+        myPageListTile(
+            '이벤트 및 정보 수신', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+            () {
+          Get.to(() => HomePolicyScreen(type: 'marketing'));
+        }),
         myPageListTile(
             '알림허용',
             Obx(() => Switch(
@@ -152,8 +164,7 @@ class HomeMyPageScreen extends StatelessWidget {
       backgroundColor: GlobalBeautyColor.buttonHotPink,
       text: '로그아웃',
       onPress: () {
-        final LoginController _loginController = Get.find();
-        _loginController.logout();
+        LoginController.to.logout();
       },
     );
   }

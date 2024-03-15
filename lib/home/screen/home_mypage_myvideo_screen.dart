@@ -1,4 +1,5 @@
 import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_myvideo_screen_scaffold.dart';
+import 'package:beautyblock_app/model/firebase_post_model.dart';
 import 'package:beautyblock_app/widget/widget_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -75,23 +76,10 @@ class _HomeMyPageMyVideoScreenState extends State<HomeMyPageMyVideoScreen>
       padding: EdgeInsets.symmetric(horizontal: 20),
       children: [
         MyPageMyChannelMyVideoListviewItem(
-            image: AssetImage('assets/images/img_test.png'),
-            userName: 'BeautyBlock',
-            videoName: 'Beauty Block Launching Festival - Heize & Dean',
-            views: '123411',
-            date: '2024.03.03'),
-        MyPageMyChannelMyVideoListviewItem(
-            image: AssetImage('assets/images/img_test.png'),
-            userName: 'BeautyBlock',
-            videoName: 'Beauty Block Launching Festival - Heize & Dean',
-            views: '123411',
-            date: '2024.03.03'),
-        MyPageMyChannelMyVideoListviewItem(
-            image: AssetImage('assets/images/img_test.png'),
-            userName: 'BeautyBlock',
-            videoName: 'Beauty Block Launching Festival - Heize & Dean',
-            views: '123411',
-            date: '2024.03.03'),
+          post: BeautyPost(id: 'a', userId: 'a'),
+          userName: 'BeautyBlock',
+          userProfile: '',
+        ),
       ],
     );
   }

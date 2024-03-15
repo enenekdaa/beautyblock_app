@@ -1,35 +1,28 @@
+import 'package:beautyblock_app/auth/login/controller/login_controller.dart';
 import 'package:beautyblock_app/config.dart';
+import 'package:beautyblock_app/model/firebase_reply_model.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:beautyblock_app/widget/widget_circle_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class HomeReviewListviewItem extends StatelessWidget {
-  const HomeReviewListviewItem(
-      {Key? key,
-      required this.imageUrl,
-      required this.nickName,
-      required this.date,
-      required this.reviewText,
-      required this.reviewHeartCount,
-      required this.reviewCount,
-      required this.shareButtonOnPress,
-      required this.postId,
-      required this.id})
-      : super(key: key);
+  const HomeReviewListviewItem({
+    Key? key,
+    required this.reply,
+    required this.shareButtonOnPress,
+    required this.postId,
+    required this.likeButtonOnPress,
+  }) : super(key: key);
 
-  final imageUrl;
-  final nickName;
-  final date;
-  final reviewText;
-  final reviewHeartCount;
-  final reviewCount;
+  final BeautyReply reply;
   final shareButtonOnPress;
+  final likeButtonOnPress;
   final postId;
-  final id;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +41,7 @@ class HomeReviewListviewItem extends StatelessWidget {
                   padding: EdgeInsets.only(left: Get.width * 0.02, top: 8),
                   child: CircleAvatar(
                     radius: 16,
-                    backgroundImage: imageUrl,
+                    backgroundImage: NetworkImage(reply.profile),
                   ),
                 ),
                 //middleSection
@@ -62,7 +55,7 @@ class HomeReviewListviewItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '@${nickName}',
+                              '@${reply.nickName}',
                               style: AppTheme.tagTextStyle,
                             ),
                             Padding(
@@ -70,38 +63,49 @@ class HomeReviewListviewItem extends StatelessWidget {
                                   horizontal: Get.height * 0.01),
                               child: Text('·', style: AppTheme.tagTextStyle),
                             ),
-                            Text(date, style: AppTheme.tagTextStyle)
+                            Text(formatDateString(reply.createdAt),
+                                style: AppTheme.tagTextStyle)
                           ],
                         ),
                         SizedBox(height: 3),
                         Text(
-                          reviewText,
+                          reply.content,
                           style: AppTheme.smallTitleTextStyle,
                           softWrap: true,
                         ),
                         SizedBox(height: 3),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/images/ic_heart.svg',
-                              color: GlobalBeautyColor.tagGray170,
-                            ),
-                            Text(
-                              reviewHeartCount,
-                              style: AppTheme.tagTextStyle,
-                            ),
-                            SizedBox(
-                              width: Get.width * 0.03,
-                            ),
-                            // SvgPicture.asset(
-                            //   'assets/images/ic_text.svg',
-                            //   color: GlobalBeautyColor.tagGray170,
-                            // ),
-                            // Text(
-                            //   '답글 ${reviewCount}개',
-                            //   style: AppTheme.tagTextStyle,
-                            // ),
-                          ],
+                        GestureDetector(
+                          onTap: likeButtonOnPress,
+                          behavior: HitTestBehavior.translucent,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                reply.likes.contains(LoginController.to.getId())
+                                    ? 'assets/images/ic_heart_active'
+                                        '.svg'
+                                    : 'assets/images/ic_heart_gray'
+                                        '.svg',
+                                height: 20,
+                                width: 20,
+                              ),
+                              Text(
+                                reply.likes.length.toString(),
+                                style: AppTheme.tagTextStyle,
+                              ),
+                              SizedBox(
+                                width: Get.width * 0.03,
+                              ),
+                              // SvgPicture.asset(
+                              //   'assets/images/ic_text.svg',
+                              //   color: GlobalBeautyColor.tagGray170,
+                              // ),
+                              // Text(
+                              //   '답글 ${reviewCount}개',
+                              //   style: AppTheme.tagTextStyle,
+                              // ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

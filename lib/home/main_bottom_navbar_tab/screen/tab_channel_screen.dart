@@ -1,5 +1,6 @@
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/tab_channel_listview_item.dart';
+import 'package:beautyblock_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../local_widget/scaffold/tab_channel_screen_scaffold.dart';
@@ -9,9 +10,10 @@ class TabChannelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TabChannelScreenScaffold(
-        appbarSection: _buildAppbar(),
-        listviewSection: _buildListview());
+    return GetBuilder<HomeController>(builder: (controller) {
+      return TabChannelScreenScaffold(
+          appbarSection: _buildAppbar(), listviewSection: _buildListview());
+    });
   }
 
   Widget _buildAppbar() {
@@ -24,9 +26,21 @@ class TabChannelScreen extends StatelessWidget {
             'assets/images/img_main_logo.png',
             height: Get.height * 0.03,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: Get.width * 0.02),
-            child: Obx(()=> Text(HomeController.to.selectedSearchCategory.value)),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: Get.width * 0.02, right: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      HomeController.to.getCategoryString(),
+                      style: AppTheme.appBarTextStyle.copyWith(fontSize: 14),
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -46,16 +60,13 @@ class TabChannelScreen extends StatelessWidget {
   Widget _buildListview() {
     return Expanded(
       child: ListView(
-        padding: EdgeInsets.only(top: Get.height *0.02),
+        padding: EdgeInsets.only(top: Get.height * 0.02),
         scrollDirection: Axis.vertical,
-        children: [
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-          TabChannelListviewItem(videoText: 'SANPAR', followCount: '1만명', contentCount: '2,315'),
-        ],
+        children: HomeController.to.filteredChannels
+            .map((channel) => TabChannelListviewItem(
+                  channel: channel,
+                ))
+            .toList(),
       ),
     );
   }

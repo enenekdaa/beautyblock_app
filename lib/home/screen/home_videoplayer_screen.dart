@@ -29,7 +29,7 @@ class HomeVideoplayerScreen extends StatefulWidget {
 class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   TextEditingController reply = TextEditingController();
-  BeautyPost? post;
+  BeautyPost post = BeautyPost(id: 'aa', userId: 'aa');
   List<BeautyReply> replies = [];
   bool loadComplete = false;
   @override
@@ -56,7 +56,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
         .collection(FirestoreConstants.pathPostCollection)
         .doc(widget.id)
         .collection(FirestoreConstants.pathRepliesCollection)
-        .orderBy('createdAt', descending: true) // 댓글을 최신 순으로 정렬
+        .orderBy('createdAt', descending: false) // 댓글을 최신 순으로 정렬
         .get()
         .then((value) {
       List<BeautyReply> tmp = [];
@@ -97,7 +97,8 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
           child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, bottom: 12, top: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -115,26 +116,26 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                 Row(
                   children: [
                     SvgPicture.asset('assets/images/ic_eye.svg'),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      post!.viewCnt.toString(),
+                      post.viewCnt.toString(),
                       style: AppTheme.tagTextStyle,
                     ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.width * 0.02),
-                      child: Text(
+                      child: const Text(
                         '·',
                         style: AppTheme.tagTextStyle,
                       ),
                     ),
                     Text(
-                      post!.createdAt.substring(0, 10),
+                      formatDateString(post?.createdAt ?? ''),
                       style: AppTheme.tagTextStyle,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -149,7 +150,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
           FutureBuilder<DocumentSnapshot>(
             future: firestore
                 .collection(FirestoreConstants.pathUserCollection)
-                .doc(post?.userId)
+                .doc(post.userId)
                 .get(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -159,12 +160,12 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                   BeautyUser user = BeautyUser.fromDocument(snapshot.data!);
                   return Container(
                     padding: EdgeInsets.only(bottom: Get.height * 0.02),
-                    color: Color.fromRGBO(246, 246, 246, 1),
+                    color: const Color.fromRGBO(246, 246, 246, 1),
                     child: Column(
                       children: [
                         SubscriptionProfileWidget(
                           imageUrl: NetworkImage(user.profile),
-                          userName: user.company,
+                          userName: user.nickName,
                           subscriptionBtnOnPress: () {},
                           channelId: user.id,
                           useGoToChannelText: false,
@@ -172,11 +173,11 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                           useLikeButton: false,
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(post?.contents ?? '',
+                              Text(post.contents ?? '',
                                   softWrap: true,
                                   style: AppTheme.smallTitleTextStyle),
                               SizedBox(
@@ -193,8 +194,8 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                                         SvgPicture.asset(
                                             'assets/images/ic_text.svg'),
                                         Text(
-                                          post!.commentCnt.toString(),
-                                          style: TextStyle(
+                                          post.commentCnt.toString(),
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontFamily: 'NotoSans',
                                               fontSize: 12,
@@ -208,21 +209,70 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         right: Get.width * 0.03),
-                                    child: Column(
-                                      children: [
-                                        SvgPicture.asset(
-                                            'assets/images/ic_heart.svg'),
-                                        Text(
-                                          post!.likes.length.toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: 'NotoSans',
-                                              fontSize: 12,
-                                              height: 1.7,
-                                              color: Color.fromRGBO(
-                                                  151, 151, 151, 1)),
-                                        )
-                                      ],
+                                    child: StreamBuilder<DocumentSnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection(FirestoreConstants
+                                              .pathPostCollection)
+                                          .doc(widget.id)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        String userId =
+                                            LoginController.to.getId();
+                                        if (snapshot.hasData) {
+                                          DocumentSnapshot postSnapshot =
+                                              snapshot.data!;
+                                          List<dynamic> likes =
+                                              postSnapshot['likes'] ?? [];
+                                          bool isLiked = likes.contains(userId);
+                                          return GestureDetector(
+                                            onTap: () {
+                                              toggleLike();
+                                            },
+                                            child: Column(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  isLiked
+                                                      ? 'assets/images/ic_hea'
+                                                          'rt_active'
+                                                          ''
+                                                          '.svg'
+                                                      : 'assets/images/ic_heart'
+                                                          '.svg',
+                                                  width: 24,
+                                                  height: 24,
+                                                ),
+                                                Text(
+                                                  likes.length.toString(),
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontFamily: 'NotoSans',
+                                                      fontSize: 12,
+                                                      height: 1.7,
+                                                      color: Color.fromRGBO(
+                                                          151, 151, 151, 1)),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                        return Column(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/images/ic_heart.svg'),
+                                            Text(
+                                              post.likes.length.toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: 'NotoSans',
+                                                  fontSize: 12,
+                                                  height: 1.7,
+                                                  color: Color.fromRGBO(
+                                                      151, 151, 151, 1)),
+                                            )
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
                                   // Padding(
@@ -241,7 +291,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                                       children: [
                                         SvgPicture.asset(
                                             'assets/images/ic_declaration.svg'),
-                                        Text(' ')
+                                        const Text(' ')
                                       ],
                                     ),
                                   ),
@@ -259,7 +309,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                 }
               }
               // 데이터 불러오는 동안 표시할 위젯
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             },
           ),
         ],
@@ -271,111 +321,131 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
 
   Widget _buildReviewListview() {
     if (widget.id != null && loadComplete) {
-      return Column(
-        // padding: EdgeInsets.zero,
-        // scrollDirection: Axis.vertical,
-        children: [
-          SizedBox(
-            height: Get.height * 0.02,
-          ),
-          replies.isNotEmpty
-              ? Column(
-                  children: replies
-                      .map(
-                        (reply) => HomeReviewListviewItem(
-                            postId: widget.id,
-                            id: reply.id,
-                            imageUrl: NetworkImage(reply.profile),
-                            nickName: reply.nickName,
-                            date: reply.createdAt.substring(0, 10),
-                            reviewText: reply.content,
-                            reviewHeartCount: reply.likes.length.toString(),
-                            reviewCount: '0',
-                            shareButtonOnPress: () {
-                              if (reply.userId != LoginController.to.getId()) {
-                                Fluttertoast.showToast(
-                                    msg: "댓글 수정/삭제는 본인만 가능합니다",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.black,
-                                    textColor: Colors.white,
-                                    fontSize: 14.0);
-                              } else {
-                                showModalBottomSheet<void>(
-                                    context: context,
-                                    // isScrollControlled: true,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0,
-                                              12,
-                                              0,
-                                              MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom +
-                                                  12),
-                                          color: Colors.transparent,
-                                          child: SingleChildScrollView(
-                                              child: Column(
-                                            children: ['삭제']
-                                                .map((e) => GestureDetector(
-                                                      onTap: () {
-                                                        deleteReply(reply.id);
-                                                        Get.back();
-                                                      },
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical:
-                                                                        12.0,
-                                                                    horizontal:
-                                                                        20),
-                                                                child: Text(e,
-                                                                    style: AppTheme
-                                                                        .smallTitleTextStyle),
-                                                              ),
-                                                              Container(
-                                                                  width:
-                                                                      Get.width,
-                                                                  height: 2,
-                                                                  color: const Color
-                                                                      .fromRGBO(
-                                                                      240,
-                                                                      240,
-                                                                      240,
-                                                                      1))
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ))
-                                                .toList(),
-                                          )));
-                                    });
-                              }
-                            }),
-                      )
-                      .toList(),
-                )
-              : Text(
-                  '등록된 댓글이 없습니다',
-                  textAlign: TextAlign.center,
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection(FirestoreConstants.pathPostCollection)
+            .doc(widget.id)
+            .collection(FirestoreConstants.pathRepliesCollection)
+            .snapshots(),
+        builder: (context, snapshot) {
+          String userId = LoginController.to.getId();
+          if (snapshot.hasData) {
+            List<DocumentSnapshot> docs = snapshot.data!.docs;
+            List<BeautyReply> replies = [];
+            for (DocumentSnapshot doc in docs) {
+              replies.add(BeautyReply.fromDocument(doc));
+            }
+            replies.sort((a, b) {
+              DateTime dateA = DateTime.parse(b.createdAt);
+              DateTime dateB = DateTime.parse(a.createdAt);
+              return dateA.compareTo(dateB);
+            });
+
+            return Column(
+              children: [
+                SizedBox(
+                  height: Get.height * 0.02,
                 ),
-          SizedBox(
-            height: 100,
-          ),
-        ],
+                replies.isNotEmpty
+                    ? Column(
+                        children: replies.map((reply) {
+                          return HomeReviewListviewItem(
+                              postId: widget.id,
+                              reply: reply,
+                              likeButtonOnPress: () {
+                                toggleLikeOnReply(reply.id);
+                              },
+                              shareButtonOnPress: () {
+                                if (reply.userId !=
+                                    LoginController.to.getId()) {
+                                  Fluttertoast.showToast(
+                                      msg: "댓글 수정/삭제는 본인만 가능합니다",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.black,
+                                      textColor: Colors.white,
+                                      fontSize: 14.0);
+                                } else {
+                                  showModalBottomSheet<void>(
+                                      context: context,
+                                      // isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0,
+                                                12,
+                                                0,
+                                                MediaQuery.of(context)
+                                                        .viewInsets
+                                                        .bottom +
+                                                    12),
+                                            color: Colors.transparent,
+                                            child: SingleChildScrollView(
+                                                child: Column(
+                                              children: ['삭제']
+                                                  .map((e) => GestureDetector(
+                                                        onTap: () {
+                                                          deleteReply(reply.id);
+                                                          Get.back();
+                                                        },
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          12.0,
+                                                                      horizontal:
+                                                                          20),
+                                                                  child: Text(e,
+                                                                      style: AppTheme
+                                                                          .smallTitleTextStyle),
+                                                                ),
+                                                                Container(
+                                                                    width: Get
+                                                                        .width,
+                                                                    height: 2,
+                                                                    color: const Color
+                                                                        .fromRGBO(
+                                                                        240,
+                                                                        240,
+                                                                        240,
+                                                                        1))
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ))
+                                                  .toList(),
+                                            )));
+                                      });
+                                }
+                              });
+                        }).toList(),
+                      )
+                    : const Text(
+                        '등록된 댓글이 없습니다',
+                        textAlign: TextAlign.center,
+                      ),
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error loading replies.');
+          }
+          return CircularProgressIndicator();
+        },
       );
     } else {
       return Container();
@@ -405,10 +475,10 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                 hintText: 'Type of message',
                 // 힌트문자
                 filled: true,
-                fillColor: Color.fromRGBO(171, 169, 163, 0.12),
+                fillColor: const Color.fromRGBO(171, 169, 163, 0.12),
                 contentPadding: EdgeInsets.only(
                     left: Get.width * 0.15, top: 15, bottom: 15),
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                     color: Color.fromRGBO(174, 173, 170, 1),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
@@ -418,13 +488,13 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                     // 포커스 되었을 경우 모양
                     borderSide: BorderSide.none),
-                errorBorder: OutlineInputBorder(
+                errorBorder: const OutlineInputBorder(
                     // 에러 발생 시 모양
                     ),
-                focusedErrorBorder: OutlineInputBorder(
+                focusedErrorBorder: const OutlineInputBorder(
                     // 에러 발생 후 포커스 되었을 경우 모양
                     )),
           ),
@@ -474,11 +544,21 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
         content: reply.text,
         likes: []);
 
-    DocumentReference doc =
-        await postRef.collection('replies').add(replyData.toJson());
+    DocumentReference doc = await postRef
+        .collection(FirestoreConstants.pathRepliesCollection)
+        .add(replyData.toJson());
     await doc.update({'id': doc.id});
     reply.clear();
     updateData();
+    firestore.runTransaction((transaction) async {
+      //cnt 증가(임시로 클라이언트에서 진행)
+      DocumentSnapshot postSnapshot = await transaction.get(postRef);
+      if (postSnapshot.exists) {
+        int currentCommentCount = postSnapshot['commentCnt'] ?? 0;
+        transaction.update(postRef, {'commentCnt': currentCommentCount + 1});
+      }
+    });
+    notifyFollowers(post, replyData);
     showSaveSuccessDialog();
   }
 
@@ -487,22 +567,105 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
     await firestore
         .collection(FirestoreConstants.pathPostCollection)
         .doc(widget.id)
-        .collection('replies')
+        .collection(FirestoreConstants.pathRepliesCollection)
         .doc(replyId)
         .delete();
+    DocumentReference postRef = firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id);
+    firestore.runTransaction((transaction) async {
+      //cnt 감소(임시로 클라이언트에서 진행)
+      DocumentSnapshot postSnapshot = await transaction.get(postRef);
+      if (postSnapshot.exists) {
+        int currentCommentCount = postSnapshot['commentCnt'] ?? 0;
+        if (currentCommentCount > 0) {
+          transaction.update(postRef, {'commentCnt': currentCommentCount - 1});
+        }
+      }
+    });
     updateData();
+  }
+
+  void notifyFollowers(BeautyPost postData, BeautyReply replyData) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    Map<String, dynamic> notificationData = {
+      'toId': post.userId, // 알림을 받을 채널주인
+      'fromId': LoginController.to.getId(), // 알림을 보내는 채널(포스트 작성자) ID
+      'image': postData.thumbnail, // 포스트 이미지
+      'content': '다른 사용자가 "${postData.title}" 다음 영상에 댓글을 남겼습니다.'
+          '\n"${replyData.content}"',
+      // 알림 내용
+      'createdAt': DateTime.now().toString(), // 알림 생성 시간
+      'type': 'reply', // 알림 타입
+      'postId': postData.id
+    };
+
+    // 'notifications' 컬렉션에 알림 문서를 추가합니다.
+    await firestore.collection('notifications').add(notificationData);
   }
 
   void showSaveSuccessDialog() {
     customDialog(
         '답글 작성 완료',
-        Text(
+        const Text(
           '답글이 성공적으로 등록되었습니다.',
           textAlign: TextAlign.center,
         ), () {
       FocusScope.of(context).unfocus();
       navigator?.pop(Get.context);
     }, '닫기');
+  }
+
+  Future<void> toggleLike() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference postRef = firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id);
+    String userId = LoginController.to.getId();
+    DocumentSnapshot postSnapshot = await postRef.get();
+    if (postSnapshot.exists) {
+      List<dynamic> likes = postSnapshot['likes'] ?? [];
+      if (likes.contains(userId)) {
+        // 사용자 ID가 이미 likes 배열에 있는 경우, likes에서 삭제
+        await postRef.update({
+          'likes': FieldValue.arrayRemove([userId])
+        });
+      } else {
+        // 사용자 ID가 likes 배열에 없는 경우, likes에 추가
+        await postRef.update({
+          'likes': FieldValue.arrayUnion([userId])
+        });
+      }
+    }
+  }
+
+  Future<void> toggleLikeOnReply(
+    String replyId,
+  ) async {
+    print('tapped');
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference replyRef = firestore
+        .collection(FirestoreConstants.pathPostCollection)
+        .doc(widget.id)
+        .collection(FirestoreConstants.pathRepliesCollection)
+        .doc(replyId);
+    String userId = LoginController.to.getId();
+    DocumentSnapshot replySnapshot = await replyRef.get();
+    if (replySnapshot.exists) {
+      List<dynamic> likes = replySnapshot['likes'] ?? [];
+      if (likes.contains(userId)) {
+        // 사용자 ID가 이미 likes 배열에 있는 경우, likes에서 삭제
+        await replyRef.update({
+          'likes': FieldValue.arrayRemove([userId])
+        });
+      } else {
+        // 사용자 ID가 likes 배열에 없는 경우, likes에 추가
+        await replyRef.update({
+          'likes': FieldValue.arrayUnion([userId])
+        });
+      }
+    }
   }
 }
 
@@ -565,9 +728,9 @@ class _BeautyVideoPlayerState extends State<BeautyVideoPlayer> {
           reverseDuration: const Duration(milliseconds: 200),
           child: controller.value.isPlaying
               ? const SizedBox.shrink()
-              : Align(
+              : const Align(
                   alignment: Alignment.topLeft,
-                  child: const ColoredBox(
+                  child: ColoredBox(
                     color: Colors.black26,
                     child: Center(
                       child: Icon(

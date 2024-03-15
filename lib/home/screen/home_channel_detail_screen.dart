@@ -70,7 +70,7 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
 
   Widget _buildAppbar() {
     return AppbarWidget(
-      appbarText: channel?.company ?? '',
+      appbarText: channel?.nickName ?? '',
       actions: [
         // GestureDetector(
         //   onTap: () {},
@@ -94,7 +94,7 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
   Widget _buildProfileField() {
     return SubscriptionProfileWidget(
       imageUrl: NetworkImage(channel?.profile ?? ''),
-      userName: channel?.company ?? '',
+      userName: channel?.nickName ?? '',
       subscriptionBtnOnPress: () {},
       subscriptionCount: channel?.subscribeCnt.toString(),
       useGoToChannelText: false,

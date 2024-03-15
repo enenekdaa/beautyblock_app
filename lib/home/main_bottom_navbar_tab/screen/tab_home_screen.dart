@@ -174,7 +174,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                                 child: CircleAvatarWidget(
                                   backgroundimage:
                                       NetworkImage(element.profile),
-                                  text: element.company,
+                                  text: element.nickName,
                                   bottomTextIsVisible: true,
                                   selected:
                                       HomeController.to.selectInfluencerId ==
@@ -200,7 +200,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
       return HomeController.to.influencerSelected
           ? SubscriptionProfileWidget(
               imageUrl: NetworkImage(channel.profile),
-              userName: channel.company,
+              userName: channel.nickName,
               subscriptionBtnOnPress: () {},
               useLikeButton: false,
               useSubscriptionCountText: false,
@@ -243,7 +243,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                       duration: post.videoLength,
                       videoTitle: post.title,
                       views: post.viewCnt.toString(),
-                      date: post.createdAt.substring(0, 10),
+                      date: formatDateString(post.createdAt),
                       thumbnail: post.thumbnail,
                       tags: post.tags,
                     ),
@@ -271,7 +271,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                             duration: post.videoLength,
                             videoTitle: post.title,
                             views: post.viewCnt.toString(),
-                            date: post.createdAt.substring(0, 10),
+                            date: formatDateString(post.createdAt),
                             thumbnail: post.thumbnail,
                             tags: post.tags,
                           ),
@@ -291,7 +291,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                             duration: post.videoLength,
                             videoTitle: post.title,
                             views: post.viewCnt.toString(),
-                            date: post.createdAt.substring(0, 10),
+                            date: formatDateString(post.createdAt),
                             thumbnail: post.thumbnail,
                             tags: post.tags,
                           ),
@@ -311,7 +311,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                             duration: post.videoLength,
                             videoTitle: post.title,
                             views: post.viewCnt.toString(),
-                            date: post.createdAt.substring(0, 10),
+                            date: formatDateString(post.createdAt),
                             thumbnail: post.thumbnail,
                             tags: post.tags,
                           ),
@@ -331,7 +331,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
                             duration: post.videoLength,
                             videoTitle: post.title,
                             views: post.viewCnt.toString(),
-                            date: post.createdAt.substring(0, 10),
+                            date: formatDateString(post.createdAt),
                             thumbnail: post.thumbnail,
                             tags: post.tags,
                           ),

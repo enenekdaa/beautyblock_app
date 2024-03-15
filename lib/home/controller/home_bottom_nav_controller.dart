@@ -21,7 +21,7 @@ class BottomNavBarController extends GetxController {
   var pages = [].obs;
   var bottomNavCurrentIndex = 0.obs;
   final ImagePicker _picker = ImagePicker();
-
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void onInit() {
     // TODO: implement onInit
@@ -47,6 +47,10 @@ class BottomNavBarController extends GetxController {
   void onItemTapped(int index) {
     if (index == 1) {
       //Drawer 열고 카테고리 진행
+      if (bottomNavCurrentIndex.value != 1) {
+        //이미 보고있을 때는 그대로 있기만 함
+        HomeController.to.openDrawer();
+      }
     } else if (index == 2) {
       showModal(Get.context);
     } else {

@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/home/screen/home_videoplayer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,82 +19,87 @@ class MyPageMyChannelMyVideoListviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
-      child: Row(
-        children: [
-          Flexible(
-            flex: 6,
-            child: Padding(
-              padding: EdgeInsets.only(right: Get.width * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: Get.height * 0.015,
-                        backgroundImage: NetworkImage(userProfile),
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        userName,
-                        style: AppTheme.smallTitleTextStyle
-                            .copyWith(fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      post.title,
-                      style: AppTheme.smallTitleTextStyle
-                          .copyWith(fontSize: 12, fontWeight: FontWeight.w700),
-                      softWrap: true,
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeVideoplayerScreen(id: post.id));
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: Get.height * 0.015),
+        child: Row(
+          children: [
+            Flexible(
+              flex: 6,
+              child: Padding(
+                padding: EdgeInsets.only(right: Get.width * 0.02),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: Get.height * 0.015,
+                          backgroundImage: NetworkImage(userProfile),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          userName,
+                          style: AppTheme.smallTitleTextStyle
+                              .copyWith(fontWeight: FontWeight.w500),
+                        )
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset('assets/images/ic_eye.svg'),
-                      SizedBox(
-                        width: 5,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        post.title,
+                        style: AppTheme.smallTitleTextStyle.copyWith(
+                            fontSize: 12, fontWeight: FontWeight.w700),
+                        softWrap: true,
                       ),
-                      Text(
-                        post.viewCnt.toString(),
-                        style: AppTheme.tagTextStyle,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Get.width * 0.02),
-                        child: Text(
-                          '·',
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset('assets/images/ic_eye.svg'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          post.viewCnt.toString(),
                           style: AppTheme.tagTextStyle,
                         ),
-                      ),
-                      Text(
-                        formatDateString(post.createdAt),
-                        style: AppTheme.tagTextStyle,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.0),
-                child: Image.network(
-                  post.thumbnail,
-                  fit: BoxFit.cover,
-                  height: 100,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.02),
+                          child: Text(
+                            '·',
+                            style: AppTheme.tagTextStyle,
+                          ),
+                        ),
+                        Text(
+                          formatDateString(post.createdAt),
+                          style: AppTheme.tagTextStyle,
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
-          )
-        ],
+            Expanded(
+              flex: 4,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: Image.network(
+                    post.thumbnail,
+                    fit: BoxFit.cover,
+                    height: 100,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

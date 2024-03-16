@@ -35,6 +35,7 @@ class HomeMyPageScreen extends StatelessWidget {
 
   Widget _buildAppbar() {
     return AppbarWidget(
+      isMain: true,
       appbarText: '마이페이지',
       centerTitle: true,
     );

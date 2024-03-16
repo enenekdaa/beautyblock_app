@@ -33,6 +33,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
 
   Widget _buildAppBar() {
     return AppbarWidget(
+      isMain: true,
       appbarText: "지역 및 국가 선택",
       centerTitle: true,
     );
@@ -111,9 +112,10 @@ class HomeSelectCountryScreen extends StatelessWidget {
           '\n선택하신 항목으로 검색하시겠습니까?',
           textAlign: TextAlign.center,
         ), () {
-          HomeController.to.selectCategory('Brand');
-          HomeController.to.selectContinent('Asia');
-          HomeController.to.selectCountryFan('${HomeController.to.getDropdownSelectedValue('title')}');
+      HomeController.to.selectCategory('Brand');
+      HomeController.to.selectContinent('Asia');
+      HomeController.to.selectCountryFan(
+          '${HomeController.to.getDropdownSelectedValue('title')}');
       Get.to(TabChannelScreen());
     }, "확인");
   }

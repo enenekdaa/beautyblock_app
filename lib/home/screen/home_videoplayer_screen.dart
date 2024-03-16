@@ -164,15 +164,15 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                     child: Column(
                       children: [
                         SubscriptionProfileWidget(
-                          imageUrl: NetworkImage(user.profile),
-                          userName: user.nickName,
-                          subscriptionBtnOnPress: () {},
-                          channelId: user.id,
-                          useGoToChannelText: false,
-                          useSubscriptionButton: true,
-                          useLikeButton: false,
-                          subscriptionCount: user.followCnt.toString(),
-                        ),
+                            imageUrl: NetworkImage(user.profile),
+                            userName: user.nickName,
+                            subscriptionBtnOnPress: () {},
+                            channelId: user.id,
+                            useGoToChannelText: false,
+                            useSubscriptionButton: true,
+                            useLikeButton: false,
+                            subscriptionCount: user.followCnt.toString(),
+                            moveToChannelOnTap: true),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(

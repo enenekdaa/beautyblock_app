@@ -1,3 +1,4 @@
+import 'package:beautyblock_app/home/controller/home_bottom_nav_controller.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/list_item/tab_channel_listview_item.dart';
 import 'package:beautyblock_app/utils.dart';
@@ -20,7 +21,11 @@ class TabCategoryScreen extends StatelessWidget {
   Widget _buildAppbar() {
     return AppBar(
       titleSpacing: 0,
-      leading: Image.asset('assets/images/ic_back_arrow.png'),
+      leading: GestureDetector(
+          onTap: () {
+            BottomNavBarController.to.bottomNavCurrentIndex.value = 0;
+          },
+          child: Image.asset('assets/images/ic_back_arrow.png')),
       title: Row(
         children: [
           Image.asset(

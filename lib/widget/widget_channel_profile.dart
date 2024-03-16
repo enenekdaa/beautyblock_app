@@ -24,6 +24,7 @@ class SubscriptionProfileWidget extends StatelessWidget {
     this.likeButtonOnPress,
     this.channelTextOnPress,
     this.channelId,
+    this.moveToChannelOnTap = false,
   }) : super(key: key);
 
   final imageUrl;
@@ -38,33 +39,41 @@ class SubscriptionProfileWidget extends StatelessWidget {
   final likeButtonOnPress;
   final channelTextOnPress;
   final channelId;
+  final bool moveToChannelOnTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color.fromRGBO(246, 246, 246, 1),
-      child: Row(
-        children: [
-          Expanded(
-              child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    ProfileImage(),
-                    SizedBox(
-                      width: Get.width * 0.01,
-                    ),
-                    _buildProfileMiddleSection(),
-                  ],
-                ),
-                _buildSubscriptionButton(),
-              ],
-            ),
-          ))
-        ],
+    return GestureDetector(
+      onTap: () {
+        if (moveToChannelOnTap) {
+          Get.to(() => HomeChannelDetailScreen(id: channelId));
+        }
+      },
+      child: Container(
+        color: Color.fromRGBO(246, 246, 246, 1),
+        child: Row(
+          children: [
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ProfileImage(),
+                      SizedBox(
+                        width: Get.width * 0.01,
+                      ),
+                      _buildProfileMiddleSection(),
+                    ],
+                  ),
+                  _buildSubscriptionButton(),
+                ],
+              ),
+            ))
+          ],
+        ),
       ),
     );
   }

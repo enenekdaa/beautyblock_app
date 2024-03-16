@@ -1,6 +1,7 @@
 import 'package:beautyblock_app/config.dart';
 import 'package:beautyblock_app/home/main_bottom_navbar_tab/screen/tab_category_screen.dart';
 import 'package:beautyblock_app/home/main_bottom_navbar_tab/screen/tab_fan_screen.dart';
+import 'package:beautyblock_app/home/screen/home_camera_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -145,6 +146,19 @@ class BottomNavBarController extends GetxController {
                   ),
                 ),
                 Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: GestureDetector(
+                    child: Text('카메라'),
+                    onTap: () {
+                        Get.to(HomeCameraScreen());
+                    },
+                  ),
+                ),
+                Divider(
+                  thickness: 1,
+                  color: Color.fromRGBO(230, 230, 230, 1),
+                ),
+                Padding(
                   padding: EdgeInsets.only(top: Get.height * 0.01, left: 20),
                   child: GestureDetector(
                     child: Text('동영상 업로드'),
@@ -158,19 +172,7 @@ class BottomNavBarController extends GetxController {
                   thickness: 1,
                   color: Color.fromRGBO(230, 230, 230, 1),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(left: 20),
-                //   child: GestureDetector(
-                //     child: Text('업로드'),
-                //     onTap: () {
-                //       _pickVideoFromGallery();
-                //     },
-                //   ),
-                // ),
-                // Divider(
-                //   thickness: 1,
-                //   color: Color.fromRGBO(230, 230, 230, 1),
-                // ),
+
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: GestureDetector(

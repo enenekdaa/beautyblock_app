@@ -26,7 +26,6 @@ class BottomNavBarController extends GetxController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     setBottomItems();
     pages.value = [

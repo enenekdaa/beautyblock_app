@@ -1,9 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:beautyblock_app/utils.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import '../../config.dart';
@@ -17,20 +19,25 @@ class HomeCameraScreen extends StatefulWidget {
   State<HomeCameraScreen> createState() => _HomeCameraScreenState();
 }
 
-class _HomeCameraScreenState extends State<HomeCameraScreen> {
+class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerProviderStateMixin{
   CameraController? _controller;
   Future<void>? _initializeControllerFuture;
   bool isRecording = false;
-
+  AnimationController? _animationController;
+  Animation<double>? _opacityAnimation;
+  final audioPlayer = AudioPlayer();
   @override
   void initState() {
     initCamera();
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds:100));
+    _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_animationController!);
     super.initState();
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 
@@ -45,14 +52,13 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> {
       backgroundColor: Colors.black12,
       body: Stack(
         children: [
+          // FadeTransition(opacity: _opacityAnimation!,child: Container(height: Get.height,width: Get.width,color: Colors.white,)),
           FutureBuilder<void>(
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                // If the Future is complete, display the preview.
-                return Container(height:Get.height,child: CameraPreview(_controller!));
+                return Container(width: Get.width,height:Get.height,child: FadeTransition(opacity: _opacityAnimation!,child: CameraPreview(_controller!)));
               } else {
-                // Otherwise, display a loading indicator.
                 return Center(child: CircularProgressIndicator());
               }
             },
@@ -139,12 +145,13 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> {
 
   void _takePicture() async {
     try {
+      _animationController?.forward(from: 0.0).then((_){_animationController!.reverse();});
       await _initializeControllerFuture;
+      await audioPlayer.play(AssetSource('sounds/camera_shutter.mp3'));
 
-      // 사진을 촬영하고 저장된 경로를 반환합니다.
       final image = await _controller!.takePicture();
-      // 사진을 표시하기 위한 다른 화면으로 경로를 전달할 수 있습니다.
       await ImageGallerySaver.saveFile(image.path);
+
     } catch (e) {
       print(e);
     }
@@ -152,6 +159,8 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> {
 
   void _startVideoRecording() async {
     try {
+      Fluttertoast.showToast(msg: '촬영을 시작합니다.',gravity: ToastGravity.CENTER);
+      audioPlayer.play(AssetSource('sounds/camera_recording_start.mp3'));
       await _initializeControllerFuture;
       await _controller!.startVideoRecording();
       setState(() {
@@ -164,6 +173,8 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> {
 
   void _stopVideoRecording() async {
     try {
+      Fluttertoast.showToast(msg: '촬영을 종료합니다.',gravity: ToastGravity.CENTER);
+      audioPlayer.play(AssetSource('sounds/camera_recording_end.mp3'));
       await _initializeControllerFuture;
       final video = await _controller!.stopVideoRecording();
       setState(() {

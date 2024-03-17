@@ -40,7 +40,7 @@ class TabCategoryScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       HomeController.to.getCategoryString(),
-                      style: AppTheme.appBarTextStyle.copyWith(fontSize: 14),
+                      style: AppTheme.appBarTextStyle.copyWith(fontSize: 16),
                       softWrap: true,
                     ),
                   ),

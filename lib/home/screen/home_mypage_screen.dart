@@ -1,6 +1,7 @@
 import 'package:beautyblock_app/auth/login/login_recive_info_screen.dart';
 import 'package:beautyblock_app/home/controller/home_controller.dart';
 import 'package:beautyblock_app/home/local_widget/scaffold/home_mypage_screen_scaffold.dart';
+import 'package:beautyblock_app/home/screen/home_channel_detail_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_favorites_channel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_mychannel_screen.dart';
 import 'package:beautyblock_app/home/screen/home_mypage_myvideo_screen.dart';
@@ -84,7 +85,7 @@ class HomeMyPageScreen extends StatelessWidget {
         // }),
         myPageListTile(
             '내 채널', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
-          Get.to(HomeMyPageMyChannelScreen());
+          Get.to(() => HomeChannelDetailScreen(id: LoginController.to.getId()));
         }),
         // myPageListTile(
         //     '나의 영상', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {

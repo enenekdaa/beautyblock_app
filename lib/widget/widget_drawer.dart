@@ -38,7 +38,7 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Expanded buildDrawerByIndex() {
-    List<String> categoryList = ['Total', ...BeautyConstants.positions];
+    List<String> categoryList = [...BeautyConstants.positions];
     List<String> continentList = BeautyConstants.continent.keys.toList();
     if (HomeController.to.drawerIndex == 0) {
       return Expanded(
@@ -53,7 +53,8 @@ class DrawerWidget extends StatelessWidget {
                   item,
                   style: AppTheme.tagTextStyle.copyWith(
                       color: Color.fromRGBO(23, 31, 36, 1),
-                      fontWeight: FontWeight.w700),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14),
                 ),
                 onTap: () {
                   if (item == 'Total') {
@@ -87,7 +88,8 @@ class DrawerWidget extends StatelessWidget {
               HomeController.to.selectedCategory,
               style: AppTheme.tagTextStyle.copyWith(
                   color: Color.fromRGBO(23, 31, 36, 1),
-                  fontWeight: FontWeight.w700),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14),
             ),
             onTap: () {
               HomeController.to.selectDrawerBack();
@@ -106,7 +108,8 @@ class DrawerWidget extends StatelessWidget {
                     item,
                     style: AppTheme.tagTextStyle.copyWith(
                         color: Color.fromRGBO(23, 31, 36, 1),
-                        fontWeight: FontWeight.w700),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
                   ),
                   onTap: () {
                     HomeController.to.selectContinent(item);
@@ -136,7 +139,8 @@ class DrawerWidget extends StatelessWidget {
               '${HomeController.to.selectedCategory} > ${HomeController.to.selectedContinent}',
               style: AppTheme.tagTextStyle.copyWith(
                   color: Color.fromRGBO(23, 31, 36, 1),
-                  fontWeight: FontWeight.w700),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14),
             ),
             onTap: () {
               HomeController.to.selectDrawerBack();
@@ -156,7 +160,8 @@ class DrawerWidget extends StatelessWidget {
                     item,
                     style: AppTheme.tagTextStyle.copyWith(
                         color: Color.fromRGBO(23, 31, 36, 1),
-                        fontWeight: FontWeight.w700),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
                   ),
                   onTap: () {
                     HomeController.to.selectCountry(item);

@@ -54,7 +54,7 @@ class DrawerWidget extends StatelessWidget {
                   style: AppTheme.tagTextStyle.copyWith(
                       color: Color.fromRGBO(23, 31, 36, 1),
                       fontWeight: FontWeight.w500,
-                      fontSize: 14),
+                      fontSize: 16),
                 ),
                 enabled: item != 'Total',
                 onTap: () {
@@ -93,7 +93,7 @@ class DrawerWidget extends StatelessWidget {
               style: AppTheme.tagTextStyle.copyWith(
                   color: Color.fromRGBO(23, 31, 36, 1),
                   fontWeight: FontWeight.w500,
-                  fontSize: 14),
+                  fontSize: 16),
             ),
             onTap: () {
               HomeController.to.selectDrawerBack();
@@ -113,7 +113,7 @@ class DrawerWidget extends StatelessWidget {
                     style: AppTheme.tagTextStyle.copyWith(
                         color: Color.fromRGBO(23, 31, 36, 1),
                         fontWeight: FontWeight.w500,
-                        fontSize: 14),
+                        fontSize: 16),
                   ),
                   onTap: () {
                     HomeController.to.selectContinent(item);
@@ -144,7 +144,7 @@ class DrawerWidget extends StatelessWidget {
               style: AppTheme.tagTextStyle.copyWith(
                   color: Color.fromRGBO(23, 31, 36, 1),
                   fontWeight: FontWeight.w500,
-                  fontSize: 14),
+                  fontSize: 16),
             ),
             onTap: () {
               HomeController.to.selectDrawerBack();
@@ -165,7 +165,7 @@ class DrawerWidget extends StatelessWidget {
                     style: AppTheme.tagTextStyle.copyWith(
                         color: Color.fromRGBO(23, 31, 36, 1),
                         fontWeight: FontWeight.w500,
-                        fontSize: 14),
+                        fontSize: 16),
                   ),
                   onTap: () {
                     HomeController.to.selectCountry(item);

@@ -38,7 +38,7 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Expanded buildDrawerByIndex() {
-    List<String> categoryList = [...BeautyConstants.positions];
+    List<String> categoryList = ['Total', ...BeautyConstants.positions];
     List<String> continentList = BeautyConstants.continent.keys.toList();
     if (HomeController.to.drawerIndex == 0) {
       return Expanded(
@@ -56,16 +56,20 @@ class DrawerWidget extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       fontSize: 14),
                 ),
+                enabled: item != 'Total',
                 onTap: () {
                   if (item == 'Total') {
                     //Total일 경우 아무 동작 안하게 - 이건주PM님
-                    Fluttertoast.showToast(msg: '준비중인 기능입니다');
+                    // Fluttertoast.showToast(msg: '준비중인 기능입니다');
                   } else {
                     HomeController.to.selectCategory(item);
                   }
                   // Get.to(HomeSelectCountryScreen());
                 },
-                trailing: SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+                trailing: item == 'Total'
+                    ? null
+                    : SvgPicture.asset('assets/images/ic_front_arrow'
+                        '.svg'),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),

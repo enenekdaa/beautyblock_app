@@ -438,7 +438,11 @@ class HomeController extends GetxController {
       tmp.add(BeautyUser.fromDocument(doc));
     }
     print('value :: ${value}');
+    tmp.sort((a, b) {
+      return a.nickName.compareTo(b.nickName);
+    });
     filteredChannels = tmp;
+
     update();
   }
 

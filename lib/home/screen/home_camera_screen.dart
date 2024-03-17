@@ -19,18 +19,22 @@ class HomeCameraScreen extends StatefulWidget {
   State<HomeCameraScreen> createState() => _HomeCameraScreenState();
 }
 
-class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerProviderStateMixin{
+class _HomeCameraScreenState extends State<HomeCameraScreen>
+    with SingleTickerProviderStateMixin {
   CameraController? _controller;
   Future<void>? _initializeControllerFuture;
   bool isRecording = false;
   AnimationController? _animationController;
   Animation<double>? _opacityAnimation;
   final audioPlayer = AudioPlayer();
+
   @override
   void initState() {
     initCamera();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds:100));
-    _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_animationController!);
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 100));
+    _opacityAnimation =
+        Tween<double>(begin: 1.0, end: 0.0).animate(_animationController!);
     super.initState();
   }
 
@@ -45,19 +49,34 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: Image.asset('assets/images/ic_back_arrow.png',color: Colors.white,),onPressed: (){Get.back();},),
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/images/ic_back_arrow.png',
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         backgroundColor: Colors.black12,
-        title: Text('카메라',style: AppTheme.appBarTextStyle.copyWith(color: Colors.white),),
+        title: Text(
+          '카메라',
+          style: AppTheme.appBarTextStyle.copyWith(color: Colors.white),
+        ),
       ),
       backgroundColor: Colors.black12,
       body: Stack(
         children: [
-          // FadeTransition(opacity: _opacityAnimation!,child: Container(height: Get.height,width: Get.width,color: Colors.white,)),
           FutureBuilder<void>(
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return Container(width: Get.width,height:Get.height,child: FadeTransition(opacity: _opacityAnimation!,child: CameraPreview(_controller!)));
+                return Container(
+                    width: Get.width,
+                    height: Get.height,
+                    child: FadeTransition(
+                        opacity: _opacityAnimation!,
+                        child: CameraPreview(_controller!)));
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -76,18 +95,18 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
                             EdgeInsets.symmetric(vertical: Get.height * 0.01),
                         labelPadding: EdgeInsets.zero,
                         indicatorSize: TabBarIndicatorSize.tab,
-                        dividerColor: GlobalBeautyColor.tagGray170,
+                        dividerColor: GlobalBeautyColor.middleBlack,
                         indicator: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
                                     width: 2,
-                                    color: GlobalBeautyColor.middleBlack))),
-                        unselectedLabelColor: Color.fromRGBO(175, 175, 175, 1),
+                                    color: Color.fromRGBO(175, 175, 175, 1)))),
+                        unselectedLabelColor: GlobalBeautyColor.middleBlack,
                         unselectedLabelStyle: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontFamily: 'NotoSans',
                             fontSize: 17),
-                        labelColor: GlobalBeautyColor.middleBlack,
+                        labelColor: Color.fromRGBO(175, 175, 175, 1),
                         labelStyle: TextStyle(fontWeight: FontWeight.w700),
                         tabs: [
                           Tab(
@@ -115,7 +134,9 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
                           child: IconButton(
                             color: Colors.red.shade700,
                             iconSize: Get.height * 0.07,
-                            icon: Icon(isRecording ? Icons.stop_circle : Icons.radio_button_checked),
+                            icon: Icon(isRecording
+                                ? Icons.stop_circle
+                                : Icons.radio_button_checked),
                             onPressed: isRecording
                                 ? _stopVideoRecording
                                 : _startVideoRecording,
@@ -145,13 +166,14 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
 
   void _takePicture() async {
     try {
-      _animationController?.forward(from: 0.0).then((_){_animationController!.reverse();});
+      _animationController?.forward(from: 0.0).then((_) {
+        _animationController!.reverse();
+      });
       await _initializeControllerFuture;
       await audioPlayer.play(AssetSource('sounds/camera_shutter.mp3'));
 
       final image = await _controller!.takePicture();
       await ImageGallerySaver.saveFile(image.path);
-
     } catch (e) {
       print(e);
     }
@@ -159,7 +181,7 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
 
   void _startVideoRecording() async {
     try {
-      Fluttertoast.showToast(msg: '촬영을 시작합니다.',gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '촬영을 시작합니다.', gravity: ToastGravity.CENTER);
       audioPlayer.play(AssetSource('sounds/camera_recording_start.mp3'));
       await _initializeControllerFuture;
       await _controller!.startVideoRecording();
@@ -173,7 +195,7 @@ class _HomeCameraScreenState extends State<HomeCameraScreen> with SingleTickerPr
 
   void _stopVideoRecording() async {
     try {
-      Fluttertoast.showToast(msg: '촬영을 종료합니다.',gravity: ToastGravity.CENTER);
+      Fluttertoast.showToast(msg: '촬영을 종료합니다.', gravity: ToastGravity.CENTER);
       audioPlayer.play(AssetSource('sounds/camera_recording_end.mp3'));
       await _initializeControllerFuture;
       final video = await _controller!.stopVideoRecording();

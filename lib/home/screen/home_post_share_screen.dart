@@ -27,8 +27,12 @@ class HomePostShareScreen extends StatelessWidget {
   Widget _buildAppbar() {
     return AppBar(
       leading: IconButton(
-        icon: SvgPicture.asset('assets/images/ic_white_back_arrow.svg',),
-        onPressed: (){Get.offAll(HomeMainScreen());},
+        icon: SvgPicture.asset(
+          'assets/images/ic_white_back_arrow.svg',
+        ),
+        onPressed: () {
+          Get.offAll(HomeMainScreen());
+        },
       ),
       backgroundColor: Colors.black,
     );
@@ -38,9 +42,9 @@ class HomePostShareScreen extends StatelessWidget {
     final pickerImagePath = HomeController.to.pickerThumbnailVideoPath.value;
 
     return OverlappingImagesWidget(
-        image:pickerImagePath.isNotEmpty
+        image: pickerImagePath.isNotEmpty
             ? FileImage(File(pickerImagePath))
-            : AssetImage('assets/images/img_main_logo.png'));
+            : AssetImage('assets/images/img_main_logo_2.png'));
   }
 
   Widget _buildSaveText() {
@@ -82,16 +86,25 @@ class HomePostShareScreen extends StatelessWidget {
                       color: Colors.black,
                       child: Text(
                         'SHARE',
-                        style: AppTheme.whiteTextStyle
-                            .copyWith(fontSize: 16, backgroundColor: Colors.black,),
+                        style: AppTheme.whiteTextStyle.copyWith(
+                          fontSize: 16,
+                          backgroundColor: Colors.black,
+                        ),
                       ),
                     )),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20,vertical: Get.height * 0.1),
-            child: RadiusButtonWidget(onPress: (){Share.shareFiles([HomeController.to.pickerThumbnailVideoPath.value]);}, text: "공유하기", backgroundColor: GlobalBeautyColor.buttonHotPink),
+            padding: EdgeInsets.symmetric(
+                horizontal: 20, vertical: Get.height * 0.1),
+            child: RadiusButtonWidget(
+                onPress: () {
+                  Share.shareFiles(
+                      [HomeController.to.pickerThumbnailVideoPath.value]);
+                },
+                text: "공유하기",
+                backgroundColor: GlobalBeautyColor.buttonHotPink),
           )
           // Padding(
           //   padding: EdgeInsets.symmetric(vertical: Get.height * 0.04),

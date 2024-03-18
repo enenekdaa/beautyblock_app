@@ -32,7 +32,7 @@ class LoginReciveInfoScreen extends StatelessWidget {
     return MainLogoWidget(
       imageHeight: Get.height * 0.1,
       imageCrossAlignment: CrossAxisAlignment.center,
-      contentGap: 5.0,
+      contentGap: 24.0,
     );
   }
 

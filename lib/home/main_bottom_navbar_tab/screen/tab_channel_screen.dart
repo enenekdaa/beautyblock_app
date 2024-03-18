@@ -23,7 +23,7 @@ class TabChannelScreen extends StatelessWidget {
       title: Row(
         children: [
           Image.asset(
-            'assets/images/img_main_logo.png',
+            'assets/images/img_main_logo_2.png',
             height: Get.height * 0.03,
           ),
           Expanded(

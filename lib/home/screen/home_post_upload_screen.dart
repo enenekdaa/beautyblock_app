@@ -73,7 +73,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
     return OverlappingImagesWidget(
         image: pickerImagePath.isNotEmpty
             ? FileImage(File(pickerImagePath))
-            : AssetImage('assets/images/img_main_logo.png'));
+            : AssetImage('assets/images/img_main_logo_2.png'));
   }
 
   Widget _buildWritePost() {

@@ -168,7 +168,7 @@ class HomeChannelWorldAndCategorySelectScreen extends StatelessWidget {
           SizedBox(
               height: Get.height * 0.1,
               child: Image.asset(
-                'assets/images/img_main_logo.png',
+                'assets/images/img_main_logo_2.png',
                 fit: BoxFit.cover,
               )),
           Text(

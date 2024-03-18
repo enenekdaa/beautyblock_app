@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../model/firebase_post_model.dart';
 import '../../model/firebase_user_model.dart';
 import '../local_widget/scaffold/home_videoplayer_screen_scaffold.dart';
@@ -680,6 +681,7 @@ class BeautyVideoPlayer extends StatefulWidget {
 class _BeautyVideoPlayerState extends State<BeautyVideoPlayer> {
   late VideoPlayerController controller;
   bool isLoading = true;
+  Key key = UniqueKey();
   @override
   void initState() {
     // TODO: implement initState
@@ -714,7 +716,15 @@ class _BeautyVideoPlayerState extends State<BeautyVideoPlayer> {
               child: SizedBox(
                   height: controller.value.size.height,
                   width: controller.value.size.width,
-                  child: VideoPlayer(controller))),
+                  child: VisibilityDetector(
+                      key: key,
+                      onVisibilityChanged: (VisibilityInfo info) {
+                        //라우팅 넘어가면 포징
+                        if (info.visibleFraction == 0) {
+                          controller.pause();
+                        }
+                      },
+                      child: VideoPlayer(controller)))),
         controlsOverlay(),
         VideoProgressIndicator(controller, allowScrubbing: true),
       ],

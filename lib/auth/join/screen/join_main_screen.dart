@@ -30,6 +30,7 @@ class JoinMainScreen extends StatelessWidget {
     return MainLogoWidget(
       imageHeight: Get.height * 0.2,
       imageCrossAlignment: CrossAxisAlignment.center,
+      contentGap: 24.0,
     );
   }
 

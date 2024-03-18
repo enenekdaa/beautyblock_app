@@ -23,7 +23,7 @@ class CircleAvatarWidget extends StatelessWidget {
           CircleAvatar(
             radius: Get.height * 0.04,
             backgroundImage: backgroundimage ??
-                Image.asset('assets/images/img_main_logo.png'),
+                Image.asset('assets/images/img_main_logo_2.png'),
           ),
           SizedBox(
             height: Get.height * 0.01,

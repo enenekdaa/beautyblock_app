@@ -24,8 +24,8 @@ class DrawerWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Image.asset(
-                  'assets/images/ic_main_leading_logo_2.png',
-                  width: Get.width / 2.5,
+                  'assets/images/ic_main_leading_logo_3.png',
+                  width: 164,
                 ),
               ),
               SizedBox(height: 34),

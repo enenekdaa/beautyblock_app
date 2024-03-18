@@ -86,10 +86,10 @@ class _TabHomeScreenState extends State<TabHomeScreen>
         leadingWidth: 0,
         leading: Text(''),
         title: Container(
-          width: Get.width * 0.4,
+          width: 164,
           padding: EdgeInsets.only(left: 20),
           child: Image.asset(
-            'assets/images/ic_main_leading_logo_2.png',
+            'assets/images/ic_main_leading_logo_3.png',
           ),
         ),
         titleSpacing: 0,

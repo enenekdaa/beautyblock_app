@@ -27,15 +27,20 @@ class HomeChannelWorldAndCategorySelectScreen extends StatelessWidget {
       leading: IconButton(
           icon: Image.asset('assets/images/ic_back_arrow.png'),
           onPressed: () => Get.offAll(HomeMainScreen())),
-      title:Text( 'World',style: AppTheme.appBarTextStyle,),
+      title: Text(
+        'World',
+        style: AppTheme.appBarTextStyle,
+      ),
       actions: [
         Padding(
           padding: EdgeInsets.only(right: Get.height * 0.02),
-          child: GestureDetector(child: SvgPicture.asset('assets/images/ic_bell.svg')),
+          child: GestureDetector(
+              child: SvgPicture.asset('assets/images/ic_bell.svg')),
         ),
         Padding(
           padding: EdgeInsets.only(right: 20),
-          child: GestureDetector(child: SvgPicture.asset('assets/images/ic_search.svg')),
+          child: GestureDetector(
+              child: SvgPicture.asset('assets/images/ic_search.svg')),
         )
       ],
     );
@@ -163,7 +168,7 @@ class HomeChannelWorldAndCategorySelectScreen extends StatelessWidget {
           SizedBox(
               height: Get.height * 0.1,
               child: Image.asset(
-                'assets/images/img_main_logo.png',
+                'assets/images/img_main_logo_2.png',
                 fit: BoxFit.cover,
               )),
           Text(

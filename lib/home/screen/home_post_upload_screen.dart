@@ -142,7 +142,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
             ),
             Positioned(
                 right: 0,
-                top: 30,
+                bottom: 0,
                 child: IconButton(
                   icon: Icon(CupertinoIcons.add_circled),
                   onPressed: () {

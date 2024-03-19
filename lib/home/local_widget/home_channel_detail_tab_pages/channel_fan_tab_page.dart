@@ -81,7 +81,7 @@ class _ChannelFanTabPageState extends State<ChannelFanTabPage> {
                     .toList(),
               );
             } else if (snapshot.hasError) {
-              return Center(child: Text('데이터를 불러오는 데 실패했습니다.'));
+              return Center(child: Text('Failed to load.'));
             }
           }
           // 데이터 로딩 중...

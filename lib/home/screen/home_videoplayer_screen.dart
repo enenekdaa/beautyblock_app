@@ -223,8 +223,12 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                                         if (snapshot.hasData) {
                                           DocumentSnapshot postSnapshot =
                                               snapshot.data!;
-                                          List<dynamic> likes =
-                                              postSnapshot['likes'] ?? [];
+                                          List<dynamic> likes = [];
+                                          try {
+                                            likes = postSnapshot['likes'];
+                                          } catch (e) {
+                                            likes = [];
+                                          }
                                           bool isLiked = likes.contains(userId);
                                           return GestureDetector(
                                             onTap: () {

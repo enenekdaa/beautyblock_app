@@ -55,7 +55,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
                 height: Get.height * 0.005,
               ),
               CustomTitleDropDownWidget(
-                  itemList: FanController.to.getCategory(),
+                  itemList: FanController.to.getCategory() ?? [],
                   dropdownKey: 'title')
             ],
           ),

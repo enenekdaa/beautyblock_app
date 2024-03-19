@@ -75,9 +75,14 @@ class BeautyPost {
       commentCnt = doc.get('commentCnt');
       viewCnt = doc.get('viewCnt');
       createdAt = doc.get('createdAt');
+    } catch (e) {}
+    try {
       doc.get('tags').forEach((data) => {tags.add(data)});
       doc.get('likes').forEach((data) => {likes.add(data)});
-    } catch (e) {}
+    } catch (e) {
+      likes = [];
+      tags = [];
+    }
     try {
       videoLength = doc.get('videoLength');
     } catch (e) {

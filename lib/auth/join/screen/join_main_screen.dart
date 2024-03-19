@@ -40,8 +40,9 @@ class JoinMainScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Everything you're looking for in the beauty industry",
+            "Everything you're looking for\nin the beauty industry",
             style: AppTheme.smallTitleTextStyle,
+            textAlign: TextAlign.center,
           ),
           Text(
             "Global beauty business app",

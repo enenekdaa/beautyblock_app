@@ -54,11 +54,11 @@ class _HomePolicyScreenState extends State<HomePolicyScreen> {
 
   String policyText(String type) {
     if (type == 'privacy') {
-      return "개인정보 취급 방침";
+      return "Privacy Policy";
     } else if (type == 'terms') {
-      return '서비스 이용약관';
+      return 'Terms and Services';
     } else if (type == "marketing") {
-      return '이벤트 및 정보 수신';
+      return 'Event and Information Subscription';
     } else {
       return "";
     }

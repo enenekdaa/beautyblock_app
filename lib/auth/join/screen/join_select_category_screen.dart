@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../home/screen/home_main_screen.dart';
 import '../../../widget/widget_text_input.dart';
 
 class JoinSelectCategoryScreen extends StatelessWidget {
@@ -177,7 +178,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
     }).toList();
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: Get.height * 0.01),
+      padding: EdgeInsets.only(top: Get.height * 0.01),
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,8 +198,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
                     // isScrollControlled: true,
                     builder: (BuildContext context) {
                       return Container(
-                          padding: EdgeInsets.fromLTRB(0, 12, 0,
-                              MediaQuery.of(context).viewInsets.bottom + 12),
+                          padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
                           color: Colors.transparent,
                           child: SingleChildScrollView(
                               child: Column(
@@ -264,7 +264,9 @@ class JoinSelectCategoryScreen extends StatelessWidget {
       children: [
         Expanded(
             child: RadiusButtonWidget(
-                onPress: () {},
+                onPress: () {
+                  Get.offAll(() => HomeMainScreen());
+                },
                 text: 'Select Later',
                 backgroundColor: Color.fromRGBO(165, 165, 165, 1))),
         SizedBox(
@@ -273,7 +275,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
         Expanded(
             child: RadiusButtonWidget(
                 onPress: () {
-                  Get.to(JoinCheckInfoScreen());
+                  Get.to(() => JoinCheckInfoScreen());
                 },
                 text: 'Save',
                 backgroundColor: GlobalBeautyColor.buttonHotPink)),

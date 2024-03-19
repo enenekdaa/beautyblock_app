@@ -2,7 +2,7 @@
     package="com.example.beautyblock_app">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="beautyblock_app"
+        android:label="BeautyBlock"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

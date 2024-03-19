@@ -23,10 +23,10 @@ class JoinTermsOfUseScreen extends StatelessWidget {
 
   Widget _buildIviteCodeForm() {
     return TextInputWidget(
-      titleText: '초대코드(선택)',
-      hintText: '초대코드를 입력해주세요.',
+      titleText: 'Invitation Code (Optional)',
+      hintText: 'Please Enter the Invitation Code.',
       isGuideTextVisible: true,
-      guideText: "*이벤트 및 정보 수신 동의 후 이용가능",
+      guideText: "*Available after Agreeing to Receive Events and Information",
       guideTextColor: Color.fromRGBO(196, 196, 196, 1),
       guideTextAlign: Alignment.topCenter,
       controller: JoinController.to.inviteCodeController,
@@ -158,6 +158,6 @@ class JoinTermsOfUseScreen extends StatelessWidget {
                 Get.to(JoinReceiveEmailScreen());
               }
             : () => Get.back(),
-        isJoinClicked ? 'Next' : '동의합니다.');
+        isJoinClicked ? 'Next' : 'Agree');
   }
 }

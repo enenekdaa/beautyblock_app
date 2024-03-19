@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../../../widget/widget_appbar.dart';
 
@@ -23,42 +24,45 @@ class JoinSelectCategoryScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarWidget(appbarText: "Additional Information"),
-      body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    children: [
-                      topTextSection,
-                      Divider(
-                        height: 10,
-                        thickness: 0.5,
-                        color: Color.fromRGBO(181, 181, 181, 0.7),
-                      ),
-                      interestTypeSection,
-                      Divider(
-                        height: 10,
-                        thickness: 0.5,
-                        color: Color.fromRGBO(181, 181, 181, 0.7),
-                      ),
-                      interestCategorySection,
-                      Divider(
-                        height: 10,
-                        thickness: 0.5,
-                        color: Color.fromRGBO(181, 181, 181, 0.7),
-                      ),
-                      interestCountrySection,
-                    ],
-                  )),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: bottomButtomSection,
-              ),
-            ],
-          )),
+      body: SingleChildScrollView(
+        child: Container(
+            height: Get.height,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Column(
+                      children: [
+                        topTextSection,
+                        Divider(
+                          height: 10,
+                          thickness: 0.5,
+                          color: Color.fromRGBO(181, 181, 181, 0.7),
+                        ),
+                        interestTypeSection,
+                        Divider(
+                          height: 10,
+                          thickness: 0.5,
+                          color: Color.fromRGBO(181, 181, 181, 0.7),
+                        ),
+                        interestCategorySection,
+                        Divider(
+                          height: 10,
+                          thickness: 0.5,
+                          color: Color.fromRGBO(181, 181, 181, 0.7),
+                        ),
+                        interestCountrySection,
+                      ],
+                    )),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: bottomButtomSection,
+                ),
+              ],
+            )),
+      ),
     );
   }
 }

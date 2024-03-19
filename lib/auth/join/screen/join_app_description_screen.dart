@@ -24,17 +24,18 @@ class JoinAppDescriptionScreen extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '뷰티, 한곳에서 빠르고 싶게',
+          'Beauty\nEverything, everywhere, all at once',
           style: AppTheme.smallTitleTextStyle.copyWith(fontSize: 15),
+          textAlign: TextAlign.center,
         ),
-        SizedBox(height: Get.height * 0.01),
+        SizedBox(height: Get.height * 0.02),
         Text(
-          '뷰티의 모든 것, 뷰티블록 App',
+          'BeautyBlock',
           style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w900,
               fontFamily: 'NotoSans',
-              height: 1.45),
+              height: 1.2),
         )
       ],
     );
@@ -48,15 +49,18 @@ class JoinAppDescriptionScreen extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '뷰티산업 모든 필수 서비스가 한곳에',
+          'All essential services of the beauty industry are provided in this application',
           style:
               AppTheme.smallTitleTextStyle.copyWith(fontSize: 16, height: 1.4),
+          textAlign: TextAlign.center,
         ),
         SizedBox(
           height: Get.height * 0.01,
         ),
         Text(
-          '브랜드, 바이어, 마케팅, 상품의 제작생산, 유통 그리고 셀렙,\n인플루언서, 유튜브 등 뷰티산업의 모든 서비스가\n한 화면에서 손쉽게 제공됩니다.',
+          'Brands, distributors, marketers, production, media and even '
+          'celebrities and influencers!\nAll of these services will be '
+          'easily accessible with a click.',
           style: TextStyle(
               fontSize: 12,
               fontFamily: 'NotoSans',

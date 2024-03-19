@@ -19,7 +19,12 @@ class TabChannelScreen extends StatelessWidget {
   Widget _buildAppbar() {
     return AppBar(
       titleSpacing: 0,
-      leading: Image.asset('assets/images/ic_back_arrow.png'),
+      leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Image.asset('assets/images/ic_back_arrow'
+              '.png')),
       title: Row(
         children: [
           Image.asset(

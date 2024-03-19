@@ -74,6 +74,8 @@
     <string>In order to access your photo library to upload video</string>
     <key>NSCameraUsageDescription</key>
     <string>In order to access camera to upload video</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>In order to access camera to capture video audio</string>
     <key>GIDClientID</key>
     <string>992094078368-k25ptc10hoabgeqaj2g6dvpth5am9dt6.apps.googleusercontent.com</string>
 </dict>

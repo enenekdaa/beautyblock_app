@@ -149,7 +149,7 @@ class BottomNavBarController extends GetxController {
                   child: GestureDetector(
                     child: Text('Camera'),
                     onTap: () {
-                      Get.to(HomeCameraScreen());
+                      Get.to(() => HomeCameraScreen());
                     },
                   ),
                 ),

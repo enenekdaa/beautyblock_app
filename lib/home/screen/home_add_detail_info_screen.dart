@@ -128,7 +128,7 @@ class _HomeAddDetailInfoScreen extends State<HomeAddDetailInfoScreen> {
             ],
           ),
           HomeAddDetailInfoItem(
-            text: '댓글 사용',
+            text: 'Use Review',
             useSwitch: true,
             switchKey: 'isUseReview',
           )
@@ -207,15 +207,15 @@ class _HomeAddDetailInfoScreen extends State<HomeAddDetailInfoScreen> {
 
   void showUploadDialog() {
     customDialog(
-        'Upload 안내',
+        'Upload Guide',
         Text(
-          '해당 파일을 업로드 하시겠습니까?',
+          'Would you like to upload this file?',
           textAlign: TextAlign.center,
         ), () {
       navigator?.pop(Get.context);
       HomeController.to.isVideoUploading.value = true;
       uploadFile();
-    }, '확인');
+    }, 'Confirm');
   }
 
   void resetControllValue() {

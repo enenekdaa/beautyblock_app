@@ -117,20 +117,20 @@ String formatDateString(String inputDate) {
     if (parsedDate.year == today.year &&
         parsedDate.month == today.month &&
         parsedDate.day == today.day) {
-      return '오늘';
+      return 'Today';
     }
 
     // 어제 날짜와 같은 경우
     if (parsedDate.year == yesterday.year &&
         parsedDate.month == yesterday.month &&
         parsedDate.day == yesterday.day) {
-      return '1일 전';
+      return 'Yesterday';
     }
 
     // 2일 전부터 10일 전까지
     int difference = today.difference(parsedDate).inDays;
     if (difference >= 2 && difference <= 10) {
-      return '${difference}일 전';
+      return '${difference} days ago';
     }
 
     // 그 이후일 경우

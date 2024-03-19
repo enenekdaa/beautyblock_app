@@ -17,14 +17,17 @@ class JoinReceivePasswordScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "회원가입"),
+      appBar: AppbarWidget(appbarText: "Sign Up"),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: receivePasswordInput,
         ),
       ),
-      bottomNavigationBar: Padding(padding:EdgeInsets.symmetric(vertical: 20,horizontal: 20),child: joinButton,),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: joinButton,
+      ),
     );
   }
 }

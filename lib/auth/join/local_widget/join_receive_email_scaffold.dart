@@ -16,7 +16,7 @@ class JoinReceiveEmailScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "회원가입"),
+      appBar: AppbarWidget(appbarText: "Sign Up"),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -24,9 +24,8 @@ class JoinReceiveEmailScaffold extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: Get.height* 0.1),
-                child: middleContents
-              ),
+                  padding: EdgeInsets.symmetric(vertical: Get.height * 0.1),
+                  child: middleContents),
               joinButton
             ],
           ),

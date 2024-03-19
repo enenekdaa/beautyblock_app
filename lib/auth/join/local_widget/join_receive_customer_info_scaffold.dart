@@ -16,14 +16,17 @@ class JoinReceiveCustomerInfoScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "고객정보입력"),
+      appBar: AppbarWidget(appbarText: "Customer Information"),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: receiveCustomerInfoInput,
         ),
       ),
-      bottomNavigationBar: Padding(padding:EdgeInsets.symmetric(vertical: 20,horizontal: 20),child: joinButton,),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: joinButton,
+      ),
     );
   }
 }

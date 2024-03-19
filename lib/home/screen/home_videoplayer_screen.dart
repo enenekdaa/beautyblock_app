@@ -361,7 +361,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                                 if (reply.userId !=
                                     LoginController.to.getId()) {
                                   Fluttertoast.showToast(
-                                      msg: "댓글 수정/삭제는 본인만 가능합니다",
+                                      msg: "Only writer can modify or delete",
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       timeInSecForIosWeb: 1,
@@ -435,7 +435,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
                         }).toList(),
                       )
                     : const Text(
-                        '등록된 댓글이 없습니다',
+                        'There are no comments registered',
                         textAlign: TextAlign.center,
                       ),
                 const SizedBox(
@@ -595,7 +595,7 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
       'toId': post.userId, // 알림을 받을 채널주인
       'fromId': LoginController.to.getId(), // 알림을 보내는 채널(포스트 작성자) ID
       'image': postData.thumbnail, // 포스트 이미지
-      'content': '다른 사용자가 "${postData.title}" 다음 영상에 댓글을 남겼습니다.'
+      'content': 'Another user commented on the video "${postData.title}"'
           '\n"${replyData.content}"',
       // 알림 내용
       'createdAt': DateTime.now().toString(), // 알림 생성 시간
@@ -609,9 +609,9 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
 
   void showSaveSuccessDialog() {
     customDialog(
-        '답글 작성 완료',
+        'Reply Completed',
         const Text(
-          '답글이 성공적으로 등록되었습니다.',
+          'Your reply has been posted successfully.',
           textAlign: TextAlign.center,
         ), () {
       FocusScope.of(context).unfocus();

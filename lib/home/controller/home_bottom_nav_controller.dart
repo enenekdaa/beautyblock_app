@@ -139,7 +139,7 @@ class BottomNavBarController extends GetxController {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    '영상 Play 만들기',
+                    'Create a PLAY video',
                     style: AppTheme.smallTitleTextStyle
                         .copyWith(fontSize: 16, fontWeight: FontWeight.w900),
                   ),
@@ -147,9 +147,9 @@ class BottomNavBarController extends GetxController {
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: GestureDetector(
-                    child: Text('카메라'),
+                    child: Text('Camera'),
                     onTap: () {
-                        Get.to(HomeCameraScreen());
+                      Get.to(HomeCameraScreen());
                     },
                   ),
                 ),
@@ -160,7 +160,7 @@ class BottomNavBarController extends GetxController {
                 Padding(
                   padding: EdgeInsets.only(top: Get.height * 0.01, left: 20),
                   child: GestureDetector(
-                    child: Text('동영상 업로드'),
+                    child: Text('Upload Video'),
                     onTap: () {
                       // _pickImageFromGallery();
                       _pickVideoFromGallery();
@@ -171,11 +171,10 @@ class BottomNavBarController extends GetxController {
                   thickness: 1,
                   color: Color.fromRGBO(230, 230, 230, 1),
                 ),
-
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: GestureDetector(
-                    child: Text('스트리밍'),
+                    child: const Text('Streaming'),
                     onTap: () {},
                   ),
                 ),

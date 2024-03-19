@@ -48,7 +48,7 @@ class LoginScreen extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Text(
-          '당신의 아름다움을 위한 선택',
+          'Your Beauty Choices',
           style: AppTheme.smallTitleTextStyle,
         ));
   }

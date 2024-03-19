@@ -17,26 +17,23 @@ class JoinCheckInfoScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "가입정보선택"),
+      appBar: AppbarWidget(appbarText: "Select Information"),
       body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              Flexible(
+          child: Column(children: [
+            Flexible(
                 fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      infoSection,
-                      interestSection,
-                    ],
-                  )),
-              Padding(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    infoSection,
+                    interestSection,
+                  ],
+                )),
+            Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                child: bottomButtonSection
-              )
-          ]
-          )),
+                child: bottomButtonSection)
+          ])),
     );
   }
 }

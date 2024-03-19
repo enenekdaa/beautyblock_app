@@ -105,7 +105,7 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
   }
 
   Widget _buildTabBar(controller) {
-    List<String> tabText = ["동영상", "라이브", "재생목록", "Follower"];
+    List<String> tabText = ["Videos", "Live", "Playlists", "Follower"];
     List<Widget> tabsWidgetList = [];
     tabText.forEach((text) {
       tabsWidgetList.add(Container(
@@ -122,8 +122,8 @@ class _HomeChannelDetailScreenState extends State<HomeChannelDetailScreen>
         controller: controller,
         children: [
           ChannelVideoTabPage(channel?.id ?? ''),
-          _buildOnProgress('라이브 준비 중입니다.'),
-          _buildOnProgress('재생 목록 준비 중입니다.'),
+          _buildOnProgress('Preparing to go live'),
+          _buildOnProgress('Preparing playlist'),
           ChannelFanTabPage(channel?.id ?? ''),
         ],
       ),

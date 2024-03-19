@@ -17,8 +17,8 @@ class JoinTermsOfUseScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(246, 246, 246, 1) ,
-      appBar: AppbarWidget(appbarText: "회원가입"),
+      backgroundColor: Color.fromRGBO(246, 246, 246, 1),
+      appBar: AppbarWidget(appbarText: "Sign Up"),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -32,8 +32,7 @@ class JoinTermsOfUseScaffold extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                          width: 6.0,
-                          color: Color.fromRGBO(246, 246, 246, 1)),
+                          width: 6.0, color: Color.fromRGBO(246, 246, 246, 1)),
                     ),
                   )),
               Container(
@@ -45,8 +44,9 @@ class JoinTermsOfUseScaffold extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15,horizontal: 15),
-        child: joinButton ,),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        child: joinButton,
+      ),
     );
   }
 }

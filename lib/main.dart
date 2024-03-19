@@ -31,6 +31,7 @@ import 'auth/join/screen/join_terms_of_use_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (Platform.isIOS) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(

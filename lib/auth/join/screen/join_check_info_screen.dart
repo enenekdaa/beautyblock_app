@@ -84,7 +84,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '나의 관심사',
+              'My Interests',
               style: AppTheme.smallTitleTextStyle,
             ),
             SizedBox(
@@ -99,7 +99,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
               height: Get.height * 0.02,
             ),
             Text(
-              '관심국가',
+              'Country of interest',
               style: AppTheme.smallTitleTextStyle,
             ),
             SizedBox(
@@ -124,7 +124,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
                 onPress: () {
                   Get.back();
                 },
-                text: '수정하기',
+                text: 'Edit',
                 backgroundColor: Color.fromRGBO(165, 165, 165, 1))),
         SizedBox(
           width: 10,
@@ -143,7 +143,7 @@ class JoinCheckInfoScreen extends StatelessWidget {
                   JoinController.to.joinToLogin();
                   showJoinSuccessDialog();
                 },
-                text: '저장',
+                text: 'Save',
                 backgroundColor: GlobalBeautyColor.buttonHotPink)),
       ],
     );
@@ -151,15 +151,15 @@ class JoinCheckInfoScreen extends StatelessWidget {
 
   showJoinSuccessDialog() {
     customDialog(
-        '가입완료',
+        'Sign up Completed',
         Text(
-          'BeautyBlock 회원이 되신걸 감사합니다.\n이제 BeautyBlock에 대한 다양한 서비스를\n이용하실 수 있습니다.',
+          'Thank you for becoming a member of BeautyBlock.\nYou can now access various services related to BeautyBlock.',
           softWrap: true,
           textAlign: TextAlign.center,
           style: AppTheme.smallTitleTextStyle
               .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
         ),
         () => {Get.offAll(() => const JoinAppDescriptionScreen())},
-        '확인');
+        'Confirm');
   }
 }

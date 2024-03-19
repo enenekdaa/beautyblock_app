@@ -38,7 +38,9 @@ class DrawerWidget extends StatelessWidget {
   }
 
   Expanded buildDrawerByIndex() {
-    List<String> categoryList = ['Total', ...BeautyConstants.positions];
+    // List<String> categoryList = ['Total', ...BeautyConstants.positions];
+    List<String> categoryList = [...BeautyConstants.positions];
+
     List<String> continentList = BeautyConstants.continent.keys.toList();
     if (HomeController.to.drawerIndex == 0) {
       return Expanded(

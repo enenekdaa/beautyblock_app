@@ -24,7 +24,7 @@ class ChannelVideoTabPage extends StatelessWidget {
             Random random = Random();
             if (posts.isEmpty) {
               return Center(
-                child: Text('등록된 컨텐츠가 없습니다'),
+                child: Text('No registered content'),
               );
             } else {
               BeautyPost rand = posts[random.nextInt(posts.length)];
@@ -46,7 +46,7 @@ class ChannelVideoTabPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '추천',
+          'Explore',
           style:
               AppTheme.smallTitleTextStyle.copyWith(fontSize: 18, height: 1.2),
         ),
@@ -75,7 +75,7 @@ class ChannelVideoTabPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '인기영상',
+              'Popular',
               style: AppTheme.smallTitleTextStyle
                   .copyWith(fontSize: 18, height: 1.2),
             ),

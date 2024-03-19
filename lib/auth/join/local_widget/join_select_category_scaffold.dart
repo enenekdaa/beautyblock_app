@@ -22,7 +22,7 @@ class JoinSelectCategoryScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "부가정보선택"),
+      appBar: AppbarWidget(appbarText: "Additional Information"),
       body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(

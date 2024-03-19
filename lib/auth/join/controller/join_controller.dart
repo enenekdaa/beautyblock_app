@@ -158,13 +158,13 @@ class JoinController extends GetxController {
       "Others"
     ];
     interestCategoryList.value = [
-      '뷰티',
-      '색조',
-      '스킨케어',
-      '마스크/팩',
-      '선케어',
-      '클렌징/필링',
-      '베이스'
+      'Beauty',
+      'Makeup',
+      'Skincare',
+      'Masks/Packs',
+      'Suncare',
+      'Cleansing/Peeling',
+      'Base'
     ];
     interestCountryList.value = ['S.Korea'];
   }
@@ -199,9 +199,12 @@ class JoinController extends GetxController {
     bool isApple = await TheAppleSignIn.isAvailable();
 
     if (!isApple) {
-      customDialog('안내', Text("애플 로그인을 지원하지 않는 기기입니다"), () {
+      customDialog(
+          'Notification',
+          Text("This device does not support Apple Sign-in"
+              "."), () {
         Get.back();
-      }, '확인');
+      }, 'Confirm');
     } else {
       final AuthorizationResult result = await TheAppleSignIn.performRequests([
         const AppleIdRequest(requestedScopes: [
@@ -304,9 +307,12 @@ class JoinController extends GetxController {
     if (nameController.text == '' ||
         companyNameController.text == '' ||
         responsibilityController.text == '') {
-      customDialog('내용 입력', Text('누락된 내용이 있어요.'), () {
+      customDialog(
+          'Notification',
+          Text('There is something you did not enter'
+              '.'), () {
         Get.back();
-      }, '확인');
+      }, 'Confirm');
     } else {
       try {
         updateCustomerInfo();
@@ -363,13 +369,13 @@ class JoinController extends GetxController {
     focusNode.addListener(() {
       if (!isChecked[2] && focusNode.hasFocus) {
         customDialog(
-                '초대코드 이용 안내',
+                'Invitation Code Usage Guide',
                 Text(
-                  '이벤트 및 정보 수신에 동의 후 초대코드를 이용할 수 있어요.',
+                  'You can use the invitation code after agreeing to receive events and information.',
                   softWrap: true,
                 ), () {
           Get.back();
-        }, '확인')
+        }, 'Confirm')
             .then((_) => focusNode.unfocus());
       }
     });

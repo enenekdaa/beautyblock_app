@@ -34,11 +34,11 @@ class JoinReceiveCustomerInfoScreen extends StatelessWidget {
           height: Get.height * 0.05,
         ),
         TextInputWidget(
-          titleText: '회원명',
-          hintText: '회원명 입력',
+          titleText: 'User Name',
+          hintText: 'Enter User Name',
           isGuideTextVisible: true,
           guideText:
-              '1.한문,영문만 가능합니다.\n\2.반드시 실명을 입력해주세요. 이벤트 참여시 다양한 혜택을 받으실 수 있습니다.',
+              '1. Only Mandarin and English are available.\n2. Please enter your real name. You can receive various benefits when participating in events.',
           guideTextColor: Color.fromRGBO(196, 196, 196, 1),
           controller: _joinController.nameController,
         ),
@@ -46,8 +46,8 @@ class JoinReceiveCustomerInfoScreen extends StatelessWidget {
           height: Get.height * 0.05,
         ),
         TextInputWidget(
-          titleText: '회사명',
-          hintText: '회사명 입력',
+          titleText: 'Business Name',
+          hintText: 'Enter Business Name',
           isGuideTextVisible: false,
           controller: _joinController.companyNameController,
         ),
@@ -104,8 +104,8 @@ class JoinReceiveCustomerInfoScreen extends StatelessWidget {
                 });
           },
           child: TextInputWidget(
-            titleText: '담당업무',
-            hintText: '담당업무 입력',
+            titleText: 'Job Title',
+            hintText: 'Enter Job Title',
             isGuideTextVisible: false,
             controller: _joinController.responsibilityController,
             readOnly: true,

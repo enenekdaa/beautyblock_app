@@ -145,11 +145,15 @@ class SubscriptionProfileWidget extends StatelessWidget {
                               color: Colors.transparent,
                               child: SingleChildScrollView(
                                   child: Column(
-                                children: ['구독', '알림취소', '구독취소']
+                                children: [
+                                  'Subscribe',
+                                  'Cancel Notifications',
+                                  'Unsubscribe'
+                                ]
                                     .map((e) => GestureDetector(
                                           behavior: HitTestBehavior.translucent,
                                           onTap: () async {
-                                            if (e == '구독') {
+                                            if (e == 'Subscribe') {
                                               if (controller
                                                       .getSubscriptionStatus(
                                                           channelId) ==
@@ -158,18 +162,20 @@ class SubscriptionProfileWidget extends StatelessWidget {
                                                         milliseconds: 500))
                                                     .then((value) {
                                                   customDialog(
-                                                      '알림',
-                                                      Text('이미 구독 중인 '
-                                                          '채널 입니다.'), () {
+                                                      'Notification',
+                                                      Text(
+                                                          'You are already subscribing to this channel.'),
+                                                      () {
                                                     Get.back();
-                                                  }, '확인');
+                                                  }, 'Confirm');
                                                 });
                                               } else {
                                                 controller.changeSubscribe(
                                                     type: 0,
                                                     targetId: channelId);
                                               }
-                                            } else if (e == '알림취소') {
+                                            } else if (e ==
+                                                'Cancel Notifications') {
                                               controller.changeSubscribe(
                                                   type: 1, targetId: channelId);
                                             } else {
@@ -244,7 +250,11 @@ class SubscriptionProfileWidget extends StatelessWidget {
                               width: 5,
                             ),
                           Text(
-                            (controller.isSubscribe(channelId)) ? '구독중' : '구독',
+                            (controller.isSubscribe(channelId))
+                                ? 'Subscribed'
+                                    ''
+                                : 'Su'
+                                    'bscribe',
                             style: TextStyle(color: Colors.white),
                           ),
                         ],

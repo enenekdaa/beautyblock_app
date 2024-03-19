@@ -86,7 +86,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
         children: [
           SizedBox(height: Get.height * 0.03),
           Text(
-            '카테고리',
+            'Category',
             style: AppTheme.smallTitleTextStyle.copyWith(fontSize: 13),
           ),
           SizedBox(height: Get.height * 0.01),
@@ -94,14 +94,14 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
               itemList: HomeController.to.categories, dropdownKey: 'category'),
           SizedBox(height: Get.height * 0.03),
           TextInputWidget(
-            titleText: '제목',
-            hintText: '제목을 입력해 주세요.',
+            titleText: 'Title',
+            hintText: 'Enter Title',
             isGuideTextVisible: false,
             controller: HomeController.to.uploadTitleController,
           ),
           SizedBox(height: Get.height * 0.03),
           Text(
-            '내용',
+            'Content',
             style: AppTheme.smallTitleTextStyle,
           ),
           SizedBox(height: Get.height * 0.01),
@@ -113,7 +113,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
               keyboardType: TextInputType.multiline,
               controller: HomeController.to.uploadContentController,
               decoration: InputDecoration(
-                  hintText: '내용을 입력해 주세요.',
+                  hintText: 'Enter Content',
                   hintStyle: AppTheme.tagTextStyle
                       .copyWith(fontWeight: FontWeight.w400, fontSize: 14),
                   filled: true,
@@ -127,7 +127,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
             Positioned(
               bottom: -2,
               child: Text(
-                '글자 수 최대 2,000자까지 입력 가능합니다.',
+                'You can enter up to 2,000 words.',
                 style: AppTheme.tagTextStyle,
               ),
             )
@@ -135,8 +135,8 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
           SizedBox(height: Get.height * 0.03),
           Stack(children: [
             TextInputWidget(
-              titleText: '태그',
-              hintText: "태그",
+              titleText: 'Tags',
+              hintText: "Tags",
               isGuideTextVisible: false,
               controller: HomeController.to.uploadTagController,
             ),
@@ -163,7 +163,7 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
                 FocusScope.of(context).unfocus();
                 showUploadDialog();
               },
-              text: '업로드',
+              text: 'Upload',
               backgroundColor: GlobalBeautyColor.buttonHotPink),
         ],
       ),
@@ -207,30 +207,30 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
 
   void showUploadDialog() {
     customDialog(
-        'Upload 안내',
+        'Upload Guide',
         Text(
-          '해당 파일을 업로드 하시겠습니까?',
+          'Would you like to upload this file?',
           textAlign: TextAlign.center,
         ), () {
       FocusScope.of(context).unfocus();
       navigator?.pop(Get.context);
       HomeController.to.isPostUploading.value = true;
       uploadFile();
-    }, '확인');
+    }, 'Confirm');
   }
 
   void showSaveSuccessDialog() {
     customDialog(
-        '업로드 완료',
+        'Upload Complete',
         Text(
-          '저장이 완료 되었습니다.\n다른 곳에 자랑하러 가볼까요?',
+          'Would you like to share your new video?',
           textAlign: TextAlign.center,
         ), () {
       FocusScope.of(context).unfocus();
       navigator?.pop(Get.context);
       resetControllValue();
       Get.off(() => const HomePostShareScreen());
-    }, '자랑하러 가기');
+    }, 'Share');
   }
 
   void resetControllValue() {
@@ -320,8 +320,8 @@ class _HomePostUploadScreen extends State<HomePostUploadScreen> {
         'toId': subscriberId, // 알림을 받을 구독자 ID
         'fromId': postData.userId, // 알림을 보내는 채널(포스트 작성자) ID
         'image': postData.thumbnail, // 포스트 이미지
-        'content':
-            '${LoginController.to.getNick()}에서 업로드한 동영상:${postData.title}',
+        'content': 'Video uploaded from ${LoginController.to.getNick()} : '
+            '${postData.title}',
         // 알림 내용
         'createdAt': DateTime.now().toString(), // 알림 생성 시간
         'type': 'post', // 알림 타입

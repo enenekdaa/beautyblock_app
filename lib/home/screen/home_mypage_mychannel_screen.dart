@@ -25,7 +25,7 @@ class HomeMyPageMyChannelScreen extends StatelessWidget {
   }
 
   Widget _buildAppbar() {
-    return AppbarWidget(appbarText: '내 채널');
+    return AppbarWidget(appbarText: 'My Channel');
   }
 
   Widget _buildChannelProfile() {
@@ -53,7 +53,7 @@ class HomeMyPageMyChannelScreen extends StatelessWidget {
             });
             if (posts.isEmpty) {
               return Center(
-                child: Text('등록된 컨텐츠가 없습니다'),
+                child: Text('No registered content'),
               );
             } else {
               return ListView(

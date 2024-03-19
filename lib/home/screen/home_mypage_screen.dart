@@ -37,7 +37,7 @@ class HomeMyPageScreen extends StatelessWidget {
   Widget _buildAppbar() {
     return AppbarWidget(
       isMain: true,
-      appbarText: '마이페이지',
+      appbarText: 'MY PAGE',
       centerTitle: true,
     );
   }
@@ -84,7 +84,8 @@ class HomeMyPageScreen extends StatelessWidget {
         //   Get.to(HomeMyPageFavoritesChannelScreen());
         // }),
         myPageListTile(
-            '내 채널', SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {
+            'My Channel', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+            () {
           Get.to(() => HomeChannelDetailScreen(id: LoginController.to.getId()));
         }),
         // myPageListTile(
@@ -100,41 +101,43 @@ class HomeMyPageScreen extends StatelessWidget {
         // myPageListTile('문의하기',
         //     SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
         myPageListTile(
-            '아이디',
+            'ID',
             Text(
               LoginController.to.getEmail(),
               style: AppTheme.boldMyPageTextStyle,
             ),
             () {}),
         myPageListTile(
-            '닉네임',
+            'Name/Username',
             Text(
               LoginController.to.getNick(),
               style: AppTheme.boldMyPageTextStyle,
             ),
             () {}),
-        // myPageListTile('비밀번호 재설정',
+        // myPageListTile('Reset Password',
         //     SvgPicture.asset('assets/images/ic_front_arrow.svg'), () {}),
         Divider(
           color: Color.fromRGBO(171, 169, 163, 0.24),
         ),
         myPageListTile(
-            '서비스 이용약관', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
-            () {
+            'Terms of Service',
+            SvgPicture.asset('assets/images/ic_front_arrow'
+                '.svg'), () {
           Get.to(() => HomePolicyScreen(type: 'terms'));
         }),
         myPageListTile(
-            '개인정보 취급 방침', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
-            () {
+            'Privacy Policy',
+            SvgPicture.asset('assets/images/ic_front_arrow'
+                '.svg'), () {
           Get.to(() => HomePolicyScreen(type: 'privacy'));
         }),
         myPageListTile(
-            '이벤트 및 정보 수신', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
+            'Marketing', SvgPicture.asset('assets/images/ic_front_arrow.svg'),
             () {
           Get.to(() => HomePolicyScreen(type: 'marketing'));
         }),
         myPageListTile(
-            '알림허용',
+            'Allow Notifications',
             Obx(() => Switch(
                   value: _homeController.getSwitchValue('isAlarm'),
                   activeColor: GlobalBeautyColor.buttonHotPink,
@@ -164,7 +167,7 @@ class HomeMyPageScreen extends StatelessWidget {
   Widget _buildbottomButton() {
     return RadiusButtonWidget(
       backgroundColor: GlobalBeautyColor.buttonHotPink,
-      text: '로그아웃',
+      text: 'Logout',
       onPress: () {
         LoginController.to.logout();
       },

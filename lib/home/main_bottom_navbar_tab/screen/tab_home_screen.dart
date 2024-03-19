@@ -140,15 +140,14 @@ class _TabHomeScreenState extends State<TabHomeScreen>
   }
 
   Widget _buildTabBar(controller) {
-    List<dynamic> tabText = ["인기", "신규", "추천", "관심"];
+    List<dynamic> tabText = ["Popular", "New", "Explore", "Interests"];
     if (HomeController.to.isShowSubscriptionChannel) {
       return Container();
     } else {
       return TabBarWidget(
           controller: controller,
           tabs: tabText
-              .map((text) =>
-                  Container(width: Get.width * 0.3, child: Tab(text: text)))
+              .map((text) => Container(child: Tab(text: text)))
               .toList());
     }
   }
@@ -163,7 +162,7 @@ class _TabHomeScreenState extends State<TabHomeScreen>
             height: Get.height * 0.13,
             margin: EdgeInsets.only(top: Get.height * 0.015),
             child: HomeController.to.subscriptionChannels.isEmpty
-                ? const Center(child: Text('구독한 채널이 없습니다'))
+                ? const Center(child: Text('You have no subscribed channels'))
                 : ListView(
                     padding: EdgeInsets.zero,
                     scrollDirection: Axis.horizontal,

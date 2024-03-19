@@ -34,7 +34,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
   Widget _buildAppBar() {
     return AppbarWidget(
       isMain: true,
-      appbarText: "지역 및 국가 선택",
+      appbarText: "Region and Country Selection",
       centerTitle: true,
     );
   }
@@ -48,7 +48,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '국가(나라)선택',
+                'Country Selection',
                 style: AppTheme.smallTitleTextStyle,
               ),
               SizedBox(
@@ -66,7 +66,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '선택확인',
+                'Confirm Selection',
                 style: AppTheme.smallTitleTextStyle,
               ),
               SizedBox(
@@ -97,7 +97,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
 
   Widget _buildBottomButton() {
     return RadiusButtonWidget(
-      text: "확인",
+      text: "Confirm",
       onPress: () => showSelectedSearchInfo(),
       backgroundColor: GlobalBeautyColor.buttonHotPink,
     );
@@ -105,11 +105,11 @@ class HomeSelectCountryScreen extends StatelessWidget {
 
   showSelectedSearchInfo() {
     customDialog(
-        '선택 확인',
+        'Confirm Selection',
         Text(
-          '검색 : ${HomeController.to.selectedCategory}'
-          '\n국가 : ${HomeController.to.getDropdownSelectedValue('title')}'
-          '\n선택하신 항목으로 검색하시겠습니까?',
+          'Category : ${HomeController.to.selectedCategory}'
+          '\nCountry : ${HomeController.to.getDropdownSelectedValue('title')}'
+          '\nWould you like to search by the selected item?',
           textAlign: TextAlign.center,
         ), () {
       HomeController.to.selectCategory('Brand');
@@ -117,6 +117,6 @@ class HomeSelectCountryScreen extends StatelessWidget {
       HomeController.to.selectCountryFan(
           '${HomeController.to.getDropdownSelectedValue('title')}');
       Get.to(TabChannelScreen());
-    }, "확인");
+    }, "Confirm");
   }
 }

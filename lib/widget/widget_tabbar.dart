@@ -25,7 +25,7 @@ class TabBarWidget extends StatelessWidget {
                   width: 2, color: GlobalBeautyColor.buttonHotPink))),
       unselectedLabelColor: Color.fromRGBO(175, 175, 175, 1),
       unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w700, fontFamily: 'NotoSans', fontSize: 15),
+          fontWeight: FontWeight.w700, fontFamily: 'NotoSans', fontSize: 14),
       labelColor: GlobalBeautyColor.buttonHotPink,
       labelStyle: TextStyle(fontWeight: FontWeight.w700),
       tabs: tabs,

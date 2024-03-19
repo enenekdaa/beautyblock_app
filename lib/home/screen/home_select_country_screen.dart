@@ -24,7 +24,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
 
   Widget _buildAppBar() {
     return AppbarWidget(
-      appbarText: "지역 및 국가 선택",
+      appbarText: "Region and Country Selection",
       centerTitle: true,
     );
   }
@@ -37,8 +37,8 @@ class HomeSelectCountryScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '대륙(지역)선택',
+              const Text(
+                'Select Continent',
                 style: AppTheme.smallTitleTextStyle,
               ),
               SizedBox(
@@ -56,7 +56,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '국가(나라)선택',
+                'Country Selection',
                 style: AppTheme.smallTitleTextStyle,
               ),
               SizedBox(
@@ -73,7 +73,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '선택확인',
+                'Confirm Selection',
                 style: AppTheme.smallTitleTextStyle,
               ),
               SizedBox(
@@ -104,7 +104,7 @@ class HomeSelectCountryScreen extends StatelessWidget {
 
   Widget _buildBottomButton() {
     return RadiusButtonWidget(
-      text: "확인",
+      text: "Confirm",
       onPress: () => showSelectedSearchInfo(),
       backgroundColor: GlobalBeautyColor.buttonHotPink,
     );
@@ -121,6 +121,6 @@ class HomeSelectCountryScreen extends StatelessWidget {
     //     (){
     //       BottomNavBarController.to.onItemTapped(1);
     //       Get.back();},
-    //     "확인");
+    //     "Confirm");
   }
 }

@@ -58,7 +58,7 @@ class HomePostShareScreen extends StatelessWidget {
               height: Get.height * 0.01,
             ),
             Text(
-              '저장완료!',
+              'Saved!',
               style: AppTheme.whiteTextStyle.copyWith(fontSize: 24),
             ),
           ],
@@ -103,7 +103,7 @@ class HomePostShareScreen extends StatelessWidget {
                   Share.shareFiles(
                       [HomeController.to.pickerThumbnailVideoPath.value]);
                 },
-                text: "공유하기",
+                text: "Share",
                 backgroundColor: GlobalBeautyColor.buttonHotPink),
           )
           // Padding(

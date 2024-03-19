@@ -40,22 +40,22 @@ class JoinMainScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "내가 찾는 뷰티 비지니스의 모든 것",
+            "Everything you're looking for in the beauty industry",
             style: AppTheme.smallTitleTextStyle,
           ),
           Text(
-            "글로벌 뷰티 비지니스 앱",
+            "Global beauty business app",
             style: AppTheme.smallTitleTextStyle,
           ),
           SizedBox(
             height: 20,
           ),
           Text(
-            "Beauty Block을 통해 나만의 뷰티 인맥을 만들어보세요.",
+            "Create your own beauty network through BeautyBlock.",
             style: AppTheme.smallTitleTextStyle
                 .copyWith(fontSize: 11, fontWeight: FontWeight.w500),
           ),
-          Text("뷰티 비지니스의 즐거움",
+          Text("Enjoy your beauty business.",
               style: AppTheme.smallTitleTextStyle.copyWith(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,

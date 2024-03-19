@@ -34,7 +34,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '내 관심 유형과 카테고리를\n선택해주세요.',
+              'Please select your interests and categories.',
               softWrap: true,
               style: TextStyle(
                 fontSize: 22,
@@ -48,7 +48,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
               height: Get.height * 0.01,
             ),
             Text(
-              '선택한 항목에 따라 다양한 컨텐츠를 즐기실 수 있습니다.',
+              'You can enjoy various contents based on your selection.',
               softWrap: true,
               style: AppTheme.smallTitleTextStyle
                   .copyWith(fontWeight: FontWeight.w500),
@@ -81,14 +81,14 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '관심유형',
+                  'Interest',
                   style: AppTheme.smallTitleTextStyle,
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  '최대 2개까지 선택',
+                  'Maximum 2 selections',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 12,
@@ -133,14 +133,14 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '관심 카테고리',
+                  'Interest Category',
                   style: AppTheme.smallTitleTextStyle,
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  '최대 3개까지 선택',
+                  'Maximum 3 selections',
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 12,
@@ -188,6 +188,10 @@ class JoinSelectCategoryScreen extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.deferToChild,
               onTap: () {
+                List<String> list = BeautyConstants.continent.values
+                    .expand((list) => list)
+                    .toList();
+                list.sort((a, b) => a.compareTo(b));
                 showModalBottomSheet<void>(
                     context: context,
                     // isScrollControlled: true,
@@ -198,9 +202,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
                           color: Colors.transparent,
                           child: SingleChildScrollView(
                               child: Column(
-                            children: BeautyConstants.continent.values
-                                .expand((list) => list)
-                                .toList()
+                            children: list
                                 .map((e) => GestureDetector(
                                       onTap: () {
                                         JoinController
@@ -239,8 +241,8 @@ class JoinSelectCategoryScreen extends StatelessWidget {
                     });
               },
               child: TextInputWidget(
-                titleText: '관심 국가',
-                hintText: '관심국가 입력',
+                titleText: 'Country of interest',
+                hintText: 'Select country of interest',
                 isGuideTextVisible: false,
                 controller: JoinController.to.countryController,
                 readOnly: true,
@@ -263,7 +265,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
         Expanded(
             child: RadiusButtonWidget(
                 onPress: () {},
-                text: '나중에 선택',
+                text: 'Select Later',
                 backgroundColor: Color.fromRGBO(165, 165, 165, 1))),
         SizedBox(
           width: 10,
@@ -273,7 +275,7 @@ class JoinSelectCategoryScreen extends StatelessWidget {
                 onPress: () {
                   Get.to(JoinCheckInfoScreen());
                 },
-                text: '저장',
+                text: 'Save',
                 backgroundColor: GlobalBeautyColor.buttonHotPink)),
       ],
     );

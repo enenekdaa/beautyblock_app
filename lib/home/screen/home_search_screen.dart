@@ -100,7 +100,7 @@ class _HomeSearchScreen extends State<HomeSearchScreen> {
     return HomeController.to.searchedList.isEmpty
         ? Center(
             child: Text(
-              '검색 결과가 없습니다',
+              'No results were found',
               textAlign: TextAlign.center,
             ),
           )

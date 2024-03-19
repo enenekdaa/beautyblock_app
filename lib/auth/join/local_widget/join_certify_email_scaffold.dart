@@ -21,14 +21,13 @@ class JoinCertifyEmailScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(appbarText: "회원가입"),
+      appBar: AppbarWidget(appbarText: "Sign Up"),
       body: Column(
         children: [
           Flexible(
             fit: FlexFit.tight,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [SingleChildScrollView(
+            child: Stack(alignment: Alignment.topCenter, children: [
+              SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   child: Column(
@@ -40,11 +39,8 @@ class JoinCertifyEmailScaffold extends StatelessWidget {
                   ),
                 ),
               ),
-                Positioned(
-                    bottom: 0,
-                    child: reSendButton),
-              ]
-            ),
+              Positioned(bottom: 0, child: reSendButton),
+            ]),
           ),
           joinButton,
         ],

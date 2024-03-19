@@ -63,9 +63,12 @@ class LoginController extends GetxController {
           .get();
       final List<DocumentSnapshot> documents = result.docs;
       if (result.docs.isEmpty) {
-        customDialog('알림', Text("존재하지 않는 계정입니다.\n회원가입 후 로그인을 진행해 주세요."), () {
+        customDialog(
+            'Notification',
+            const Text("This account does not exist.\nPlease sign "
+                "up and log in."), () {
           Get.to(() => JoinMainScreen());
-        }, '회원가입');
+        }, 'Sign Up');
       } else {
         await GoogleSignIn().signOut();
         DocumentSnapshot documentSnapshot = documents[0];
@@ -79,9 +82,12 @@ class LoginController extends GetxController {
   Future<void> signInWithApple() async {
     bool isApple = await TheAppleSignIn.isAvailable();
     if (!isApple) {
-      customDialog('안내', Text("애플 로그인을 지원하지 않는 기기입니다"), () {
+      customDialog(
+          'Notification',
+          Text("This device does not support Apple Sign-in"
+              "."), () {
         Get.back();
-      }, '확인');
+      }, 'Confirm');
     } else {
       final AuthorizationResult result =
           await TheAppleSignIn.performRequests([const AppleIdRequest()]);
@@ -95,10 +101,12 @@ class LoginController extends GetxController {
               .get();
           final List<DocumentSnapshot> documents = res.docs;
           if (res.docs.isEmpty) {
-            customDialog('알림', Text("존재하지 않는 계정입니다.\n회원가입 후 로그인을 진행해 주세요."),
-                () {
+            customDialog(
+                'Notification',
+                const Text("This account does not exist.\nPlease sign "
+                    "up and log in."), () {
               Get.to(() => JoinMainScreen());
-            }, '회원가입');
+            }, 'Sign Up');
           } else {
             DocumentSnapshot documentSnapshot = documents[0];
             BeautyUser user = BeautyUser.fromDocument(documentSnapshot);

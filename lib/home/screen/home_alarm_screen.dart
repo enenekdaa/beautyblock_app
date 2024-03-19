@@ -29,7 +29,7 @@ class HomeAlarmScreen extends StatelessWidget {
       title: Padding(
         padding: EdgeInsets.only(left: Get.width * 0.02),
         child: Text(
-          '알림',
+          'Notification',
           style: AppTheme.boldMyPageTextStyle
               .copyWith(fontSize: 16, color: Color.fromRGBO(30, 29, 29, 1)),
         ),
@@ -96,9 +96,9 @@ class HomeAlarmScreen extends StatelessWidget {
                             ))
                         .toList()
                   ])
-                : const Center(child: Text("알림이 없습니다"));
+                : const Center(child: Text("No notifications"));
           } else {
-            return const Center(child: Text("알림이 없습니다"));
+            return const Center(child: Text("No notifications"));
           }
         },
       ),

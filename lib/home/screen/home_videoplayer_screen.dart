@@ -527,7 +527,10 @@ class _HomeVideoplayerScreenState extends State<HomeVideoplayerScreen> {
         .runTransaction<void>((Transaction transaction) async {
           DocumentSnapshot postSnapshot = await transaction.get(postRef);
           if (postSnapshot.exists) {
-            int currentViewCount = postSnapshot.get('viewCnt') ?? 0;
+            Map<String, dynamic> data =
+                postSnapshot.data() as Map<String, dynamic>;
+            int currentViewCount =
+                data.containsKey('viewCnt') ? postSnapshot.get('viewCnt') : 0;
             transaction.update(postRef, {'viewCnt': currentViewCount + 1});
           }
         })

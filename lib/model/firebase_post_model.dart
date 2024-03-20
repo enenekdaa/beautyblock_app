@@ -16,6 +16,7 @@ class BeautyPost {
   int videoLength = 0;
   List<String> likes = [];
   List<String> tags = [];
+  bool isTop = false;
 
   BeautyPost(
       {required this.id,
@@ -30,7 +31,8 @@ class BeautyPost {
       this.createdAt = '',
       this.videoLength = 0,
       this.likes = emptyList,
-      this.tags = emptyList});
+      this.tags = emptyList,
+      this.isTop = false});
 
   Map<String, dynamic> toJson() {
     return {
@@ -64,6 +66,7 @@ class BeautyPost {
     int videoLength = 0;
     List<String> tags = [];
     List<String> likes = [];
+    bool isTop = false;
     try {
       id = doc.get('id');
       userId = doc.get('userId');
@@ -74,8 +77,14 @@ class BeautyPost {
       contents = doc.get('contents');
       commentCnt = doc.get('commentCnt');
       viewCnt = doc.get('viewCnt');
+    } catch (e) {
+      viewCnt = 0;
+    }
+    try {
       createdAt = doc.get('createdAt');
-    } catch (e) {}
+    } catch (e) {
+      createdAt = '2024-03-20 10:14:43';
+    }
     try {
       doc.get('tags').forEach((data) => {tags.add(data)});
       doc.get('likes').forEach((data) => {likes.add(data)});
@@ -87,6 +96,11 @@ class BeautyPost {
       videoLength = doc.get('videoLength');
     } catch (e) {
       videoLength = 0;
+    }
+    try {
+      isTop = doc.get('isTop');
+    } catch (e) {
+      isTop = false;
     }
     return BeautyPost(
         id: id,

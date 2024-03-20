@@ -154,6 +154,7 @@ class _HomeCameraScreenState extends State<HomeCameraScreen>
 
   Future<void> initCamera() async {
     final cameras = await availableCameras();
+    print('length : ${cameras.length}');
     final firstCamera = cameras.first;
 
     _controller = CameraController(

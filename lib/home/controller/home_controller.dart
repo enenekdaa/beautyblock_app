@@ -191,14 +191,15 @@ class HomeController extends GetxController {
   void updateMainPosts() async {
     final postsRef = FirebaseFirestore.instance
         .collection(FirestoreConstants.pathPostCollection)
-        .orderBy('createdAt', descending: true)
-        .limit(20);
+        .orderBy('createdAt', descending: true);
+
     final topPostRef = FirebaseFirestore.instance
         .collection(FirestoreConstants.pathPostCollection)
         .where('isTop', isEqualTo: true);
-    //10개까지만 추출
+
     final querySnapshot = await postsRef.get();
     final topSnapshot = await topPostRef.get();
+    print(querySnapshot.docs.length);
     List<BeautyPost> posts = [];
     BeautyPost? topPost;
     for (var doc in querySnapshot.docs) {
@@ -210,6 +211,7 @@ class HomeController extends GetxController {
     popularPosts = posts.toList();
     popularPosts.sort((a, b) => b.viewCnt - a.viewCnt);
     if (topPost != null) {
+      popularPosts.removeWhere((element) => element.id == topPost?.id);
       popularPosts.insert(0, topPost);
     }
     interestPosts = posts.toList();
